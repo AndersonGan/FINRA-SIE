@@ -270,6 +270,38 @@
     .empty .empty-icon { width:66px; height:66px; border-radius:20px; margin:0 auto 15px; display:grid; place-items:center; background:var(--green-2); color:var(--green); font-size:25px; }
     .notice { padding:12px 14px; border:1px solid var(--line); background:var(--surface-2); color:var(--muted); border-radius:11px; font-size:12px; }
     .source-note { margin-top:28px; color:var(--muted); font-size:11px; }
+    .study-intro { background:linear-gradient(135deg,var(--navy),var(--navy-2)); color:white; border:0; }
+    .study-intro p { color:#bed2ce; }
+    .study-intro .tag { background:rgba(255,255,255,.09); color:#8cddd0; }
+    .study-toc { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:18px; }
+    .study-toc a { display:flex; justify-content:space-between; gap:12px; padding:11px 13px; border:1px solid rgba(255,255,255,.13); border-radius:10px; color:white; text-decoration:none; background:rgba(255,255,255,.05); }
+    .study-toc a:hover { background:rgba(255,255,255,.1); }
+    .study-section { scroll-margin-top:92px; }
+    .study-section > header { margin-bottom:17px; }
+    .study-section > header h2 { margin:5px 0 6px; font-size:clamp(25px,3vw,34px); letter-spacing:-.04em; }
+    .study-section > header p { max-width:830px; }
+    .study-points { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:16px 0; }
+    .study-point { padding:15px; border:1px solid var(--line); background:var(--paper); border-radius:12px; }
+    .study-point strong { display:block; margin-bottom:4px; color:var(--green); }
+    .study-point p { font-size:13px; }
+    .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:13px; margin:16px 0; }
+    .study-table { width:100%; min-width:590px; border-collapse:collapse; background:var(--surface); }
+    .study-table th,.study-table td { padding:12px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line); }
+    .study-table th { color:var(--muted); background:var(--surface-2); font-size:11px; letter-spacing:.07em; text-transform:uppercase; }
+    .study-table tr:last-child td { border-bottom:0; }
+    .practice-block { margin-top:20px; padding:19px; border:1px solid color-mix(in srgb,var(--blue) 28%,var(--line)); background:var(--blue-2); border-radius:14px; }
+    .practice-block h3 { margin:0 0 5px; }
+    .practice-list { display:grid; gap:10px; margin-top:14px; }
+    .study-question { padding:13px 14px; background:var(--surface); border:1px solid var(--line); border-radius:11px; }
+    .study-question p { color:var(--ink); }
+    .question-type { display:inline-block; margin-bottom:5px; color:var(--blue); font-size:9px; font-weight:850; letter-spacing:.09em; text-transform:uppercase; }
+    .choice-list { margin:7px 0 0; padding-left:22px; color:var(--muted); font-size:13px; }
+    .study-rule { border:0; border-top:1px solid var(--line); margin:30px 0; }
+    .answer-key { scroll-margin-top:92px; }
+    .answer-entry { padding:12px 0; border-bottom:1px solid var(--line); }
+    .answer-entry:last-child { border-bottom:0; }
+    .answer-entry strong { color:var(--green); }
+    .answer-entry p { margin-top:3px; }
     .toast { position:fixed; right:22px; bottom:22px; z-index:100; padding:12px 16px; background:var(--navy); color:white; border-radius:11px; box-shadow:var(--shadow); transform:translateY(90px); opacity:0; transition:.25s; }
     .toast.show { transform:none; opacity:1; }
     dialog { width:min(540px,calc(100vw - 30px)); border:1px solid var(--line); border-radius:20px; background:var(--surface); color:var(--ink); padding:0; box-shadow:var(--shadow); }
@@ -309,6 +341,7 @@
       .module-row { grid-template-columns:48px minmax(0,1fr); }
       .module-actions { grid-column:1/-1; justify-content:flex-end; }
       .concept-grid, .control-grid { grid-template-columns:1fr; }
+      .study-points { grid-template-columns:1fr; }
       .domain-result { grid-template-columns:1fr 50px; }
       .domain-result .bar { grid-column:1/-1; grid-row:2; }
       .task { grid-template-columns:auto 42px minmax(0,1fr); }
@@ -316,6 +349,7 @@
     }
     @media (max-width: 480px) {
       .grid-4 { grid-template-columns:1fr; }
+      .study-toc { grid-template-columns:1fr; }
       .top-title { max-width:190px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .hero-actions > * { flex:1; }
       .mini-metrics { grid-template-columns:1fr; }
@@ -345,6 +379,7 @@
         <button data-view="home"><span class="nav-icon">⌂</span><span>Home</span></button>
         <button data-view="dashboard"><span class="nav-icon">◫</span><span>Dashboard</span></button>
         <button data-view="course"><span class="nav-icon">▤</span><span>Course</span></button>
+        <button data-view="guide"><span class="nav-icon">≡</span><span>Study guide</span></button>
         <button data-view="quiz"><span class="nav-icon">✓</span><span>Quiz</span></button>
         <button data-view="flashcards"><span class="nav-icon">◇</span><span>Cards</span></button>
         <button data-view="review"><span class="nav-icon">↻</span><span>Review</span></button>
@@ -445,6 +480,121 @@
       ['d3','Buy limit','Order to buy at the limit price or lower; price is controlled, execution is not guaranteed.'],['d3','Sell stop','Placed below current market; becomes a market order when triggered.'],['d3','Bid / ask','Dealer buys at bid and sells at ask; customers generally do the reverse.'],['d3','Regular-way settlement','Most U.S. equity and corporate bond trades settle T+1 under the current outline.'],['d3','UTMA account','Irrevocable gift owned by a minor and managed by a custodian.'],['d3','Structuring','Breaking transactions into smaller amounts to evade reporting requirements.'],['d3','SAR confidentiality','A customer must not be told that a Suspicious Activity Report was filed.'],['d3','Front running','Trading ahead of a known customer order to benefit from its expected market impact.'],['d3','MNPI','Information a reasonable investor would consider important that is not broadly public.'],
       ['d4','Form U4','Starts and updates an associated person’s registration and disclosure record.'],['d4','Form U5','Terminates registration and reports termination-related information.'],['d4','Firm Element','Firm-designed annual continuing education based on a needs analysis.'],['d4','Private securities transaction','A securities transaction outside the regular scope of employment; written notice and approval can be required.']
     ].map((x,i)=>({id:'f'+(i+1),domain:x[0],front:x[1],back:x[2]}));
+
+    const guideSections = [
+      {id:'guide-markets',number:'01',title:'Markets, participants and the economy',summary:'Start with where a transaction occurs, who acts, and how money and securities move. These relationships make later rules easier to reason through.',points:[
+        ['Primary market','An issuer sells new securities and receives capital. Example: a corporation sells newly issued bonds through an underwriting syndicate.'],
+        ['Secondary market','Investors trade outstanding securities; the issuer receives no proceeds. Example: one shareholder sells listed stock to another investor.'],
+        ['Policy signal','The Fed influences money and credit; Congress and the executive branch set taxes and spending. A Fed securities purchase generally adds reserves and eases credit.']
+      ],table:{headers:['Concept','Plain-language rule','Useful contrast'],rows:[
+        ['Broker vs. dealer','A broker acts for another party; a dealer trades from firm inventory.','Agency compensation is a commission; principal compensation can be a markup or markdown.'],
+        ['Third vs. fourth market','Third: exchange-listed securities trade OTC. Fourth: institutions trade directly.','Neither term means a new issue.'],
+        ['SEC vs. FINRA','The SEC is the federal regulator; FINRA is the broker-dealer SRO.','The SEC oversees FINRA and other SROs.']
+      ]},example:'A firm sells a bond from its inventory to a customer. The trade is secondary-market and principal capacity: the issuer gets no proceeds, and the firm is acting as dealer.',questions:[
+        {id:'G1Q1',type:'Multiple choice',prompt:'A city sells newly issued revenue bonds through an underwriter. Which market is involved?',choices:['A. Primary','B. Secondary','C. Third','D. Fourth'],answer:'A. Primary. The bonds are new and sale proceeds reach the municipal issuer.'},
+        {id:'G1Q2',type:'Short answer',prompt:'Why does a Federal Reserve open-market sale usually put upward pressure on interest rates?',answer:'The buyers pay the Fed, which removes reserves from the banking system. Less available credit tends to put upward pressure on rates.'},
+        {id:'G1Q3',type:'Scenario',prompt:'An institution sells exchange-listed shares directly to another institution without a broker-dealer. Name the market and explain why.',answer:'The fourth market. The defining fact is direct institution-to-institution trading without a broker-dealer intermediary.'}
+      ]},
+      {id:'guide-core-products',number:'02',title:'Equity and debt securities',summary:'Equity represents ownership; debt represents an issuer obligation. Most product questions ask about rights, payment priority, income certainty or the risk created by a feature.',points:[
+        ['Common stock','Residual ownership with voting rights, limited liability and variable dividends. In liquidation, common shareholders are generally last.'],
+        ['Preferred stock','Equity with dividend and liquidation priority over common. A cumulative feature carries missed dividends forward.'],
+        ['Debt security','A contractual promise to pay interest and return principal. Credit quality, maturity and embedded calls shape the investor’s risk.']
+      ],table:{headers:['Security','Investor position','High-yield risk or feature'],rows:[
+        ['Common stock','Owner with residual claim','Market risk and uncertain dividends; greatest upside participation.'],
+        ['Preferred stock','Owner with priority over common','Rate sensitivity and dividend omission; usually limited voting.'],
+        ['Corporate bond','Creditor of a company','Credit and interest-rate risk; secured debt has identified collateral.'],
+        ['Municipal bond','Creditor of a public issuer','GO uses taxing power; revenue debt uses project or facility receipts.']
+      ]},example:'A 6% bond with $1,000 par pays $60 annually. If it trades at $1,200, current yield is $60 ÷ $1,200 = 5%; the coupon remains 6%.',questions:[
+        {id:'G2Q1',type:'Multiple choice',prompt:'Which investor normally has the highest liquidation priority?',choices:['A. Common shareholder','B. Preferred shareholder','C. Secured bondholder','D. Warrant holder'],answer:'C. Secured bondholder. Creditors rank ahead of owners, and secured creditors have a claim on identified collateral.'},
+        {id:'G2Q2',type:'Short answer',prompt:'Why does an existing fixed-rate bond usually fall in price when market rates rise?',answer:'New bonds offer more competitive coupons. The older bond’s price falls so its yield can adjust upward relative to current rates.'},
+        {id:'G2Q3',type:'Scenario',prompt:'A toll-road bond is repaid from toll collections. Is it a GO or revenue bond, and what supports repayment?',answer:'It is a revenue bond. The specified toll-road revenues—not the issuer’s broad taxing power—support debt service.'}
+      ]},
+      {id:'guide-packaged',number:'03',title:'Options, funds and alternative products',summary:'These products package a contract, a portfolio or a specialized strategy. Begin with legal structure and pricing before comparing benefits.',points:[
+        ['Option contract','A call buyer has the right to buy; a put buyer has the right to sell. Buyers risk their premium, while an uncovered call writer can face extreme loss.'],
+        ['Pooled product','Mutual funds, closed-end funds, UITs and ETFs pool holdings but use different issuance, redemption and pricing mechanisms.'],
+        ['Alternative product','DPPs, non-listed REITs and hedge funds may add income or diversification, but often sacrifice liquidity and simple valuation.']
+      ],table:{headers:['Product','How it trades or prices','Distinctive exam cue'],rows:[
+        ['Open-end mutual fund','Bought or redeemed with the fund at the next NAV, plus any sales charge.','Forward pricing; breakpoints can reduce Class A sales charges.'],
+        ['Closed-end fund','Trades intraday on an exchange at a market price.','Can trade above or below NAV.'],
+        ['ETF','Trades intraday; creation/redemption helps price track NAV.','Exchange liquidity with portfolio exposure.'],
+        ['ETN','Unsecured issuer debt linked to a benchmark.','Issuer credit risk, despite the exchange-traded name.']
+      ]},example:'An investor owns 100 shares and buys one put. The put can set a floor under the stock’s value while preserving upside; the premium is the cost of that protection.',questions:[
+        {id:'G3Q1',type:'Multiple choice',prompt:'Which position can create theoretically unlimited loss?',choices:['A. Long call','B. Long put','C. Covered call','D. Uncovered short call'],answer:'D. Uncovered short call. The stock can rise without a fixed ceiling while the writer remains obligated to deliver.'},
+        {id:'G3Q2',type:'Short answer',prompt:'Why can an ETN carry more issuer-specific credit risk than an ETF holding a portfolio?',answer:'An ETN is an unsecured promise of its issuer. Its value therefore depends partly on that issuer’s ability to pay, while an ETF owns portfolio assets.'},
+        {id:'G3Q3',type:'Scenario',prompt:'A fund trades intraday at a 6% discount to its per-share NAV. Which structure best fits, and why?',answer:'A closed-end fund. Exchange supply and demand can move its market price away from NAV; open-end shares transact with the fund at NAV.'}
+      ]},
+      {id:'guide-risk-tax',number:'04',title:'Risk, return and taxation essentials',summary:'Name the risk before choosing the product answer. For taxes, focus on whether money goes in before or after tax, how earnings grow, and how distributions are treated.',points:[
+        ['Systematic vs. specific','Broad-market risk remains after diversification; issuer and industry risk can be reduced by spreading exposure.'],
+        ['Income taxation','Corporate bond interest is generally federally taxable. Municipal interest is generally federally exempt, but gains and state treatment require separate analysis.'],
+        ['Tax deferral','Deferral postpones tax; it does not erase it. Variable-annuity earnings grow tax deferred and are generally taxed as ordinary income when withdrawn.']
+      ],table:{headers:['Item','Typical federal treatment','Common trap'],rows:[
+        ['Qualified stock dividend','Generally taxable income when paid.','A dividend is not tax free merely because it is reinvested.'],
+        ['Municipal bond interest','Generally exempt from federal income tax.','Capital gains can still be taxable; state treatment varies.'],
+        ['Traditional retirement contribution/distribution','Contribution may receive tax advantages; taxable distributions are generally ordinary income.','Account and eligibility rules matter.'],
+        ['529 qualified distribution','Generally federally tax free for qualified education use.','The owner controls the account; nonqualified use can create tax and penalty consequences.']
+      ]},example:'A retiree living on fixed payments is especially exposed to inflation risk because rising prices reduce what each dollar can buy, even when the stated payment does not change.',questions:[
+        {id:'G4Q1',type:'Multiple choice',prompt:'Diversifying across many issuers most directly reduces which risk?',choices:['A. Systematic risk','B. Nonsystematic risk','C. Inflation risk','D. Interest-rate risk'],answer:'B. Nonsystematic risk. Issuer- and industry-specific risk can be spread; a broad market decline remains.'},
+        {id:'G4Q2',type:'Short answer',prompt:'Why is “tax deferred” different from “tax free”?',answer:'Tax-deferred earnings are generally taxed later when distributed. Tax-free treatment means qualifying income or distributions are not subject to the specified tax.'},
+        {id:'G4Q3',type:'Scenario',prompt:'Mortgage rates fall and homeowners refinance. What two connected risks does an MBS investor face?',answer:'Prepayment risk returns principal earlier than expected, and reinvestment risk makes it difficult to reinvest that cash at the former yield.'}
+      ]},
+      {id:'guide-trading',number:'05',title:'Trading, settlement and customer accounts',summary:'Translate the customer’s objective into order mechanics, then identify who owns the account, who may act, and whether credit or discretion is involved.',points:[
+        ['Order priority','A market order favors execution; a limit order controls price; a stop becomes a market order after its trigger is reached.'],
+        ['Settlement','Most U.S. equity and corporate bond trades settle regular way on T+1 under the current outline.'],
+        ['Account authority','Ownership and authority are separate. A UTMA minor owns the assets; the custodian manages them. A trustee’s authority comes from the trust document.']
+      ],table:{headers:['Instruction or account','What it does','What it does not guarantee'],rows:[
+        ['Buy limit','Sets the highest acceptable purchase price.','Execution.'],
+        ['Sell stop','Activates below the market, then becomes a market order.','The stop price as execution price.'],
+        ['Discretionary account','Lets an approved representative choose specified trade terms.','Unlimited action outside written authority.'],
+        ['Margin account','Uses broker-dealer credit and magnifies exposure.','A floor on losses or protection from forced liquidation.']
+      ]},example:'With a quote of 24.10 bid—24.18 ask, a customer generally buys at 24.18 and sells at 24.10. The dealer buys at the bid and sells at the ask.',questions:[
+        {id:'G5Q1',type:'Multiple choice',prompt:'A customer wants to buy only at $42 or lower. Which order best expresses that instruction?',choices:['A. Market order','B. Buy stop at $42','C. Buy limit at $42','D. Sell limit at $42'],answer:'C. Buy limit at $42. It controls the maximum purchase price but cannot guarantee execution.'},
+        {id:'G5Q2',type:'Short answer',prompt:'Why can a sell stop execute below its stop price during a fast decline?',answer:'The stop price only activates the order. After activation it becomes a market order and fills at the next available price.'},
+        {id:'G5Q3',type:'Scenario',prompt:'A representative chooses both the security and amount for a customer. What type of authority is involved?',answer:'Substantive discretion. It generally requires written customer authorization and firm acceptance; ordinary time-and-price discretion is narrower.'}
+      ]},
+      {id:'guide-protection',number:'06',title:'Customer protection and prohibited conduct',summary:'When a scenario involves suspicious funds, customer assets, confidential information or a vulnerable adult, the exam usually rewards stopping, documenting and escalating.',points:[
+        ['AML reflex','Placement introduces funds, layering obscures the trail, and integration makes wealth appear legitimate. Structuring is breaking transactions up to evade reporting.'],
+        ['MNPI reflex','Material plus nonpublic plus a duty or improper tip means do not trade or share; escalate through firm procedures.'],
+        ['Asset-protection reflex','Never guarantee a customer against loss, falsify a signature, misuse funds or pay transaction compensation to an unregistered person.']
+      ],table:{headers:['Red flag','Why it matters','Proper exam response'],rows:[
+        ['Repeated cash deposits just below a reporting level','Possible structuring and money laundering.','Document and escalate; never help redesign the pattern.'],
+        ['Trade before a known customer block order','Possible front running.','Do not trade ahead; protect customer-order information.'],
+        ['Sudden wire requested by a new caregiver','Possible senior exploitation.','Follow supervisory escalation and permitted-hold procedures.'],
+        ['Customer asks representative to sign a form','False record even with consent.','Decline and use proper documentation procedures.']
+      ]},example:'A firm files a SAR after suspicious transfers. The representative must not tell the customer; SAR confidentiality prevents tipping off the subject.',questions:[
+        {id:'G6Q1',type:'Multiple choice',prompt:'A representative trades before a known customer block order to benefit from its expected price impact. This is',choices:['A. Hedging','B. Front running','C. Best execution','D. Dollar-cost averaging'],answer:'B. Front running. The representative is abusing confidential customer-order information.'},
+        {id:'G6Q2',type:'Short answer',prompt:'Why may a representative not tell a customer that the firm filed a SAR?',answer:'SAR filings are confidential. Telling the customer could tip off the subject and interfere with monitoring or investigation.'},
+        {id:'G6Q3',type:'Scenario',prompt:'An employee learns confidentially that an acquisition will be announced tomorrow and tips a friend who trades. Who can face exposure?',answer:'Both the tipper and the informed tippee can face insider-trading liability; the information is likely material and nonpublic.'}
+      ]},
+      {id:'guide-regulation',number:'07',title:'Regulatory framework and professional conduct',summary:'Map each organization, law and form to its purpose. Then ask whether the activity requires registration, disclosure, approval or supervision.',points:[
+        ['Federal acts','The 1933 Act centers on new offerings; the 1934 Act centers on markets, broker-dealers and anti-fraud regulation. The two 1940 Acts cover investment companies and advisers.'],
+        ['Registration record','Form U4 begins and updates an individual record; Form U5 reports termination. Passing the SIE alone does not authorize securities business.'],
+        ['Outside conduct','Outside business activity generally requires prior written notice. Outside securities transactions can require notice, approval and firm supervision.']
+      ],table:{headers:['Rule or organization','Primary purpose','Exam distinction'],rows:[
+        ['Securities Act of 1933','Registration and disclosure for new offerings.','Disclosure does not mean SEC approval.'],
+        ['Exchange Act of 1934','SEC, secondary markets, exchanges and broker-dealers.','Broad anti-fraud and market framework.'],
+        ['MSRB','Writes municipal securities and adviser rules.','It does not directly enforce every rule.'],
+        ['SIPC','Customer-asset process after a member broker-dealer fails.','Not insurance against market loss.']
+      ]},example:'A representative receives shares for privately raising money for a startup. Calling the payment a consulting fee does not change the substance: this is an outside securities transaction requiring firm handling.',questions:[
+        {id:'G7Q1',type:'Multiple choice',prompt:'Which law is most directly associated with registration of a corporate IPO?',choices:['A. Securities Act of 1933','B. Exchange Act of 1934','C. Advisers Act of 1940','D. SIPA'],answer:'A. Securities Act of 1933. It focuses on new-issue registration and offering disclosure.'},
+        {id:'G7Q2',type:'Short answer',prompt:'Why does passing the SIE not by itself permit someone to act as a registered representative?',answer:'The SIE demonstrates essential knowledge but is not a registration. The person also needs the appropriate representative qualification and association with a member firm.'},
+        {id:'G7Q3',type:'Scenario',prompt:'A representative plans to run a paid weekend bookkeeping business. What should happen before the work begins?',answer:'The representative should provide prior written notice to the member firm under its outside-business-activity procedures.'}
+      ]}
+    ];
+
+    const mixedReview = [
+      {id:'M1',type:'Multiple choice',prompt:'A registered corporate bond is sold from one investor to another. Which market is involved?',choices:['A. Primary','B. Secondary','C. Fourth only','D. Money market'],answer:'B. Secondary. The security is already outstanding and the issuer receives no proceeds.'},
+      {id:'M2',type:'Scenario',prompt:'Rates rise sharply. Compare the likely price effect on a newly issued floating-rate instrument and a long fixed-rate bond.',answer:'The long fixed-rate bond should face greater price pressure because its coupon does not adjust. A floating rate can reset, reducing—but not eliminating—rate sensitivity.'},
+      {id:'M3',type:'Multiple choice',prompt:'Which product is unsecured debt linked to an index?',choices:['A. ETF','B. ETN','C. Closed-end fund','D. UIT'],answer:'B. ETN. “Note” signals an issuer debt obligation and its accompanying credit risk.'},
+      {id:'M4',type:'Short answer',prompt:'Explain why a covered call is covered but not risk free.',answer:'Owned shares can satisfy assignment, so delivery is covered. The shares can still fall substantially, and upside above the strike is surrendered.'},
+      {id:'M5',type:'Scenario',prompt:'A customer holds $48,000 in a fund family and wants to invest $5,000 more. Which sales-charge feature should be checked?',answer:'Rights of accumulation. Existing eligible holdings may put the new purchase above a breakpoint threshold.'},
+      {id:'M6',type:'Multiple choice',prompt:'Which risk is most directly associated with an issuer failing to make promised bond payments?',choices:['A. Credit risk','B. Currency risk','C. Prepayment risk','D. Political risk only'],answer:'A. Credit risk. The question describes inability or unwillingness to pay contractual obligations.'},
+      {id:'M7',type:'Scenario',prompt:'A customer wants immediate execution and accepts price uncertainty. Which order fits?',answer:'A market order. It prioritizes execution but does not guarantee the execution price.'},
+      {id:'M8',type:'Multiple choice',prompt:'Who owns assets transferred into a UTMA account?',choices:['A. Custodian','B. Minor','C. Broker-dealer','D. Donor'],answer:'B. Minor. The custodian controls the assets for the minor but the completed gift is irrevocable.'},
+      {id:'M9',type:'Short answer',prompt:'Give one reason a raw 72% practice score does not guarantee passing the actual SIE.',answer:'FINRA reports a scaled score and uses equating across exam forms. Practice questions also cannot reproduce the exact difficulty or selection of the actual exam.'},
+      {id:'M10',type:'Scenario',prompt:'A customer repeatedly deposits cash below a reporting threshold and wires it abroad. What should a representative do?',answer:'Follow firm AML procedures and escalate the suspicious pattern. Do not confront or help the customer alter the transactions, and never disclose any SAR filing.'},
+      {id:'M11',type:'Multiple choice',prompt:'Which entity writes rules for municipal securities firms and municipal advisers?',choices:['A. SIPC','B. FDIC','C. MSRB','D. Federal Reserve'],answer:'C. MSRB. Enforcement is performed by other regulators, including FINRA, the SEC and bank regulators.'},
+      {id:'M12',type:'Short answer',prompt:'Contrast the tax treatment of typical municipal-bond interest with a capital gain from selling that bond.',answer:'Municipal interest is generally exempt from federal income tax. A realized capital gain is generally taxable, and state treatment of either item can vary.'}
+    ];
 
     const allLessons = modules.flatMap(m=>m.lessons.map(l=>({...l,moduleId:m.id,moduleTitle:m.title,domain:m.domain})));
 
@@ -728,7 +878,7 @@
       const w=weakDomain(),d=DOMAINS[w],next=allLessons.find(l=>l.domain===w&&!state.completedLessons.includes(l.id))||nextLesson();
       return {domain:w,title:next.title,lesson:next,reason:domainResults(w).total?`${d.short} is your lowest measured accuracy area.`:`${d.short} carries ${d.weight}% of scored questions and needs baseline evidence.`};
     }
-    function sourceNote(){return `<p class="source-note">Coverage blueprint verified against the <a href="https://www.finra.org/sites/default/files/2025-10/SIE_Content_Outline.pdf" target="_blank" rel="noreferrer">2025 FINRA SIE Content Outline</a> and <a href="https://www.finra.org/industry/sie-practice-test" target="_blank" rel="noreferrer">FINRA practice-test guidance</a>. SIE Compass is an independent study tool, not affiliated with or endorsed by FINRA. Readiness is directional and never a guarantee of exam performance.</p>`;}
+    function sourceNote(){return `<p class="source-note">Optional references: <a href="https://www.finra.org/sites/default/files/2025-10/SIE_Content_Outline.pdf" target="_blank" rel="noreferrer">official FINRA SIE Content Outline</a> and <a href="https://www.finra.org/industry/sie-practice-test" target="_blank" rel="noreferrer">official FINRA practice-test guidance</a>. SIE Compass is an independent study tool, not affiliated with or endorsed by FINRA. Readiness is directional and never a guarantee of exam performance.</p>`;}
     function updateChrome(){
       const p=completion();$('#sideProgress').style.width=p+'%';$('#sideCompleted').textContent=`${state.completedLessons.length} of ${allLessons.length} lessons`;$('#sidePercent').textContent=p+'%';
       $$('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
@@ -748,7 +898,7 @@
       history.replaceState(null,'','#'+next+(arg?'/'+arg:''));render();window.scrollTo(0,0);$('#main').focus({preventScroll:true});
     }
     function render(){
-      updateChrome();const renderers={home:renderHome,dashboard:renderDashboard,course:renderCourse,lesson:renderLesson,quiz:renderQuiz,flashcards:renderFlashcards,review:renderReview,exam:renderExam,planner:renderPlanner,analytics:renderAnalytics};
+      updateChrome();const renderers={home:renderHome,dashboard:renderDashboard,course:renderCourse,guide:renderGuide,lesson:renderLesson,quiz:renderQuiz,flashcards:renderFlashcards,review:renderReview,exam:renderExam,planner:renderPlanner,analytics:renderAnalytics};
       (renderers[view]||renderHome)();$('#main').classList.remove('view-enter');void $('#main').offsetWidth;$('#main').classList.add('view-enter');
     }
     function weightCards(showProgress=false){return Object.entries(DOMAINS).map(([id,d])=>`
@@ -795,6 +945,17 @@
     function moduleRow(m,index){
       const done=m.lessons.filter(l=>state.completedLessons.includes(l.id)).length,p=percent(done,m.lessons.length),d=DOMAINS[m.domain];
       return `<article class="module-row" style="--domain-color:${d.color}"><div class="module-num">${String(index+1).padStart(2,'0')}</div><div><div class="eyebrow">${esc(d.short)} · ${d.weight}% domain</div><h3>${esc(m.title)}</h3><div class="module-meta">${esc(m.description)} · ${m.lessons.reduce((a,l)=>a+l.minutes,0)} min</div><div class="lesson-grid">${m.lessons.map(l=>`<button class="lesson-link ${state.completedLessons.includes(l.id)?'done':''}" data-action="open-lesson" data-id="${l.id}"><span>${state.completedLessons.includes(l.id)?'✓ ':''}${esc(l.title)}</span><span>${l.minutes} min →</span></button>`).join('')}</div></div><div class="module-actions"><div class="progress-disc" style="--pct:${p}%"><span>${p}%</span></div><button class="soft-btn" data-action="start-domain-quiz" data-domain="${m.domain}">Checkpoint</button></div></article>`;
+    }
+    function guideQuestionMarkup(q){return `<div class="study-question"><span class="question-type">${esc(q.type)} · ${esc(q.id)}</span><p><strong>${esc(q.prompt)}</strong></p>${q.choices?`<ol class="choice-list" type="A">${q.choices.map(c=>`<li>${esc(c.replace(/^[A-D]\.\s*/,''))}</li>`).join('')}</ol>`:''}</div>`;}
+    function renderGuide(){
+      $('#topEyebrow').textContent='First-pass study guide';$('#topTitle').textContent='Read, retrieve, then verify.';
+      const allGuideQuestions=guideSections.flatMap(s=>s.questions);
+      $('#main').innerHTML=`<div class="page-head"><div><div class="eyebrow">Concise study hub</div><h1>The SIE, from first principles to exam decisions.</h1><p>This guide adds a skim-friendly path through the full app. Use the Course for deeper lessons and Quiz mode for scored practice.</p></div><button class="primary-btn" data-action="start-diagnostic">Start diagnostic →</button></div>
+        <section class="card study-intro"><span class="tag">How to use this resource</span><h2 style="margin-top:12px">One section. Closed-book recall. Delayed answers.</h2><p>Read each section once, study the comparison, then answer its three questions without looking back. Complete the mixed review after all seven sections and check every response against the answer key at the bottom.</p><nav class="study-toc" aria-label="Study guide contents">${guideSections.map(s=>`<a href="#${s.id}"><span>${s.number} · ${esc(s.title)}</span><span>↓</span></a>`).join('')}<a href="#guide-mixed"><span>08 · Mixed review</span><span>↓</span></a><a href="#guide-answers"><span>09 · Answer key</span><span>↓</span></a></nav></section>
+        ${guideSections.map(s=>`<hr class="study-rule"><section class="card study-section" id="${s.id}"><header><div class="eyebrow">Section ${s.number}</div><h2>${esc(s.title)}</h2><p>${esc(s.summary)}</p></header><div class="study-points">${s.points.map(p=>`<div class="study-point"><strong>${esc(p[0])}</strong><p>${esc(p[1])}</p></div>`).join('')}</div><div class="table-wrap"><table class="study-table"><thead><tr>${s.table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${s.table.rows.map(row=>`<tr>${row.map((cell,i)=>`<${i?'td':'th scope="row"'}>${esc(cell)}</${i?'td':'th'}>`).join('')}</tr>`).join('')}</tbody></table></div><div class="callout"><h3>Concrete example</h3><p>${esc(s.example)}</p></div><div class="practice-block"><h3>Check your understanding</h3><p>Answer before visiting the key.</p><div class="practice-list">${s.questions.map(guideQuestionMarkup).join('')}</div></div></section>`).join('')}
+        <hr class="study-rule"><section class="card study-section" id="guide-mixed"><header><div class="eyebrow">Section 08 · Interleaving</div><h2>Mixed review</h2><p>These questions switch topics deliberately. On the actual exam, first identify the domain, then the rule or relationship being tested.</p></header><div class="practice-list">${mixedReview.map(guideQuestionMarkup).join('')}</div></section>
+        <hr class="study-rule"><section class="card answer-key" id="guide-answers"><header><div class="eyebrow">Section 09</div><h2 style="margin:5px 0 6px">Answer key with reasoning</h2><p>Do not score only the letter. Say why the correct answer works and why your original reasoning differed.</p></header><h3 style="margin-top:22px">Section checks</h3>${allGuideQuestions.map(q=>`<div class="answer-entry"><strong>${esc(q.id)}</strong><p>${esc(q.answer)}</p></div>`).join('')}<h3 style="margin-top:25px">Mixed review</h3>${mixedReview.map(q=>`<div class="answer-entry"><strong>${esc(q.id)}</strong><p>${esc(q.answer)}</p></div>`).join('')}</section>
+        <p class="source-note">Optional references: <a href="https://www.finra.org/registration-exams-ce/qualification-exams/securities-industry-essentials-exam-sie" target="_blank" rel="noreferrer">official FINRA SIE overview</a> and <a href="https://www.sec.gov/about/what-we-do" target="_blank" rel="noreferrer">official SEC overview</a>. All explanations and practice questions in this guide are original.</p>`;
     }
     function renderCourse(){
       $('#topEyebrow').textContent='Course map';$('#topTitle').textContent=`${allLessons.length} concise lessons across 13 modules.`;
@@ -1045,7 +1206,7 @@
     window.addEventListener('beforeunload',()=>{creditTime();localStorage.setItem(STORAGE_KEY,JSON.stringify(state));});
     setInterval(()=>{creditTime();save();},60000);
     (function init(){
-      const parts=location.hash.replace('#','').split('/');if(parts[0]&&['home','dashboard','course','lesson','quiz','flashcards','review','exam','planner','analytics'].includes(parts[0]))view=parts[0];if(view==='lesson'&&parts[1])selectedLesson=parts[1];
+      const parts=location.hash.replace('#','').split('/');if(parts[0]&&['home','dashboard','course','guide','lesson','quiz','flashcards','review','exam','planner','analytics'].includes(parts[0]))view=parts[0];if(view==='lesson'&&parts[1])selectedLesson=parts[1];
       const expected={d1:12,d2:33,d3:23,d4:7};Object.keys(expected).forEach(id=>{const actual=questions.filter(q=>q.domain===id).length;if(actual!==expected[id])console.error(`Question weighting error for ${id}: ${actual}`)});
       render();
     })();
