@@ -178,6 +178,31 @@
     .lesson-link:hover { border-color:var(--green); }
     .lesson-link.done { background:var(--green-2); }
     .lesson-link span:last-child { color:var(--muted); font-size:12px; white-space:nowrap; }
+    .learning-map { max-width:980px; margin:0 auto; display:grid; gap:24px; }
+    .map-module { --route-color:var(--green); position:relative; padding:0 0 4px 82px; }
+    .map-module:not(:last-child)::after { content:""; position:absolute; left:29px; top:61px; bottom:-26px; width:3px; border-radius:99px; background:linear-gradient(var(--route-color),color-mix(in srgb,var(--route-color) 25%,var(--line))); }
+    .map-module-marker { position:absolute; z-index:2; left:0; top:0; width:61px; height:61px; border-radius:20px; display:grid; place-items:center; color:white; background:var(--route-color); box-shadow:0 8px 20px color-mix(in srgb,var(--route-color) 24%,transparent); border:5px solid var(--paper); font-size:18px; font-weight:850; }
+    .map-module-card { overflow:hidden; padding:0; border-color:color-mix(in srgb,var(--route-color) 24%,var(--line)); }
+    .map-module-head { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:18px; padding:20px 22px; background:linear-gradient(120deg,color-mix(in srgb,var(--route-color) 10%,var(--surface)),var(--surface)); border-bottom:1px solid var(--line); }
+    .map-module-head h2 { margin:3px 0 4px; font-size:20px; }
+    .map-module-head p { font-size:12px; }
+    .map-module-progress { min-width:86px; text-align:right; }
+    .map-module-progress strong { display:block; color:var(--route-color); font-size:22px; }
+    .map-module-progress span { color:var(--muted); font-size:10px; text-transform:uppercase; letter-spacing:.07em; }
+    .map-lesson-list { position:relative; display:grid; gap:0; padding:12px 18px 16px 30px; }
+    .map-lesson-list::before { content:""; position:absolute; top:21px; bottom:25px; left:33px; width:2px; background:var(--line); }
+    .map-stop { position:relative; z-index:1; width:100%; display:grid; grid-template-columns:30px minmax(0,1fr) auto; align-items:center; gap:12px; padding:10px 10px 10px 0; border:0; border-radius:12px; background:transparent; color:var(--ink); text-align:left; }
+    .map-stop:hover { background:var(--surface-2); }
+    .map-stop-dot { width:16px; height:16px; margin-left:-4px; border-radius:50%; border:3px solid var(--surface); background:var(--line); box-shadow:0 0 0 2px var(--line); }
+    .map-stop.done .map-stop-dot { background:var(--green); box-shadow:0 0 0 2px var(--green); }
+    .map-stop.current .map-stop-dot { width:20px; height:20px; margin-left:-6px; background:var(--gold); box-shadow:0 0 0 3px var(--gold-2),0 0 0 5px var(--gold); }
+    .map-stop-title { min-width:0; }
+    .map-stop-title strong { display:block; font-size:14px; }
+    .map-stop-title span { display:block; margin-top:2px; color:var(--muted); font-size:11px; }
+    .map-stop-status { color:var(--muted); font-size:11px; white-space:nowrap; }
+    .map-stop.done .map-stop-status { color:var(--green); font-weight:800; }
+    .map-stop.current { background:var(--gold-2); }
+    .map-stop.current .map-stop-status { color:var(--gold); font-weight:850; }
     .lesson-layout { display:grid; grid-template-columns:minmax(0,1fr) 270px; gap:22px; align-items:start; }
     .lesson-hero { padding:clamp(25px,4vw,44px); border-radius:22px; color:white; background:linear-gradient(135deg,var(--navy),var(--navy-2)); margin-bottom:17px; }
     .lesson-hero h1 { font-size:clamp(29px,4vw,48px); line-height:1.04; letter-spacing:-.05em; margin:9px 0 12px; }
@@ -202,6 +227,14 @@
     .must-know div { padding:12px 13px; border-radius:10px; background:var(--gold-2); border:1px solid color-mix(in srgb,var(--gold) 20%,var(--line)); }
     .must-know strong { display:block; color:var(--gold); font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
     .lesson-source { color:var(--muted); font-size:11px; margin-top:12px; }
+    .lesson-check-cta { display:flex; align-items:center; justify-content:space-between; gap:18px; }
+    .lesson-check-cta p { max-width:650px; }
+    .lesson-flow { position:sticky; z-index:12; bottom:16px; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr); align-items:center; gap:10px; margin-top:20px; padding:11px; border:1px solid color-mix(in srgb,var(--green) 25%,var(--line)); border-radius:16px; background:color-mix(in srgb,var(--surface) 94%,transparent); box-shadow:0 15px 38px rgba(5,25,23,.18); backdrop-filter:blur(14px); }
+    .lesson-flow .flow-prev { justify-self:start; }
+    .lesson-flow .flow-next { justify-self:end; }
+    .lesson-flow-status { min-width:105px; color:var(--muted); font-size:11px; text-align:center; }
+    .lesson-flow-status strong { display:block; color:var(--ink); font-size:13px; }
+    .lesson-flow button:disabled { opacity:.38; cursor:not-allowed; }
     details.deep { border:1px solid var(--line); border-radius:14px; background:var(--surface); }
     details.deep summary { padding:16px 18px; font-weight:780; cursor:pointer; }
     details.deep > div { padding:0 18px 18px; color:var(--muted); }
@@ -218,6 +251,7 @@
     .lesson-nav-list { display:grid; gap:6px; margin:14px 0; }
     .lesson-nav-list button { text-align:left; padding:8px 10px; border:0; background:transparent; color:var(--muted); border-radius:9px; }
     .lesson-nav-list button:hover { background:var(--surface-2); color:var(--ink); }
+    .lesson-nav-list button.current { background:var(--green-2); color:var(--green); font-weight:800; }
     .check-card { padding:20px; border:1px solid var(--line); border-radius:15px; background:var(--surface); }
     .check-options { display:grid; gap:8px; margin:14px 0; }
     .option-btn { display:flex; gap:10px; align-items:flex-start; width:100%; text-align:left; padding:12px 13px; border:1px solid var(--line); border-radius:11px; background:var(--paper); color:var(--ink); }
@@ -354,9 +388,20 @@
       .page-head { align-items:start; flex-direction:column; }
       .module-row { grid-template-columns:48px minmax(0,1fr); }
       .module-actions { grid-column:1/-1; justify-content:flex-end; }
+      .map-module { padding-left:65px; }
+      .map-module:not(:last-child)::after { left:25px; }
+      .map-module-marker { width:52px; height:52px; border-radius:16px; font-size:15px; }
+      .map-module-head { grid-template-columns:1fr; gap:9px; }
+      .map-module-progress { text-align:left; }
+      .map-module-progress strong,.map-module-progress span { display:inline; }
+      .map-module-progress span { margin-left:5px; }
       .concept-grid, .control-grid { grid-template-columns:1fr; }
       .must-know { grid-template-columns:1fr; }
       .study-points { grid-template-columns:1fr; }
+      .lesson-flow { bottom:80px; grid-template-columns:1fr 1fr; }
+      .lesson-flow-status { display:none; }
+      .lesson-flow button { width:100%; }
+      .lesson-check-cta { align-items:flex-start; flex-direction:column; }
       .domain-result { grid-template-columns:1fr 50px; }
       .domain-result .bar { grid-column:1/-1; grid-row:2; }
       .task { grid-template-columns:auto 42px minmax(0,1fr); }
@@ -372,6 +417,16 @@
       .flashcard { min-height:390px; }
       .review-item { grid-template-columns:38px minmax(0,1fr); }
       .review-item > .soft-btn { grid-column:2; }
+      .map-module { padding-left:0; }
+      .map-module:not(:last-child)::after { left:25px; top:48px; bottom:-27px; }
+      .map-module-marker { position:relative; width:49px; height:49px; margin:0 0 -10px 1px; }
+      .map-module-card { margin-left:15px; }
+      .map-lesson-list { padding-left:21px; }
+      .map-lesson-list::before { left:24px; }
+      .map-stop { grid-template-columns:28px minmax(0,1fr); }
+      .map-stop-status { grid-column:2; margin-top:-7px; }
+      .lesson-flow { margin-left:-8px; margin-right:-8px; padding:8px; }
+      .lesson-flow .soft-btn,.lesson-flow .primary-btn { padding:10px 9px; font-size:11px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
@@ -1235,6 +1290,15 @@
       const done=m.lessons.filter(l=>state.completedLessons.includes(l.id)).length,p=percent(done,m.lessons.length),d=DOMAINS[m.domain];
       return `<article class="module-row" style="--domain-color:${d.color}"><div class="module-num">${String(index+1).padStart(2,'0')}</div><div><div class="eyebrow">${esc(d.short)} · ${d.weight}% domain</div><h3>${esc(m.title)}</h3><div class="module-meta">${esc(m.description)} · ${m.lessons.reduce((a,l)=>a+lessonMinutes(l),0)} min</div><div class="lesson-grid">${m.lessons.map(l=>`<button class="lesson-link ${state.completedLessons.includes(l.id)?'done':''}" data-action="open-lesson" data-id="${l.id}"><span>${state.completedLessons.includes(l.id)?'✓ ':''}${esc(l.title)}</span><span>${lessonMinutes(l)} min →</span></button>`).join('')}</div></div><div class="module-actions"><div class="progress-disc" style="--pct:${p}%"><span>${p}%</span></div><button class="soft-btn" data-action="start-domain-quiz" data-domain="${m.domain}">Checkpoint</button></div></article>`;
     }
+    function mapModule(m,index){
+      const completed=m.lessons.filter(l=>state.completedLessons.includes(l.id)).length,d=DOMAINS[m.domain],current=state.completedLessons.length<allLessons.length?nextLesson().id:null;
+      return `<article class="map-module" style="--route-color:${d.color}">
+        <div class="map-module-marker" aria-hidden="true">${String(index+1).padStart(2,'0')}</div>
+        <div class="card map-module-card"><header class="map-module-head"><div><div class="eyebrow">${esc(d.short)} · ${d.weight}% domain</div><h2>${esc(m.title)}</h2><p>${esc(m.description)} · ${m.lessons.reduce((sum,l)=>sum+lessonMinutes(l),0)} minutes</p></div><div class="map-module-progress"><strong>${completed}/${m.lessons.length}</strong><span>lessons complete</span></div></header>
+          <div class="map-lesson-list">${m.lessons.map(l=>{const globalIndex=allLessons.findIndex(item=>item.id===l.id),done=state.completedLessons.includes(l.id),isCurrent=l.id===current;return `<button class="map-stop ${done?'done':''} ${isCurrent?'current':''}" data-action="open-lesson" data-id="${l.id}" aria-label="Open lesson ${globalIndex+1}: ${esc(l.title)}"><span class="map-stop-dot" aria-hidden="true"></span><span class="map-stop-title"><strong>${globalIndex+1}. ${esc(l.title)}</strong><span>${lessonMinutes(l)} min · ${lessonDepth[l.id].sections.length} teaching sections</span></span><span class="map-stop-status">${done?'✓ Complete':isCurrent?'Continue →':'Upcoming'}</span></button>`}).join('')}</div>
+        </div>
+      </article>`;
+    }
     function guideQuestionMarkup(q){return `<div class="study-question"><span class="question-type">${esc(q.type)} · ${esc(q.id)}</span><p><strong>${esc(q.prompt)}</strong></p>${q.choices?`<ol class="choice-list" type="A">${q.choices.map(c=>`<li>${esc(c.replace(/^[A-D]\.\s*/,''))}</li>`).join('')}</ol>`:''}</div>`;}
     function renderGuide(){
       $('#topEyebrow').textContent='First-pass study guide';$('#topTitle').textContent='Read, retrieve, then verify.';
@@ -1247,21 +1311,22 @@
         <p class="source-note">Optional references: <a href="https://www.finra.org/registration-exams-ce/qualification-exams/securities-industry-essentials-exam-sie" target="_blank" rel="noreferrer">official FINRA SIE overview</a> and <a href="https://www.sec.gov/about/what-we-do" target="_blank" rel="noreferrer">official SEC overview</a>. All explanations and practice questions in this guide are original.</p>`;
     }
     function renderCourse(){
-      $('#topEyebrow').textContent='Course map';$('#topTitle').textContent=`${allLessons.length} concise lessons across 13 modules.`;
-      $('#main').innerHTML=`<div class="page-head"><div><div class="eyebrow">Curriculum architecture</div><h1>The official outline, made learnable.</h1><p>Foundations precede products; trading and compliance then interleave application. Core lessons contain intuition, exam framing, examples, traps and active recall.</p></div><button class="primary-btn" data-action="open-lesson" data-id="${nextLesson().id}">Next lesson →</button></div>
-        <section class="grid grid-4" style="margin-bottom:25px">${weightCards(true)}</section>
-        <div class="module-list">${modules.map(moduleRow).join('')}</div>${sourceNote()}`;
+      const next=nextLesson(),courseDone=state.completedLessons.length===allLessons.length;$('#topEyebrow').textContent='Course map';$('#topTitle').textContent=`Your ordered path through ${allLessons.length} lessons.`;
+      $('#main').innerHTML=`<div class="page-head"><div><div class="eyebrow">Guided learning path</div><h1>Follow the route from foundations to exam readiness.</h1><p>Each stop builds on the ones before it. Completed lessons turn green, your next lesson is highlighted in gold, and the path always remembers where to continue.</p></div><button class="primary-btn" data-action="open-lesson" data-id="${next.id}">${courseDone?'Review from lesson 1':state.completedLessons.length?'Continue the path':'Start at lesson 1'} →</button></div>
+        <section class="card recommendation" style="margin-bottom:25px"><div class="section-title" style="margin:0"><div><div class="eyebrow">Overall route progress</div><h2>${state.completedLessons.length} of ${allLessons.length} lessons complete</h2><p>${courseDone?'Route complete. Review any lesson or move into cumulative practice.':`Next stop: ${esc(next.title)}`}</p></div><strong style="font-size:28px;color:var(--green)">${completion()}%</strong></div><div class="bar" style="height:10px"><span style="width:${completion()}%"></span></div></section>
+        <div class="learning-map">${modules.map(mapModule).join('')}</div>
+        <section class="section"><div class="section-title"><div><div class="eyebrow">Exam blueprint</div><h2>Where the scored questions come from</h2></div></div><div class="grid grid-4">${weightCards(true)}</div></section>${sourceNote()}`;
     }
     function lessonQuestion(lesson){
       const ids=lessonQuestionMap[lesson.id]||[];
       return practiceQuestions.find(q=>q.id===ids[0])||practiceQuestions.find(q=>q.domain===lesson.domain);
     }
     function renderLesson(){
-      const lesson=allLessons.find(l=>l.id===selectedLesson)||allLessons[0],m=modules.find(x=>x.id===lesson.moduleId),depth=lessonDepth[lesson.id],q=lessonQuestion(lesson),done=state.completedLessons.includes(lesson.id);
+      const lesson=allLessons.find(l=>l.id===selectedLesson)||allLessons[0],lessonIndex=allLessons.findIndex(l=>l.id===lesson.id),previous=allLessons[lessonIndex-1]||null,next=allLessons[lessonIndex+1]||null,m=modules.find(x=>x.id===lesson.moduleId),depth=lessonDepth[lesson.id],q=lessonQuestion(lesson),done=state.completedLessons.includes(lesson.id);
       $('#topEyebrow').textContent=`${DOMAINS[lesson.domain].short} · ${DOMAINS[lesson.domain].weight}%`;
       $('#topTitle').textContent=lesson.title;
       $('#main').innerHTML=`<div class="lesson-layout"><div>
-        <section class="lesson-hero"><div class="eyebrow">${esc(m.title)} · lesson ${m.lessons.findIndex(l=>l.id===lesson.id)+1}</div><h1>${esc(lesson.title)}</h1><p>${esc(lesson.summary)}</p><div class="lesson-meta"><span>◷ ${depth.minutes} minutes</span><span>${done?'✓ Complete':'Comprehensive lesson'}</span><span>${esc(depth.outline)}</span><span>Domain weight ${DOMAINS[lesson.domain].weight}%</span></div></section>
+        <section class="lesson-hero"><div class="eyebrow">Course lesson ${lessonIndex+1} of ${allLessons.length} · ${esc(m.title)}</div><h1>${esc(lesson.title)}</h1><p>${esc(lesson.summary)}</p><div class="lesson-meta"><span>◷ ${depth.minutes} minutes</span><span>${done?'✓ Complete':'Current path stop'}</span><span>${esc(depth.outline)}</span><span>Domain weight ${DOMAINS[lesson.domain].weight}%</span></div></section>
         <div class="coverage-banner"><div><strong>Complete outline coverage for this lesson</strong><span>${esc(depth.outline)} · ${depth.sections.length} teaching sections · aligned retrieval practice</span></div><span class="tag green">Expanded</span></div>
         <section class="card lesson-block"><div class="eyebrow">Why this matters on test day</div><h2>Turn the fact into a decision</h2><p>${esc(lesson.why)}</p></section>
         <section class="card lesson-block"><h2>Learning objectives</h2><ul>${lesson.objectives.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
@@ -1275,8 +1340,9 @@
         <section class="callout gold lesson-block"><h3>Memory aid</h3><p>${esc(lesson.memory)}</p></section>
         <section class="check-card lesson-block" id="quickCheck"><div class="eyebrow">Mini knowledge check</div><h2>${esc(q.stem)}</h2><div class="check-options">${q.choices.map((c,i)=>`<button class="option-btn" data-action="quick-answer" data-index="${i}" data-qid="${q.id}"><span class="option-letter">${letters[i]}</span><span>${esc(c)}</span></button>`).join('')}</div><div id="quickFeedback" aria-live="polite"></div></section>
         <section class="card lesson-block"><div class="eyebrow">What FINRA is really testing</div><h2>Recognition under pressure</h2><p>${esc(lesson.finra)}</p><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><h3>Summary sheet</h3><ul>${lesson.summaryPoints.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
-        <div class="lesson-actions" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><button class="soft-btn" data-action="lesson-quiz" data-lesson="${lesson.id}">Lesson-aligned quiz · ${(lessonQuestionMap[lesson.id]||[]).length} questions</button><button class="primary-btn" data-action="toggle-complete" data-id="${lesson.id}">${done?'Mark incomplete':'Mark complete'} →</button></div>
-      </div><aside class="card sticky-card"><span class="tag green">Lesson navigator</span><div class="lesson-nav-list">${m.lessons.map(l=>`<button data-action="open-lesson" data-id="${l.id}">${state.completedLessons.includes(l.id)?'✓ ':''}${esc(l.title)}</button>`).join('')}</div><div class="bar"><span style="width:${percent(m.lessons.filter(l=>state.completedLessons.includes(l.id)).length,m.lessons.length)}%"></span></div><p style="font-size:12px;margin-top:8px">${m.lessons.filter(l=>state.completedLessons.includes(l.id)).length} of ${m.lessons.length} complete</p><button class="soft-btn" style="width:100%;margin-top:15px" data-view="course">Back to course map</button></aside></div>${sourceNote()}`;
+        <section class="card lesson-block lesson-check-cta"><div><div class="eyebrow">Before you continue</div><h2>Check that the lesson stuck</h2><p>This short assessment uses only questions mapped to this lesson. You can continue through the course whether you take it now or return later.</p></div><button class="soft-btn" data-action="lesson-quiz" data-lesson="${lesson.id}">Take ${(lessonQuestionMap[lesson.id]||[]).length}-question lesson check</button></section>
+        <nav class="lesson-flow" aria-label="Lesson sequence"><button class="soft-btn flow-prev" data-action="previous-lesson" data-id="${previous?.id||''}" ${previous?'':'disabled'} aria-label="${previous?`Previous lesson: ${esc(previous.title)}`:'This is the first lesson'}">← Previous</button><div class="lesson-flow-status"><strong>Lesson ${lessonIndex+1} of ${allLessons.length}</strong>${esc(DOMAINS[lesson.domain].short)}</div><button class="primary-btn flow-next" data-action="complete-continue" data-id="${lesson.id}" data-next="${next?.id||''}" aria-label="${next?`${done?'Continue':'Complete lesson and continue'} to ${esc(next.title)}`:'Complete the final lesson'}">${next?(done?'Continue →':'Complete & continue →'):'Finish course ✓'}</button></nav>
+      </div><aside class="card sticky-card"><span class="tag green">Module ${modules.findIndex(item=>item.id===m.id)+1} of ${modules.length}</span><div class="lesson-nav-list">${m.lessons.map(l=>`<button class="${l.id===lesson.id?'current':''}" data-action="open-lesson" data-id="${l.id}">${state.completedLessons.includes(l.id)?'✓ ':''}${esc(l.title)}</button>`).join('')}</div><div class="bar"><span style="width:${percent(m.lessons.filter(l=>state.completedLessons.includes(l.id)).length,m.lessons.length)}%"></span></div><p style="font-size:12px;margin-top:8px">${m.lessons.filter(l=>state.completedLessons.includes(l.id)).length} of ${m.lessons.length} complete</p><button class="soft-btn" style="width:100%;margin-top:15px" data-view="course">View full course map</button></aside></div>${sourceNote()}`;
     }
 
     function quizPool(domain='mixed',difficulty='all'){
@@ -1434,6 +1500,12 @@
       if(btn.dataset.view){go(btn.dataset.view);return;}
       const a=btn.dataset.action;
       if(a==='open-lesson')go('lesson',btn.dataset.id);
+      else if(a==='previous-lesson'&&btn.dataset.id)go('lesson',btn.dataset.id);
+      else if(a==='complete-continue'){
+        const id=btn.dataset.id;if(!state.completedLessons.includes(id))state.completedLessons.push(id);creditTime();save();
+        if(btn.dataset.next){go('lesson',btn.dataset.next);toast('Lesson complete · next stop opened');}
+        else{go('course');toast('Course complete · every lesson is now on your map');}
+      }
       else if(a==='quick-study')startQuiz({domain:weakDomain(),count:10});
       else if(a==='set-plan'){state.plan=btn.dataset.plan;state.completedTasks=[];save();toast(`${planConfig[state.plan].name} activated`);go('planner');}
       else if(a==='toggle-complete'){
