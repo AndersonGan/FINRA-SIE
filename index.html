@@ -502,6 +502,40 @@
     .tts-controls select { height:34px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); font-size:12px; padding:0 5px; max-width:112px; }
     .tts-controls .tts-spacer { margin-left:auto; }
     @media (max-width:900px) { .tts-player { left:12px; right:12px; width:auto; bottom:82px; } }
+    .qx { margin-top:14px; border:1px solid var(--line); border-radius:13px; background:var(--surface); overflow:hidden; }
+    .qx > summary { cursor:pointer; padding:11px 14px; font-size:12.5px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--green); background:var(--surface-2); list-style:none; }
+    .qx > summary::-webkit-details-marker { display:none; }
+    .qx > summary::before { content:'▸ '; }
+    .qx[open] > summary::before { content:'▾ '; }
+    .qx-body { padding:15px 16px 16px; }
+    .qx-block { margin-bottom:15px; }
+    .qx-block:last-child { margin-bottom:0; }
+    .qx-block h4 { margin:0 0 6px; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+    .qx-block p { margin:0 0 6px; font-size:13.5px; line-height:1.6; }
+    .qx-model { color:var(--muted); font-style:italic; }
+    .qx-steps { margin:6px 0 0; padding-left:20px; font-size:13.5px; line-height:1.6; }
+    .qx-steps li { margin-bottom:5px; }
+    .qx-rule p { padding:10px 12px; border-radius:10px; background:var(--gold-2); border:1px solid color-mix(in srgb,var(--gold) 30%,var(--line)); }
+    .qx-trap p { padding:10px 12px; border-radius:10px; background:var(--coral-2); border:1px solid color-mix(in srgb,var(--coral) 28%,var(--line)); }
+    .qx-choice { padding:10px 12px; border:1px solid var(--line); border-left-width:4px; border-radius:9px; margin-bottom:7px; background:var(--paper); }
+    .qx-choice.ok { border-left-color:var(--green); background:var(--green-2); }
+    .qx-choice.no { border-left-color:var(--coral); background:var(--coral-2); }
+    .qx-choice strong { font-size:12px; }
+    .qx-choice p { margin:4px 0 0; font-size:13px; line-height:1.55; }
+    .qx-extra { color:var(--muted); font-size:12.5px!important; padding-top:5px; border-top:1px dashed var(--line); margin-top:6px!important; }
+    .qx-src-row { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:13px; }
+    .qx-src { padding:5px 10px; border:1px solid var(--line); border-radius:99px; background:var(--paper); color:var(--ink); font-size:11.5px; font-weight:700; cursor:pointer; }
+    .qx-src:hover { border-color:var(--green); }
+    .qx-drill-btn { width:100%; }
+    .qx-drill { margin-top:14px; padding:14px; border:1px solid var(--green); border-radius:13px; background:var(--paper); }
+    .qx-drill-top { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:9px; flex-wrap:wrap; }
+    .qx-drill-top strong { font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:var(--green); }
+    .qx-streak { font-size:11.5px; color:var(--muted); font-weight:700; }
+    .qx-streak.hot { color:var(--gold); }
+    .qx-drill-stem { font-size:14px; font-weight:700; margin:0 0 11px; line-height:1.5; }
+    .qx-drill-fb { margin-top:11px; padding:10px 12px; border-radius:10px; background:var(--coral-2); font-size:13px; line-height:1.55; }
+    .qx-drill-fb.ok { background:var(--green-2); }
+    .qx-drill-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
     @media print {
       .sidebar,.topbar,.hero-actions,.lesson-actions,.source-note,.as-launcher,.as-panel,.tts-player { display:none!important; }
       .shell,.content { display:block; }
@@ -1845,7 +1879,7 @@
     }
     function quizAnswerMarkup(q,chosen){
       if(chosen===undefined)return '';
-      return `<div class="answer-reasons" aria-live="polite">${q.reasons.map((r,i)=>`<div class="reason ${i===q.correct?'correct':''}"><strong>${letters[i]} · ${i===q.correct?'Correct':'Why tempting but wrong'}</strong><br>${esc(r)}</div>`).join('')}<div class="callout gold"><h3>High-yield takeaway</h3><p>${esc(q.takeaway)}</p></div></div>`;
+      return `<div class="answer-reasons" aria-live="polite">${q.reasons.map((r,i)=>`<div class="reason ${i===q.correct?'correct':''}"><strong>${letters[i]} · ${i===q.correct?'Correct':'Why tempting but wrong'}</strong><br>${esc(r)}</div>`).join('')}<div class="callout gold"><h3>High-yield takeaway</h3><p>${esc(q.takeaway)}</p></div>${qxExplainHTML(q,chosen,'quiz-'+q.id)}</div>`;
     }
     function quizQuestionMarkup(session,isExam=false){
       const q=session.questions[session.index],chosen=session.answers[q.id];
@@ -1929,7 +1963,7 @@
     }
     function examReviewHTML(report){
       if(!report.order)return '';
-      return report.order.map((qid,i)=>{const q=practiceQuestions.find(x=>x.id===qid);if(!q)return '';const chosen=report.answers[qid];const correct=chosen===q.correct;return `<article class="review-q ${chosen===undefined?'wrong':correct?'correct':'wrong'}"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span class="tag" style="color:${DOMAINS[q.domain].color}">${esc(DOMAINS[q.domain].short)}</span><span class="tag ${correct?'green':'coral'}">${chosen===undefined?'Unanswered':correct?'Correct':'Missed'}</span></div><p style="margin:8px 0"><strong>${i+1}. ${esc(q.stem)}</strong></p>${q.choices.map((c,ci)=>`<div class="rq-choice ${ci===q.correct?'correct':ci===chosen&&!correct?'chosen-wrong':''}">${letters[ci]}. ${esc(c)}${ci===q.correct?' ✓':ci===chosen&&!correct?' ✗ your answer':''}</div>`).join('')}<p style="margin-top:9px;color:var(--muted);font-size:13px"><strong>Why:</strong> ${esc(q.reasons[q.correct])} <em>${esc(q.takeaway)}</em></p></article>`}).join('');
+      return report.order.map((qid,i)=>{const q=practiceQuestions.find(x=>x.id===qid);if(!q)return '';const chosen=report.answers[qid];const correct=chosen===q.correct;return `<article class="review-q ${chosen===undefined?'wrong':correct?'correct':'wrong'}"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span class="tag" style="color:${DOMAINS[q.domain].color}">${esc(DOMAINS[q.domain].short)}</span><span class="tag ${correct?'green':'coral'}">${chosen===undefined?'Unanswered':correct?'Correct':'Missed'}</span></div><p style="margin:8px 0"><strong>${i+1}. ${esc(q.stem)}</strong></p>${q.choices.map((c,ci)=>`<div class="rq-choice ${ci===q.correct?'correct':ci===chosen&&!correct?'chosen-wrong':''}">${letters[ci]}. ${esc(c)}${ci===q.correct?' ✓':ci===chosen&&!correct?' ✗ your answer':''}</div>`).join('')}<p style="margin-top:9px;color:var(--muted);font-size:13px"><strong>Why:</strong> ${esc(q.reasons[q.correct])} <em>${esc(q.takeaway)}</em></p>${qxExplainHTML(q,chosen,'rev-'+q.id)}</article>`}).join('');
     }
     function renderExamReport(report){
       $('#topEyebrow').textContent='Mock exam report';$('#topTitle').textContent='Evidence first. Remediation next.';
@@ -1993,7 +2027,7 @@
     function quickAnswer(btn){
       const q=practiceQuestions.find(x=>x.id===btn.dataset.qid),chosen=Number(btn.dataset.index),wrap=btn.closest('.check-card');
       wrap.querySelectorAll('.option-btn').forEach((b,i)=>{b.disabled=true;b.classList.toggle('correct',i===q.correct);b.classList.toggle('incorrect',i===chosen&&i!==q.correct)});
-      wrap.querySelector('#quickFeedback').innerHTML=`<div class="callout ${chosen===q.correct?'':'trap'}"><h3>${chosen===q.correct?'Correct':'Not quite'}</h3><p>${esc(q.reasons[chosen])}</p><p><strong>Takeaway:</strong> ${esc(q.takeaway)}</p></div>`;
+      wrap.querySelector('#quickFeedback').innerHTML=`<div class="callout ${chosen===q.correct?'':'trap'}"><h3>${chosen===q.correct?'Correct':'Not quite'}</h3><p>${esc(q.reasons[chosen])}</p><p><strong>Takeaway:</strong> ${esc(q.takeaway)}</p></div>${qxExplainHTML(q,chosen,'lc-'+q.id)}`;
     }
     function exportProgress(){
       const payload={exportedAt:new Date().toISOString(),app:'SIE Compass',readiness:readiness(),note:'Directional study metric; not a pass prediction.',state};
@@ -2959,6 +2993,208 @@
       ttsStart(root,'Full study guide');
     }
 
+
+    /* ================== Deeper question explanations + repetition drill ==================
+       Every explanation is composed from content already in this file: the lesson that
+       teaches the question, its reasoning lab, the glossary, and the question's own
+       per-choice rationales. Nothing is invented.                                       */
+
+    /* question id -> lesson id, from the authored mapping where one exists */
+    const qxLessonIndex=(()=>{
+      const map=Object.create(null);
+      Object.keys(lessonQuestionMap||{}).forEach(lid=>{
+        (lessonQuestionMap[lid]||[]).forEach(qid=>{map[qid]=lid;});
+      });
+      return map;
+    })();
+    function qxLessonFor(q){
+      if(!q)return null;
+      const direct=qxLessonIndex[q.id];
+      if(direct){const l=allLessons.find(x=>x.id===direct);if(l)return l;}
+      /* fall back to the best-matching lesson in the same domain */
+      const toks=asQueryTokens((q.topic||'')+' '+(q.stem||'')+' '+(q.takeaway||''));
+      if(!toks.length)return null;
+      let best=null,bestScore=0;
+      allLessons.forEach(l=>{
+        if(q.domain&&l.domain!==q.domain)return;
+        const blob=asDocTokens([l.title,l.summary,l.why,l.deep,l.trap,...(l.concepts||[])].join(' '));
+        let sc=0;toks.forEach(t=>{if(blob.has(t))sc+=asIdf(t);});
+        if(sc>bestScore){bestScore=sc;best=l;}
+      });
+      return bestScore>2?best:null;
+    }
+    /* Glossary entry that best explains a question. Prefers a term the question
+       literally names, so we never attach a definition that merely scored well. */
+    function qxGlossFor(text,minScore){
+      const hits=asSearch(text,8).filter(h=>h.e.kind==='glossary'||h.e.kind==='concept');
+      if(!hits.length)return null;
+      const low=String(text||'').toLowerCase();
+      const named=hits.find(h=>low.includes(h.e.title.toLowerCase()));
+      if(named)return named.e;
+      return hits[0].s>=(minScore||18)?hits[0].e:null;
+    }
+    function qxGlossForQuestion(q){
+      const answer=(q.choices&&q.choices[q.correct])?q.choices[q.correct]:'';
+      const probe=(q.topic||'')+' '+(q.stem||'')+' '+answer;
+      const hits=asSearch(probe,10).filter(h=>h.e.kind==='glossary'||h.e.kind==='concept');
+      if(!hits.length)return null;
+      const named=((q.stem||'')+' '+answer).toLowerCase();
+      const hit=hits.find(h=>named.includes(h.e.title.toLowerCase()));
+      if(hit)return hit.e;
+      return hits[0].s>=18?hits[0].e:null;
+    }
+
+    /* ---------------- plain-English walkthrough ---------------- */
+    function qxWalkthrough(q){
+      const lesson=qxLessonFor(q);
+      const lab=lesson?(lessonLabs||{})[lesson.id]:null;
+      const gloss=qxGlossForQuestion(q);
+      const out={concept:'',conceptDef:'',steps:[],rule:'',lesson:lesson,sources:[]};
+
+      out.concept=q.topic||(lesson?lesson.title:'This concept');
+      if(gloss){out.conceptDef=gloss.body;out.sources.push({title:gloss.title,kind:'glossary',target:'glossary',term:gloss.title});}
+      else if(lesson){out.conceptDef=lesson.summary;}
+
+      if(lab&&lab.steps&&lab.steps.length){
+        out.steps=lab.steps.slice(0,4);
+        out.model=lab.model||'';
+        if(lesson)out.sources.push({title:lesson.title+' — reasoning lab',kind:'lesson',target:'lesson',id:lesson.id});
+      }else if(lesson){
+        const s=[];
+        if(lesson.finra)s.push(lesson.finra);
+        if(lesson.why)s.push(lesson.why);
+        out.steps=s;
+        out.sources.push({title:lesson.title,kind:'lesson',target:'lesson',id:lesson.id});
+      }
+      out.rule=q.takeaway||'';
+      if(lesson&&lesson.trap)out.trap=lesson.trap;
+      return out;
+    }
+
+    /* ---------------- expanded per-choice reasoning ---------------- */
+    function qxChoiceDetail(q,i){
+      const base=(q.reasons&&q.reasons[i])?q.reasons[i]:'';
+      /* Only attach a definition the choice actually names, and only if the
+         existing rationale has not already explained that same term. */
+      const low=String(q.choices[i]||'').toLowerCase();
+      const hits=asSearch(q.choices[i],8).filter(h=>h.e.kind==='glossary');
+      const g=hits.map(h=>h.e).find(e=>low.includes(e.title.toLowerCase()))||null;
+      let extra='';
+      if(g&&!base.toLowerCase().includes(g.title.toLowerCase())){
+        extra=g.title+': '+g.body;
+      }
+      return {text:q.choices[i],reason:base,extra:extra,term:g?g.title:''};
+    }
+
+    function qxExplainHTML(q,chosen,zoneId){
+      if(!q)return '';
+      const correct=chosen===q.correct;
+      const w=qxWalkthrough(q);
+      const openAttr=(chosen!==undefined&&!correct)?' open':'';
+      const steps=w.steps.length?`<div class="qx-block"><h4>How to think it through</h4>${w.model?`<p class="qx-model">${esc(w.model)}</p>`:''}<ol class="qx-steps">${w.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol></div>`:'';
+      const concept=`<div class="qx-block"><h4>What this question is really testing</h4><p><strong>${esc(w.concept)}</strong>${w.conceptDef?' — '+esc(w.conceptDef):''}</p></div>`;
+      const rule=w.rule?`<div class="qx-block qx-rule"><h4>The rule that decides it</h4><p>${esc(w.rule)}</p></div>`:'';
+      const trap=w.trap?`<div class="qx-block qx-trap"><h4>Where people go wrong</h4><p>${esc(w.trap)}</p></div>`:'';
+      const choices=`<div class="qx-block"><h4>Every choice, explained</h4>${q.choices.map((c,i)=>{
+        const d=qxChoiceDetail(q,i);
+        const isC=i===q.correct,isX=i===chosen&&!isC;
+        return `<div class="qx-choice ${isC?'ok':''} ${isX?'no':''}"><strong>${letters[i]} · ${isC?'Correct':'Incorrect'}${isX?' · you picked this':''}</strong><p>${esc(d.reason)}</p>${d.extra?`<p class="qx-extra">${esc(d.extra)}</p>`:''}</div>`;
+      }).join('')}</div>`;
+      const srcs=w.sources.length?`<div class="qx-src-row">${w.sources.map(s=>`<button class="qx-src" type="button" data-action="as-jump" data-target="${esc(s.target)}" data-id="${esc(s.id||'')}" data-term="${esc(s.term||'')}">${esc(s.title)}</button>`).join('')}</div>`:'';
+      const drillBtn=`<button class="soft-btn qx-drill-btn" data-action="drill-start" data-qid="${esc(q.id)}">↻ Drill this concept — keep giving me similar questions</button>`;
+      return `<details class="qx"${openAttr}><summary>${correct?'Explain this in depth':'Explain this in depth — why you missed it'}</summary><div class="qx-body">${concept}${steps}${rule}${trap}${choices}${srcs}${drillBtn}<div data-drill-zone="${esc(zoneId||q.id)}"></div></div></details>`;
+    }
+
+    /* ---------------- repetition drill: keep serving questions on one concept ---------------- */
+    let drillState=null; /* {originId, zone, seen:[], streak:0, best:0, done:0, current, chosen} */
+
+    function qxSimilar(origin,excludeIds){
+      const ex=new Set([origin.id,...(excludeIds||[])]);
+      const toks=asQueryTokens((origin.topic||'')+' '+(origin.stem||'')+' '+(origin.takeaway||''));
+      const scored=practiceQuestions.filter(q=>!ex.has(q.id)).map(q=>{
+        let s=0;
+        if(origin.topic&&q.topic===origin.topic)s+=40;
+        if(q.domain===origin.domain)s+=6;
+        const blob=asDocTokens(q.stem+' '+(q.topic||'')+' '+(q.takeaway||''));
+        toks.forEach(t=>{if(blob.has(t))s+=asIdf(t);});
+        return {q,s};
+      }).filter(x=>x.s>8).sort((a,b)=>b.s-a.s);
+      return scored.map(x=>x.q);
+    }
+    function drillPick(){
+      if(!drillState)return null;
+      const origin=practiceQuestions.find(q=>q.id===drillState.originId);
+      if(!origin)return null;
+      const pool=qxSimilar(origin,drillState.seen);
+      if(!pool.length){
+        /* exhausted the close matches — recycle from the same topic/domain */
+        drillState.seen=[];
+        const again=qxSimilar(origin,[]);
+        return again.length?again[0]:null;
+      }
+      return pool[Math.floor(Math.random()*Math.min(4,pool.length))];
+    }
+    function drillStart(qid,zone){
+      drillState={originId:qid,zone:zone||qid,seen:[],streak:0,best:0,done:0,current:null,chosen:undefined};
+      const first=drillPick();
+      if(!first){
+        drillState=null;
+        toast('No closely related questions in the bank for this one');
+        return;
+      }
+      drillState.current=first;
+      drillState.seen.push(first.id);
+      renderDrill();
+    }
+    function drillAnswer(i){
+      if(!drillState||drillState.chosen!==undefined)return;
+      drillState.chosen=Number(i);
+      const q=drillState.current;
+      const right=drillState.chosen===q.correct;
+      drillState.done++;
+      if(right){drillState.streak++;if(drillState.streak>drillState.best)drillState.best=drillState.streak;}
+      else{drillState.streak=0;if(state.missedIds&&!state.missedIds.includes(q.id)){state.missedIds.push(q.id);save();}}
+      renderDrill();
+    }
+    function drillNext(){
+      if(!drillState)return;
+      const nxt=drillPick();
+      if(!nxt){toast('That is every related question in the bank');return;}
+      drillState.current=nxt;
+      drillState.seen.push(nxt.id);
+      drillState.chosen=undefined;
+      renderDrill();
+    }
+    function drillExit(){drillState=null;renderDrill();}
+
+    function drillMarkup(){
+      if(!drillState||!drillState.current)return '';
+      const q=drillState.current,chosen=drillState.chosen,answered=chosen!==undefined;
+      const right=answered&&chosen===q.correct;
+      const streakLine=drillState.done
+        ? `<span class="qx-streak ${drillState.streak>=3?'hot':''}">${drillState.streak} in a row · ${drillState.done} done${drillState.best>=3?' · best '+drillState.best:''}</span>`
+        : '';
+      const opts=q.choices.map((c,i)=>{
+        let cls='option-btn';
+        if(answered){
+          if(i===q.correct)cls+=' correct';
+          else if(i===chosen)cls+=' incorrect';
+        }
+        return `<button class="${cls}" data-action="drill-answer" data-index="${i}" ${answered?'disabled':''}><span class="option-letter">${letters[i]}</span><span>${esc(c)}</span></button>`;
+      }).join('');
+      const fb=answered?`<div class="qx-drill-fb ${right?'ok':''}"><strong>${right?'Correct.':'Not quite.'}</strong> ${esc(q.reasons&&q.reasons[chosen]?q.reasons[chosen]:'')}${right?'':'<br><strong>Answer — '+letters[q.correct]+':</strong> '+esc(q.reasons&&q.reasons[q.correct]?q.reasons[q.correct]:'')}${q.takeaway?'<br><em>'+esc(q.takeaway)+'</em>':''}</div>`:'';
+      const controls=answered
+        ? `<div class="qx-drill-actions"><button class="primary-btn" data-action="drill-next">Another like this →</button><button class="soft-btn" data-action="drill-exit">Done drilling</button></div>`
+        : `<div class="qx-drill-actions"><button class="soft-btn" data-action="drill-exit">Stop</button></div>`;
+      return `<div class="qx-drill"><div class="qx-drill-top"><strong>Concept drill · ${esc(q.topic||DOMAINS[q.domain].short)}</strong>${streakLine}</div><p class="qx-drill-stem">${esc(q.stem)}</p><div class="check-options">${opts}</div>${fb}${controls}</div>`;
+    }
+    function renderDrill(){
+      const zones=$$('[data-drill-zone]');
+      zones.forEach(z=>{
+        z.innerHTML=(drillState&&z.getAttribute('data-drill-zone')===String(drillState.zone))?drillMarkup():'';
+      });
+    }
+
     /* ------------------------- assistant DOM layer ------------------------- */
     let asOpen=false, asLog=[], asMemory={subject:'',seen:[]}, asQuizState={};
 
@@ -3198,6 +3434,10 @@
       else if(a==='glossary-domain'){glossaryFilter=btn.dataset.domain;renderGlossary();}
       else if(a==='open-lookup')openLookup();
       else if(a==='goto-glossary'){glossarySearch=lookupSearch;closeDialog();go('glossary');}
+      else if(a==='drill-start')drillStart(btn.dataset.qid,(btn.closest('.qx-body')?.querySelector('[data-drill-zone]')?.getAttribute('data-drill-zone'))||btn.dataset.qid);
+      else if(a==='drill-answer')drillAnswer(btn.dataset.index);
+      else if(a==='drill-next')drillNext();
+      else if(a==='drill-exit')drillExit();
       else if(a==='tts-lesson')ttsReadLesson();
       else if(a==='tts-guide-section')ttsReadGuideSection(btn.dataset.id);
       else if(a==='tts-guide-all')ttsReadGuideAll();
