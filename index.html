@@ -431,8 +431,34 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
     }
+    .chat-launcher { position:fixed; right:22px; bottom:90px; width:56px; height:56px; border-radius:50%; background:var(--green); color:#fff; border:none; font-size:22px; line-height:1; display:grid; place-items:center; box-shadow:var(--shadow); cursor:pointer; z-index:90; transition:transform .2s ease; }
+    .chat-launcher:hover { transform:translateY(-2px); }
+    .chat-panel { position:fixed; right:22px; bottom:158px; width:380px; max-width:calc(100vw - 32px); height:min(520px,calc(100vh - 210px)); min-height:320px; background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; z-index:89; }
+    .chat-panel[hidden] { display:none; }
+    .chat-panel-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; padding:16px 16px 12px; border-bottom:1px solid var(--line); }
+    .chat-panel-head strong { display:block; font-size:15px; }
+    .chat-panel-head span { display:block; color:var(--muted); font-size:12px; margin-top:2px; }
+    .chat-log { flex:1; overflow-y:auto; padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+    .chat-msg { display:flex; flex-direction:column; }
+    .chat-msg p { margin:0; padding:10px 13px; border-radius:14px; font-size:13.5px; line-height:1.5; }
+    .chat-user { align-items:flex-end; }
+    .chat-user p { background:var(--green); color:#fff; border-bottom-right-radius:4px; max-width:88%; }
+    .chat-bot { align-items:flex-start; }
+    .chat-bot p { background:var(--surface-2); color:var(--ink); border-bottom-left-radius:4px; max-width:92%; }
+    .chat-results { display:flex; flex-direction:column; gap:6px; margin-top:6px; width:92%; }
+    .chat-result { text-align:left; padding:9px 11px; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); cursor:pointer; font:inherit; }
+    .chat-result:hover { border-color:var(--green); }
+    .chat-result strong { display:block; font-size:12.5px; }
+    .chat-result span { display:block; color:var(--muted); font-size:11.5px; margin-top:2px; }
+    .chat-suggest { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 10px; }
+    .chat-input-row { display:flex; gap:8px; padding:12px 16px 16px; border-top:1px solid var(--line); }
+    .chat-input-row input { flex:1; min-width:0; padding:11px 13px; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--ink); font-size:14px; }
+    @media (max-width:480px) {
+      .chat-panel { right:12px; left:12px; width:auto; bottom:84px; }
+      .chat-launcher { right:16px; bottom:16px; }
+    }
     @media print {
-      .sidebar,.topbar,.hero-actions,.lesson-actions,.source-note { display:none!important; }
+      .sidebar,.topbar,.hero-actions,.lesson-actions,.source-note,.chat-launcher,.chat-panel { display:none!important; }
       .shell,.content { display:block; }
       body { background:white; color:black; }
       .main { max-width:none; padding:0; }
@@ -547,6 +573,25 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <dialog id="dialog"><div class="dialog-body" id="dialogBody"></div></dialog>
+  <button id="chatLauncher" class="chat-launcher" data-action="toggle-chat" aria-haspopup="dialog" aria-expanded="false" aria-controls="chatPanel" aria-label="Open study assistant" title="Ask the study assistant (offline)">&#128172;</button>
+  <section id="chatPanel" class="chat-panel" hidden aria-label="Offline study assistant">
+    <header class="chat-panel-head">
+      <div><strong>Study assistant</strong><span>Offline &middot; searches your course</span></div>
+      <button class="icon-btn" data-action="toggle-chat" aria-label="Close assistant" title="Close">&times;</button>
+    </header>
+    <div class="chat-log" id="chatLog"></div>
+    <div class="chat-suggest" id="chatSuggest">
+      <button class="chip" type="button" data-action="chat-chip" data-q="What is Reg T?">Reg T</button>
+      <button class="chip" type="button" data-action="chat-chip" data-q="GO bond vs revenue bond">GO vs revenue bond</button>
+      <button class="chip" type="button" data-action="chat-chip" data-q="What is T+1 settlement?">T+1 settlement</button>
+      <button class="chip" type="button" data-action="chat-chip" data-q="Explain a covered call">Covered call</button>
+      <button class="chip" type="button" data-action="chat-chip" data-q="SIPC vs FDIC">SIPC vs FDIC</button>
+    </div>
+    <form class="chat-input-row" id="chatForm">
+      <input id="chatInput" type="text" placeholder="Ask about a term, rule or lesson&hellip;" autocomplete="off" aria-label="Ask the study assistant a question">
+      <button class="primary-btn" type="submit">Ask</button>
+    </form>
+  </section>
   <script>
     'use strict';
 
@@ -1580,7 +1625,7 @@
     }
     /* ===================== ADDED FEATURES ===================== */
     // Module-scope UI state for new views
-    let cardMode='due', glossaryFilter='all', glossarySearch='', pendingMock=null, examReviewOpen=false, lookupSearch='';
+    let cardMode='due', glossaryFilter='all', glossarySearch='', pendingMock=null, examReviewOpen=false, lookupSearch='', chatOpen=false, chatMessages=[];
 
     // ---- Seeded PRNG + mock builder ----
     function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
@@ -1719,6 +1764,108 @@
       if(!list.length)return `<div class="card empty"><div class="empty-icon">◈</div><h2>No terms match “${esc(glossarySearch)}”.</h2><p>Try a shorter search or a different domain filter.</p></div>`;
       return `<div class="glossary-list">${list.map(g=>`<div class="glossary-entry"><h4>${esc(g[1])} <em>${esc(DOMAINS[g[0]].short)}</em></h4><p>${esc(g[2])}</p></div>`).join('')}</div>`;
     }
+    // ---- Offline study assistant (keyword search over course content; no network calls) ----
+    function buildChatIndex(){
+      const idx=[];
+      glossaryData.forEach(([d,term,def])=>{
+        idx.push({kind:'glossary',title:term,text:term+' '+def,snippet:def,target:'glossary'});
+      });
+      allLessons.forEach(lesson=>{
+        idx.push({kind:'lesson',title:lesson.title,text:[lesson.title,lesson.summary,lesson.why,lesson.deep,lesson.trap,lesson.example,lesson.memory,lesson.finra,...(lesson.summaryPoints||[])].filter(Boolean).join(' '),snippet:lesson.summary,target:'lesson',id:lesson.id,lessonTitle:lesson.title});
+        (lesson.concepts||[]).forEach(c=>{
+          const parts=c.split('|');const term=parts[0],detail=parts[1]||'';
+          idx.push({kind:'concept',title:term,text:term+' '+detail,snippet:detail,target:'lesson',id:lesson.id,lessonTitle:lesson.title});
+        });
+        const depth=lessonDepth[lesson.id];
+        if(depth&&depth.sections)depth.sections.forEach(sec=>{
+          idx.push({kind:'section',title:sec.h,text:[sec.h,sec.p,...(sec.b||[]),sec.e].filter(Boolean).join(' '),snippet:sec.p,target:'lesson',id:lesson.id,lessonTitle:lesson.title});
+        });
+      });
+      formulaData.groups.forEach(g=>g.items.forEach(it=>{
+        idx.push({kind:'formula',title:it.n,text:[it.n,it.eq,it.note].join(' '),snippet:it.eq+' — '+it.note,target:'formulas'});
+      }));
+      formulaData.mnemonics.forEach(([phrase,note])=>{
+        idx.push({kind:'mnemonic',title:phrase,text:phrase+' '+note,snippet:note,target:'formulas'});
+      });
+      guideSections.forEach(sec=>(sec.points||[]).forEach(([term,explain])=>{
+        idx.push({kind:'guide',title:term,text:term+' '+explain,snippet:explain,target:'guide'});
+      }));
+      return idx;
+    }
+    const chatIndex=buildChatIndex();
+    const CHAT_STOPWORDS=new Set(['the','a','an','is','are','was','were','what','whats',"what's",'of','to','in','on','for','and','or','vs','versus','do','does','did','how','why','explain','define','definition','tell','me','about','can','you','please','it','its',"it's",'this','that','with','between','difference','differ','mean','means']);
+    function chatTokenize(str){return (str||'').toLowerCase().replace(/[^a-z0-9%$.\s]/g,' ').split(/\s+/).filter(Boolean);}
+    function scoreChatEntry(entry,qTokens,qRaw){
+      const titleLower=entry.title.toLowerCase();
+      let score=0;
+      if(titleLower===qRaw)score+=30;
+      else if(qRaw.length>2&&titleLower.includes(qRaw))score+=14;
+      const textLower=entry.text.toLowerCase();
+      qTokens.forEach(t=>{
+        if(CHAT_STOPWORDS.has(t)||t.length<2)return;
+        if(titleLower.includes(t))score+=4;
+        if(textLower.includes(t))score+=1;
+      });
+      return score;
+    }
+    function chatResultLabel(kind){
+      if(kind==='glossary')return 'Glossary';
+      if(kind==='formula')return 'Formulas & calculators';
+      if(kind==='mnemonic')return 'Memory hook';
+      if(kind==='guide')return 'Study guide';
+      return 'Lesson';
+    }
+    function answerChatQuestion(raw){
+      const qRaw=raw.trim().toLowerCase();
+      const qTokens=chatTokenize(qRaw).filter(t=>!CHAT_STOPWORDS.has(t)&&t.length>1);
+      if(!qTokens.length)return {text:'Try asking about a specific term, rule or lesson — for example “what is Reg T” or “GO bond vs revenue bond”.',results:[]};
+      const scored=chatIndex.map(e=>({e,s:scoreChatEntry(e,qTokens,qRaw)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s);
+      if(!scored.length)return {text:`I couldn't find a close match for “${raw.trim()}” in the course content. Try different wording, or search the full glossary.`,results:[]};
+      const seen=new Set(),results=[];
+      for(const {e} of scored){
+        const key=e.kind+'|'+e.title+'|'+(e.id||'');
+        if(seen.has(key))continue;seen.add(key);
+        results.push(e);
+        if(results.length>=4)break;
+      }
+      const top=scored[0].e,topScore=scored[0].s;
+      let text;
+      if((top.kind==='glossary'||top.kind==='concept')&&topScore>=14)text=`**${top.title}** — ${top.snippet}`;
+      else text=`Here's what I found in your course for “${raw.trim()}”:`;
+      return {text,results};
+    }
+    function formatChatText(text){return esc(text).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');}
+    function renderChatLog(){
+      const log=$('#chatLog');if(!log)return;
+      log.innerHTML=chatMessages.map(m=>{
+        if(m.role==='user')return `<div class="chat-msg chat-user"><p>${esc(m.text)}</p></div>`;
+        const results=(m.results&&m.results.length)?`<div class="chat-results">${m.results.map(r=>`<button class="chat-result" type="button" data-action="chat-jump" data-target="${r.target}" data-id="${r.id||''}" data-term="${r.kind==='glossary'?esc(r.title):''}"><strong>${esc(r.title)} <span style="font-weight:600;color:var(--muted)">· ${chatResultLabel(r.kind)}</span></strong><span>${esc((r.snippet||'').slice(0,120))}${(r.snippet||'').length>120?'…':''}</span></button>`).join('')}</div>`:'';
+        return `<div class="chat-msg chat-bot"><p>${formatChatText(m.text)}</p>${results}</div>`;
+      }).join('');
+      log.scrollTop=log.scrollHeight;
+    }
+    function askChat(question){
+      if(!question||!question.trim())return;
+      chatMessages.push({role:'user',text:question.trim()});
+      const ans=answerChatQuestion(question);
+      chatMessages.push({role:'bot',text:ans.text,results:ans.results});
+      renderChatLog();
+    }
+    function openChat(){
+      chatOpen=true;
+      const panel=$('#chatPanel');if(panel)panel.hidden=false;
+      const launcher=$('#chatLauncher');if(launcher)launcher.setAttribute('aria-expanded','true');
+      if(!chatMessages.length){
+        chatMessages.push({role:'bot',text:"Hi! I'm an offline study assistant — I search your lessons, glossary and formulas (no internet, no AI service) to answer questions. Try one of the suggestions below, or ask your own.",results:[]});
+        renderChatLog();
+      }
+      setTimeout(()=>{const i=$('#chatInput');if(i)i.focus();},30);
+    }
+    function closeChat(){
+      chatOpen=false;
+      const panel=$('#chatPanel');if(panel)panel.hidden=true;
+      const launcher=$('#chatLauncher');if(launcher)launcher.setAttribute('aria-expanded','false');
+    }
     function lookupResultsHTML(){
       const term=lookupSearch.trim().toLowerCase();
       if(!term)return `<p class="lookup-hint">Start typing to search all ${glossaryData.length} terms and definitions.</p>`;
@@ -1778,6 +1925,13 @@
       if(e.target.id==='lookupSearchInput'){lookupSearch=e.target.value;const r=$('#lookupResults');if(r)r.innerHTML=lookupResultsHTML();}
     });
     document.addEventListener('change',e=>{ if(e.target.classList&&e.target.classList.contains('calc-input'))computeCalculators(); });
+    document.addEventListener('submit',e=>{
+      if(e.target&&e.target.id==='chatForm'){
+        e.preventDefault();
+        const input=$('#chatInput');
+        if(input&&input.value.trim()){askChat(input.value);input.value='';}
+      }
+    });
     /* ===================== END ADDED FEATURES ===================== */
 
     document.addEventListener('click',e=>{
@@ -1851,6 +2005,14 @@
       else if(a==='glossary-domain'){glossaryFilter=btn.dataset.domain;renderGlossary();}
       else if(a==='open-lookup')openLookup();
       else if(a==='goto-glossary'){glossarySearch=lookupSearch;closeDialog();go('glossary');}
+      else if(a==='toggle-chat'){chatOpen?closeChat():openChat();}
+      else if(a==='chat-chip'){askChat(btn.dataset.q);}
+      else if(a==='chat-jump'){
+        const t=btn.dataset.target;
+        if(t==='glossary'){glossarySearch=btn.dataset.term||'';go('glossary');}
+        else if(t==='lesson'){go('lesson',btn.dataset.id);}
+        else if(t){go(t);}
+      }
       else if(a==='confirm-mock'){pendingMock=btn.dataset.mock;const m=mockDefs.find(x=>x.id===pendingMock)||{};showDialog(`<h2>Start ${esc(m.name||'the mock')}?</h2><p>The 105-minute timer begins immediately. Your saved progress is safe, but the active attempt is not preserved if the browser closes.</p><div class="dialog-actions"><button class="soft-btn" data-action="close-dialog">Not yet</button><button class="primary-btn" data-action="start-exam-now">Start timer</button></div>`);}
       else if(a==='toggle-exam-review'){examReviewOpen=!examReviewOpen;renderExamReport(activeExam&&activeExam.report?activeExam.report:state.lastExam);}
     });
