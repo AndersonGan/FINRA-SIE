@@ -431,34 +431,61 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
     }
-    .chat-launcher { position:fixed; right:22px; bottom:90px; width:56px; height:56px; border-radius:50%; background:var(--green); color:#fff; border:none; font-size:22px; line-height:1; display:grid; place-items:center; box-shadow:var(--shadow); cursor:pointer; z-index:90; transition:transform .2s ease; }
-    .chat-launcher:hover { transform:translateY(-2px); }
-    .chat-panel { position:fixed; right:22px; bottom:158px; width:380px; max-width:calc(100vw - 32px); height:min(520px,calc(100vh - 210px)); min-height:320px; background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; z-index:89; }
-    .chat-panel[hidden] { display:none; }
-    .chat-panel-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; padding:16px 16px 12px; border-bottom:1px solid var(--line); }
-    .chat-panel-head strong { display:block; font-size:15px; }
-    .chat-panel-head span { display:block; color:var(--muted); font-size:12px; margin-top:2px; }
-    .chat-log { flex:1; overflow-y:auto; padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
-    .chat-msg { display:flex; flex-direction:column; }
-    .chat-msg p { margin:0; padding:10px 13px; border-radius:14px; font-size:13.5px; line-height:1.5; }
-    .chat-user { align-items:flex-end; }
-    .chat-user p { background:var(--green); color:#fff; border-bottom-right-radius:4px; max-width:88%; }
-    .chat-bot { align-items:flex-start; }
-    .chat-bot p { background:var(--surface-2); color:var(--ink); border-bottom-left-radius:4px; max-width:92%; }
-    .chat-results { display:flex; flex-direction:column; gap:6px; margin-top:6px; width:92%; }
-    .chat-result { text-align:left; padding:9px 11px; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); cursor:pointer; font:inherit; }
-    .chat-result:hover { border-color:var(--green); }
-    .chat-result strong { display:block; font-size:12.5px; }
-    .chat-result span { display:block; color:var(--muted); font-size:11.5px; margin-top:2px; }
-    .chat-suggest { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 10px; }
-    .chat-input-row { display:flex; gap:8px; padding:12px 16px 16px; border-top:1px solid var(--line); }
-    .chat-input-row input { flex:1; min-width:0; padding:11px 13px; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--ink); font-size:14px; }
-    @media (max-width:480px) {
-      .chat-panel { right:12px; left:12px; width:auto; bottom:84px; }
-      .chat-launcher { right:16px; bottom:16px; }
+    .as-launcher { position:fixed; right:22px; bottom:22px; height:52px; padding:0 20px 0 16px; border-radius:99px; background:var(--green); color:#fff; border:none; font:700 14px/1 Inter,ui-sans-serif,system-ui,sans-serif; display:flex; align-items:center; gap:9px; box-shadow:var(--shadow); cursor:pointer; z-index:92; transition:transform .18s ease; }
+    .as-launcher:hover { transform:translateY(-2px); }
+    .as-launcher .as-dot { width:8px; height:8px; border-radius:50%; background:#8ff0d8; }
+    .as-panel { position:fixed; right:22px; bottom:86px; width:420px; max-width:calc(100vw - 28px); height:min(640px,calc(100vh - 130px)); min-height:360px; background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; z-index:91; }
+    .as-panel[hidden] { display:none; }
+    .as-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; padding:15px 16px 12px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+    .as-head strong { display:block; font-size:14.5px; }
+    .as-head span { display:block; color:var(--muted); font-size:11.5px; margin-top:3px; }
+    .as-log { flex:1; overflow-y:auto; padding:14px 15px; display:flex; flex-direction:column; gap:14px; }
+    .as-msg { display:flex; flex-direction:column; max-width:100%; }
+    .as-user { align-items:flex-end; }
+    .as-user p { margin:0; background:var(--green); color:#fff; padding:9px 13px; border-radius:14px 14px 4px 14px; font-size:13.5px; line-height:1.5; max-width:85%; }
+    .as-bot { align-items:flex-start; }
+    .as-bubble { background:var(--surface-2); border:1px solid var(--line); border-radius:14px 14px 14px 4px; padding:12px 14px; font-size:13.5px; line-height:1.6; max-width:97%; }
+    .as-bubble p { margin:0 0 9px; }
+    .as-bubble p:last-child { margin-bottom:0; }
+    .as-bubble strong { color:var(--ink); }
+    .as-list { margin:4px 0 8px; padding-left:18px; }
+    .as-list li { margin-bottom:4px; }
+    .as-math { display:flex; flex-direction:column; gap:6px; margin:8px 0; padding:11px 12px; border-radius:10px; background:var(--paper); border:1px solid var(--line); font-variant-numeric:tabular-nums; font-size:13px; }
+    .as-table-wrap { overflow-x:auto; margin:9px 0; }
+    .as-table { width:100%; border-collapse:collapse; font-size:12.5px; }
+    .as-table th, .as-table td { border:1px solid var(--line); padding:7px 9px; text-align:left; vertical-align:top; }
+    .as-table thead th { background:var(--paper); font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+    .as-table tbody th { background:var(--paper); font-weight:700; white-space:nowrap; }
+    .as-sources { margin-top:10px; border-top:1px dashed var(--line); padding-top:9px; }
+    .as-sources summary { cursor:pointer; font-size:11px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; color:var(--green); margin-bottom:7px; }
+    .as-related summary { color:var(--muted); }
+    .as-src { display:block; width:100%; text-align:left; padding:7px 10px; margin-bottom:5px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); cursor:pointer; font:inherit; }
+    .as-src:hover { border-color:var(--green); }
+    .as-src strong { display:block; font-size:12.5px; }
+    .as-src span { display:block; font-size:11px; color:var(--muted); margin-top:1px; }
+    .as-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+    .as-chips .chip { cursor:pointer; }
+    .as-quiz { margin:6px 0 2px; }
+    .as-quiz-stem { font-weight:700; margin-bottom:9px; }
+    .as-quiz-opts { display:flex; flex-direction:column; gap:6px; }
+    .as-quiz-opt { display:flex; gap:9px; align-items:flex-start; text-align:left; padding:8px 10px; border:1px solid var(--line); border-radius:10px; background:var(--paper); color:var(--ink); cursor:pointer; font:inherit; font-size:12.5px; }
+    .as-quiz-opt:hover:not(:disabled) { border-color:var(--green); }
+    .as-quiz-opt:disabled { cursor:default; }
+    .as-quiz-opt.correct { border-color:var(--green); background:var(--green-2); }
+    .as-quiz-opt.wrong { border-color:var(--coral); background:var(--coral-2); }
+    .as-quiz-letter { font-weight:800; color:var(--muted); }
+    .as-quiz-fb { margin-top:9px; padding:9px 11px; border-radius:10px; background:var(--coral-2); font-size:12.5px; line-height:1.55; }
+    .as-quiz-fb.right { background:var(--green-2); }
+    .as-suggest { display:flex; flex-wrap:wrap; gap:6px; padding:0 15px 10px; }
+    .as-form { display:flex; gap:8px; padding:11px 15px 14px; border-top:1px solid var(--line); }
+    .as-form input { flex:1; min-width:0; padding:11px 13px; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--ink); font-size:14px; }
+    .as-foot { padding:0 15px 12px; font-size:10.5px; color:var(--muted); text-align:center; }
+    @media (max-width:520px) {
+      .as-panel { right:10px; left:10px; width:auto; bottom:80px; height:calc(100vh - 150px); }
+      .as-launcher { right:14px; bottom:14px; }
     }
     @media print {
-      .sidebar,.topbar,.hero-actions,.lesson-actions,.source-note,.chat-launcher,.chat-panel { display:none!important; }
+      .sidebar,.topbar,.hero-actions,.lesson-actions,.source-note,.as-launcher,.as-panel { display:none!important; }
       .shell,.content { display:block; }
       body { background:white; color:black; }
       .main { max-width:none; padding:0; }
@@ -573,24 +600,24 @@
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <dialog id="dialog"><div class="dialog-body" id="dialogBody"></div></dialog>
-  <button id="chatLauncher" class="chat-launcher" data-action="toggle-chat" aria-haspopup="dialog" aria-expanded="false" aria-controls="chatPanel" aria-label="Open study assistant" title="Ask the study assistant (offline)">&#128172;</button>
-  <section id="chatPanel" class="chat-panel" hidden aria-label="Offline study assistant">
-    <header class="chat-panel-head">
-      <div><strong>Study assistant</strong><span>Offline &middot; searches your course</span></div>
-      <button class="icon-btn" data-action="toggle-chat" aria-label="Close assistant" title="Close">&times;</button>
+  <button id="asLauncher" class="as-launcher" data-action="as-toggle" aria-haspopup="dialog" aria-expanded="false" aria-controls="asPanel" aria-label="Open the study assistant"><span class="as-dot"></span>Ask</button>
+  <section id="asPanel" class="as-panel" hidden aria-label="Offline study assistant">
+    <header class="as-head">
+      <div><strong>Study assistant</strong><span>Offline &middot; answers cite your course content</span></div>
+      <button class="icon-btn" data-action="as-toggle" aria-label="Close assistant" title="Close">&times;</button>
     </header>
-    <div class="chat-log" id="chatLog"></div>
-    <div class="chat-suggest" id="chatSuggest">
-      <button class="chip" type="button" data-action="chat-chip" data-q="What is Reg T?">Reg T</button>
-      <button class="chip" type="button" data-action="chat-chip" data-q="GO bond vs revenue bond">GO vs revenue bond</button>
-      <button class="chip" type="button" data-action="chat-chip" data-q="What is T+1 settlement?">T+1 settlement</button>
-      <button class="chip" type="button" data-action="chat-chip" data-q="Explain a covered call">Covered call</button>
-      <button class="chip" type="button" data-action="chat-chip" data-q="SIPC vs FDIC">SIPC vs FDIC</button>
+    <div class="as-log" id="asLog"></div>
+    <div class="as-suggest">
+      <button class="chip" type="button" data-action="as-chip" data-q="What is a debenture?">Debenture</button>
+      <button class="chip" type="button" data-action="as-chip" data-q="GO bond vs revenue bond">GO vs revenue</button>
+      <button class="chip" type="button" data-action="as-chip" data-q="Current yield on a 6% bond at 120">Yield math</button>
+      <button class="chip" type="button" data-action="as-chip" data-q="Quiz me on options">Quiz me</button>
     </div>
-    <form class="chat-input-row" id="chatForm">
-      <input id="chatInput" type="text" placeholder="Ask about a term, rule or lesson&hellip;" autocomplete="off" aria-label="Ask the study assistant a question">
+    <form class="as-form" id="asForm">
+      <input id="asInput" type="text" placeholder="Ask about any term, rule or calculation&hellip;" autocomplete="off" aria-label="Ask the study assistant">
       <button class="primary-btn" type="submit">Ask</button>
     </form>
+    <div class="as-foot">No internet, no AI service &mdash; searches only this page&rsquo;s content.</div>
   </section>
   <script>
     'use strict';
@@ -1625,7 +1652,7 @@
     }
     /* ===================== ADDED FEATURES ===================== */
     // Module-scope UI state for new views
-    let cardMode='due', glossaryFilter='all', glossarySearch='', pendingMock=null, examReviewOpen=false, lookupSearch='', chatOpen=false, chatMessages=[];
+    let cardMode='due', glossaryFilter='all', glossarySearch='', pendingMock=null, examReviewOpen=false, lookupSearch='';
 
     // ---- Seeded PRNG + mock builder ----
     function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
@@ -1764,108 +1791,659 @@
       if(!list.length)return `<div class="card empty"><div class="empty-icon">◈</div><h2>No terms match “${esc(glossarySearch)}”.</h2><p>Try a shorter search or a different domain filter.</p></div>`;
       return `<div class="glossary-list">${list.map(g=>`<div class="glossary-entry"><h4>${esc(g[1])} <em>${esc(DOMAINS[g[0]].short)}</em></h4><p>${esc(g[2])}</p></div>`).join('')}</div>`;
     }
-    // ---- Offline study assistant (keyword search over course content; no network calls) ----
-    function buildChatIndex(){
+    /* ============ SIE Study Assistant — offline retrieval + reasoning engine ============
+       No network calls, no model weights. Every answer is composed only from the course
+       content defined above in this file, and every answer cites what it drew from.      */
+
+    const AS_STOP=new Set(['the','a','an','is','are','was','were','be','been','being','of','to','in','on','for','and','or','do','does','did','can','could','should','would','will','i','me','my','you','your','it','its','this','that','these','those','with','about','at','as','by','from','if','then','than','so','but','not','no','yes','please','tell','give','show','explain','define','definition','what','whats','which','who','whom','how','why','when','where','mean','means','meaning','again','some','any','all','into','out','over','under','there','their','they','he','she','we','us','have','has','had','get','got','know','need','want','like','just','really','actually','okay','ok','hey','hi','thanks','thank']);
+
+    /* Domain-specific vocabulary expansion: abbreviations, plurals and exam shorthand. */
+    const AS_TOKEN_SYN={
+      muni:['municipal'],munis:['municipal'],municipals:['municipal'],
+      bd:['broker','dealer'],bds:['broker','dealer'],
+      rr:['registered','representative'],
+      go:['general','obligation'],gos:['general','obligation'],
+      rev:['revenue'],
+      cy:['current','yield'],ytm:['yield','maturity'],ytc:['yield','call'],
+      nav:['net','asset','value'],pop:['public','offering','price'],
+      cdsc:['contingent','deferred','sales','charge','back','end'],
+      loi:['letter','intent'],roa:['rights','accumulation'],
+      mf:['mutual','fund'],etf:['exchange','traded','fund'],etn:['exchange','traded','note'],
+      uit:['unit','investment','trust'],reit:['real','estate','investment','trust'],
+      bdc:['business','development','company'],dpp:['direct','participation','program'],
+      va:['variable','annuity'],ira:['individual','retirement','account'],
+      cip:['customer','identification','program'],kyc:['know','customer'],
+      aml:['anti','money','laundering'],sar:['suspicious','activity','report'],
+      ctr:['currency','transaction','report'],ofac:['office','foreign','assets','control'],
+      mnpi:['material','nonpublic','information'],odd:['options','disclosure','document'],
+      occ:['options','clearing','corporation'],dtcc:['depository','trust','clearing'],
+      sro:['self','regulatory','organization'],
+      sipc:['securities','investor','protection'],fdic:['federal','deposit','insurance'],
+      sec:['securities','exchange','commission'],finra:['financial','industry','regulatory'],
+      msrb:['municipal','securities','rulemaking','board'],
+      frb:['federal','reserve'],fed:['federal','reserve'],
+      tbill:['treasury','bill'],tbills:['treasury','bill'],
+      tnote:['treasury','note'],tbond:['treasury','bond'],
+      tips:['treasury','inflation','protected'],
+      jtwros:['joint','tenants','survivorship'],tic:['tenants','common'],
+      ugma:['uniform','gifts','minors','custodial'],utma:['uniform','transfers','minors','custodial'],
+      tod:['transfer','death'],crd:['central','registration','depository'],
+      oba:['outside','business','activity'],
+      regt:['regulation','margin','credit'],
+      regbi:['regulation','best','interest'],
+      regd:['regulation','private','placement','exemption'],
+      regsp:['regulation','privacy'],
+      ipo:['initial','public','offering'],
+      gnma:['ginnie','mae','mortgage','pass','through'],
+      mbs:['mortgage','backed','security','prepayment'],
+      strips:['zero','coupon','treasury'],
+      cd:['certificate','deposit'],cds:['certificate','deposit'],
+      bond:['bonds','debt'],bonds:['bond','debt'],
+      stock:['stocks','equity','share'],stocks:['stock','equity','share'],
+      shares:['share','stock','equity'],
+      option:['options'],options:['option'],
+      call:['calls'],calls:['call'],put:['puts'],puts:['put'],
+      fund:['funds'],funds:['fund'],
+      tax:['taxes','taxable','taxation'],taxes:['tax','taxable'],
+      risk:['risks'],risks:['risk'],
+      rule:['rules'],rules:['rule'],
+      order:['orders'],orders:['order'],
+      account:['accounts'],accounts:['account'],
+      dividend:['dividends'],dividends:['dividend'],
+      rate:['rates'],rates:['rate'],
+      yield:['yields'],yields:['yield'],
+      settle:['settlement'],settles:['settlement'],
+      registration:['register','registered'],
+      prohibited:['prohibit','violation','illegal'],
+      junk:['high','yield','speculative'],
+      naked:['uncovered'],uncovered:['naked'],
+      breakeven:['break','even'],
+      undiversifiable:['systematic'],
+      eli5:[],simpler:[],simply:[]
+    };
+
+    /* Multi-word shorthand normalised before tokenising. */
+    const AS_PHRASE_SYN=[
+      [/\breg\s*t\b/g,'regulation t margin credit'],
+      [/\breg\s*bi\b/g,'regulation best interest'],
+      [/\breg\s*d\b/g,'regulation d private placement'],
+      [/\breg\s*s-?p\b/g,'regulation s-p privacy'],
+      [/\bt\s*\+\s*1\b/g,'t+1 settlement regular way'],
+      [/\bt\s*\+\s*2\b/g,'settlement regular way'],
+      [/\bg\.?o\.?\s+bond/g,'general obligation bond'],
+      [/\bex[\s-]?date\b/g,'ex dividend date'],
+      [/\bex[\s-]?div(idend)?\b/g,'ex dividend date'],
+      [/\bmoney\s+market\b/g,'money market short term'],
+      [/\bblue\s*sky\b/g,'state securities administrator'],
+      [/\bmark\s*up\b/g,'markup principal dealer'],
+      [/\bmark\s*down\b/g,'markdown principal dealer'],
+      [/\bshort\s+sale\b/g,'short sale borrow unlimited risk'],
+      [/\bstop\s*loss\b/g,'sell stop order'],
+      [/\bin\s+the\s+money\b/g,'intrinsic moneyness in the money'],
+      [/\bout\s+of\s+the\s+money\b/g,'moneyness out of the money'],
+      [/\bplain\s+english\b/g,'simpler'],
+      [/\bdumb(ed)?\s+(it\s+)?down\b/g,'simpler'],
+      [/\blike\s+i'?m\s+(five|5)\b/g,'simpler']
+    ];
+
+    function asNormalize(str){
+      let s=String(str||'').toLowerCase();
+      AS_PHRASE_SYN.forEach(([re,rep])=>{s=s.replace(re,rep);});
+      return s;
+    }
+    function asRawTokens(str){
+      return asNormalize(str).replace(/[^a-z0-9%$+.\s-]/g,' ').split(/[\s\-]+/).filter(Boolean);
+    }
+    function asStem(t){
+      if(t.length<5)return t;
+      return t.replace(/ies$/,'y').replace(/([^aeious])s$/,'$1').replace(/ing$/,'').replace(/ed$/,'');
+    }
+    /* Query tokens: stopword-stripped, synonym-expanded, stemmed. */
+    function asQueryTokens(str){
+      const out=new Set();
+      asRawTokens(str).forEach(t=>{
+        if(AS_STOP.has(t)||t.length<2)return;
+        out.add(t);out.add(asStem(t));
+        (AS_TOKEN_SYN[t]||[]).forEach(x=>{out.add(x);out.add(asStem(x));});
+      });
+      return [...out].filter(t=>t.length>1);
+    }
+    /* Document tokens: no stopword strip needed for matching, but stemmed + expanded. */
+    function asDocTokens(str){
+      const out=new Set();
+      asRawTokens(str).forEach(t=>{
+        if(t.length<2)return;
+        out.add(t);out.add(asStem(t));
+        (AS_TOKEN_SYN[t]||[]).forEach(x=>{out.add(x);out.add(asStem(x));});
+      });
+      return out;
+    }
+    function asLev(a,b,max){
+      if(Math.abs(a.length-b.length)>max)return max+1;
+      let prev=Array.from({length:b.length+1},(_,i)=>i);
+      for(let i=1;i<=a.length;i++){
+        const cur=[i];let best=i;
+        for(let j=1;j<=b.length;j++){
+          cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+          if(cur[j]<best)best=cur[j];
+        }
+        if(best>max)return max+1;
+        prev=cur;
+      }
+      return prev[b.length];
+    }
+
+    /* ---------- Build the searchable index over every piece of course content ---------- */
+    function asBuildIndex(){
       const idx=[];
-      glossaryData.forEach(([d,term,def])=>{
-        idx.push({kind:'glossary',title:term,text:term+' '+def,snippet:def,target:'glossary'});
-      });
+      const add=e=>{
+        e.titleTokens=asDocTokens(e.title);
+        e.bodyTokens=asDocTokens(e.title+' '+e.body);
+        e.titleLower=e.title.toLowerCase();
+        idx.push(e);
+      };
+      glossaryData.forEach(([d,term,def])=>add({
+        kind:'glossary',domain:d,title:term,body:def,snippet:def,target:'glossary',term:term
+      }));
       allLessons.forEach(lesson=>{
-        idx.push({kind:'lesson',title:lesson.title,text:[lesson.title,lesson.summary,lesson.why,lesson.deep,lesson.trap,lesson.example,lesson.memory,lesson.finra,...(lesson.summaryPoints||[])].filter(Boolean).join(' '),snippet:lesson.summary,target:'lesson',id:lesson.id,lessonTitle:lesson.title});
+        const depth=lessonDepth[lesson.id]||{};
+        add({kind:'lesson',domain:lesson.domain,title:lesson.title,
+          body:[lesson.summary,lesson.why,lesson.deep,lesson.finra,...(lesson.summaryPoints||[])].filter(Boolean).join(' '),
+          snippet:lesson.summary,target:'lesson',id:lesson.id,lesson:lesson});
         (lesson.concepts||[]).forEach(c=>{
-          const parts=c.split('|');const term=parts[0],detail=parts[1]||'';
-          idx.push({kind:'concept',title:term,text:term+' '+detail,snippet:detail,target:'lesson',id:lesson.id,lessonTitle:lesson.title});
+          const [term,detail=''] =c.split('|');
+          add({kind:'concept',domain:lesson.domain,title:term,body:detail,snippet:detail,
+            target:'lesson',id:lesson.id,lesson:lesson,term:term});
         });
-        const depth=lessonDepth[lesson.id];
-        if(depth&&depth.sections)depth.sections.forEach(sec=>{
-          idx.push({kind:'section',title:sec.h,text:[sec.h,sec.p,...(sec.b||[]),sec.e].filter(Boolean).join(' '),snippet:sec.p,target:'lesson',id:lesson.id,lessonTitle:lesson.title});
-        });
+        (depth.sections||[]).forEach(sec=>add({
+          kind:'section',domain:lesson.domain,title:sec.h,
+          body:[sec.p,...(sec.b||[]),sec.e].filter(Boolean).join(' '),snippet:sec.p,
+          target:'lesson',id:lesson.id,lesson:lesson,section:sec}));
+        (depth.facts||[]).forEach(f=>add({
+          kind:'fact',domain:lesson.domain,title:lesson.title+' — key fact',body:f,snippet:f,
+          target:'lesson',id:lesson.id,lesson:lesson}));
       });
-      formulaData.groups.forEach(g=>g.items.forEach(it=>{
-        idx.push({kind:'formula',title:it.n,text:[it.n,it.eq,it.note].join(' '),snippet:it.eq+' — '+it.note,target:'formulas'});
-      }));
-      formulaData.mnemonics.forEach(([phrase,note])=>{
-        idx.push({kind:'mnemonic',title:phrase,text:phrase+' '+note,snippet:note,target:'formulas'});
+      formulaData.groups.forEach(g=>g.items.forEach(it=>add({
+        kind:'formula',title:it.n,body:it.eq+' '+it.note,snippet:it.eq+' — '+it.note,
+        target:'formulas',eq:it.eq,note:it.note})));
+      formulaData.mnemonics.forEach(([phrase,note])=>add({
+        kind:'mnemonic',title:phrase,body:note,snippet:note,target:'formulas'}));
+      guideSections.forEach(sec=>{
+        (sec.points||[]).forEach(([term,explain])=>add({
+          kind:'guide',title:term,body:explain,snippet:explain,target:'guide',term:term}));
+        if(sec.table)sec.table.rows.forEach(row=>add({
+          kind:'guide',title:row[0],body:row.slice(1).join(' '),snippet:row.slice(1).join(' — '),target:'guide'}));
       });
-      guideSections.forEach(sec=>(sec.points||[]).forEach(([term,explain])=>{
-        idx.push({kind:'guide',title:term,text:term+' '+explain,snippet:explain,target:'guide'});
-      }));
       return idx;
     }
-    const chatIndex=buildChatIndex();
-    const CHAT_STOPWORDS=new Set(['the','a','an','is','are','was','were','what','whats',"what's",'of','to','in','on','for','and','or','vs','versus','do','does','did','how','why','explain','define','definition','tell','me','about','can','you','please','it','its',"it's",'this','that','with','between','difference','differ','mean','means']);
-    function chatTokenize(str){return (str||'').toLowerCase().replace(/[^a-z0-9%$.\s]/g,' ').split(/\s+/).filter(Boolean);}
-    function scoreChatEntry(entry,qTokens,qRaw){
-      const titleLower=entry.title.toLowerCase();
+    const asIndex=asBuildIndex();
+
+    /* Inverse document frequency so common words ("bond") outrank nothing. */
+    const asIDF=(()=>{
+      const df=Object.create(null);
+      asIndex.forEach(e=>e.bodyTokens.forEach(t=>{df[t]=(df[t]||0)+1;}));
+      const N=asIndex.length,map=Object.create(null);
+      for(const t in df)map[t]=Math.log(1+N/df[t]);
+      return map;
+    })();
+    const asIdf=t=>asIDF[t]||Math.log(1+asIndex.length);
+
+    function asScore(entry,qTokens,qNorm){
       let score=0;
-      if(titleLower===qRaw)score+=30;
-      else if(qRaw.length>2&&titleLower.includes(qRaw))score+=14;
-      const textLower=entry.text.toLowerCase();
+      if(entry.titleLower===qNorm)score+=45;
+      else if(qNorm.length>3&&entry.titleLower.includes(qNorm))score+=20;
+      else if(qNorm.length>3&&qNorm.includes(entry.titleLower)&&entry.titleLower.length>3)score+=12;
       qTokens.forEach(t=>{
-        if(CHAT_STOPWORDS.has(t)||t.length<2)return;
-        if(titleLower.includes(t))score+=4;
-        if(textLower.includes(t))score+=1;
+        const w=asIdf(t);
+        if(entry.titleTokens.has(t))score+=5*w;
+        else if(entry.bodyTokens.has(t))score+=1.4*w;
+        else if(t.length>=6){
+          for(const bt of entry.titleTokens){
+            if(Math.abs(bt.length-t.length)<=2&&asLev(t,bt,1)<=1){score+=2.5*w;break;}
+          }
+        }
       });
+      if(entry.kind==='glossary')score*=1.12;
+      if(entry.kind==='concept')score*=1.05;
       return score;
     }
-    function chatResultLabel(kind){
-      if(kind==='glossary')return 'Glossary';
-      if(kind==='formula')return 'Formulas & calculators';
-      if(kind==='mnemonic')return 'Memory hook';
-      if(kind==='guide')return 'Study guide';
-      return 'Lesson';
+    function asSearch(query,limit){
+      const qTokens=asQueryTokens(query);
+      const qNorm=asNormalize(query).replace(/[?.!,]/g,'').trim();
+      if(!qTokens.length)return [];
+      return asIndex.map(e=>({e,s:asScore(e,qTokens,qNorm)}))
+        .filter(x=>x.s>0).sort((a,b)=>b.s-a.s).slice(0,limit||8);
     }
-    function answerChatQuestion(raw){
-      const qRaw=raw.trim().toLowerCase();
-      const qTokens=chatTokenize(qRaw).filter(t=>!CHAT_STOPWORDS.has(t)&&t.length>1);
-      if(!qTokens.length)return {text:'Try asking about a specific term, rule or lesson — for example “what is Reg T” or “GO bond vs revenue bond”.',results:[]};
-      const scored=chatIndex.map(e=>({e,s:scoreChatEntry(e,qTokens,qRaw)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s);
-      if(!scored.length)return {text:`I couldn't find a close match for “${raw.trim()}” in the course content. Try different wording, or search the full glossary.`,results:[]};
-      const seen=new Set(),results=[];
-      for(const {e} of scored){
-        const key=e.kind+'|'+e.title+'|'+(e.id||'');
+    function asDedupe(hits,limit){
+      const seen=new Set(),out=[];
+      for(const h of hits){
+        const key=h.e.kind+'|'+h.e.titleLower+'|'+(h.e.id||'');
         if(seen.has(key))continue;seen.add(key);
-        results.push(e);
-        if(results.length>=4)break;
+        out.push(h);
+        if(out.length>=(limit||4))break;
       }
-      const top=scored[0].e,topScore=scored[0].s;
-      let text;
-      if((top.kind==='glossary'||top.kind==='concept')&&topScore>=14)text=`**${top.title}** — ${top.snippet}`;
-      else text=`Here's what I found in your course for “${raw.trim()}”:`;
-      return {text,results};
+      return out;
     }
-    function formatChatText(text){return esc(text).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');}
-    function renderChatLog(){
-      const log=$('#chatLog');if(!log)return;
-      log.innerHTML=chatMessages.map(m=>{
-        if(m.role==='user')return `<div class="chat-msg chat-user"><p>${esc(m.text)}</p></div>`;
-        const results=(m.results&&m.results.length)?`<div class="chat-results">${m.results.map(r=>`<button class="chat-result" type="button" data-action="chat-jump" data-target="${r.target}" data-id="${r.id||''}" data-term="${r.kind==='glossary'?esc(r.title):''}"><strong>${esc(r.title)} <span style="font-weight:600;color:var(--muted)">· ${chatResultLabel(r.kind)}</span></strong><span>${esc((r.snippet||'').slice(0,120))}${(r.snippet||'').length>120?'…':''}</span></button>`).join('')}</div>`:'';
-        return `<div class="chat-msg chat-bot"><p>${formatChatText(m.text)}</p>${results}</div>`;
+
+    /* ---------------------------- Intent detection ---------------------------- */
+    const AS_INTENT=[
+      ['greet',    /^\s*(hi|hey|hello|yo|sup|good\s+(morning|afternoon|evening))\b/i],
+      ['help',     /\b(what can you do|how do you work|help me|what do you know|who are you|are you (an? )?(ai|llm|chatgpt|claude))\b/i],
+      ['quiz',     /\b(quiz|test me|practice question|ask me|drill me|give me a question)\b/i],
+      ['calc',     /\b(calculate|compute|work out|solve|what('?s| is) the (current yield|breakeven|break-even|nav|pop|sales charge|accrued))\b/i],
+      ['compare',  /\b(vs\.?|versus|difference between|differences between|compare|contrast|how (do|does) .+ differ|which is better)\b/i],
+      ['trap',     /\b(trap|trick|tricky|gotcha|common mistake|why (is|are) .+ wrong|watch out|easy to miss|confus)\b/i],
+      ['example',  /\b(example|for instance|scenario|show me how|real world|in practice)\b/i],
+      ['simplify', /\b(simpler|simplify|plain english|eli5|dumb it down|i('?m| am) confused|don'?t (get|understand)|too complicated)\b/i],
+      ['memory',   /\b(mnemonic|memory (aid|trick|hook)|how (do i|to) remember|memorize)\b/i],
+      ['formula',  /\b(formula|equation|how (do i|to) calculate|math for)\b/i],
+      ['more',     /^\s*(more|tell me more|go on|continue|elaborate|expand|go deeper|and\??|keep going|what else)\s*[?.!]*\s*$/i],
+      ['study',    /\b(what should i study|where (do|should) i start|study plan|weak(est)? (area|domain)|what'?s next|how am i doing)\b/i],
+      ['define',   /.*/]
+    ];
+    function asDetectIntent(raw){
+      for(const [name,re] of AS_INTENT)if(re.test(raw))return name;
+      return 'define';
+    }
+    function asSplitCompare(raw){
+      let s=asNormalize(raw).replace(/[?.!]/g,' ');
+      s=s.replace(/^.*?\b(difference|differences)\s+between\s+/,'');
+      s=s.replace(/^.*?\b(compare|contrast)\s+/,'');
+      s=s.replace(/^\s*(how\s+(do|does)\s+)/,'');
+      s=s.replace(/\s+(differ|compare)\b.*$/,'');
+      const parts=s.split(/\s+(?:vs\.?|versus|and|or)\s+/).map(x=>x.replace(/\b(a|an|the)\b/g,'').trim()).filter(Boolean);
+      return parts.length>=2?[parts[0],parts[1]]:null;
+    }
+
+    /* ------------------------- Live calculators ------------------------- */
+    function asNums(raw){
+      return (asNormalize(raw).match(/\d+(?:\.\d+)?/g)||[]).map(Number);
+    }
+    function asTryCalc(raw){
+      const q=asNormalize(raw),n=asNums(raw);
+      const money=v=>'$'+v.toLocaleString(undefined,{maximumFractionDigits:2});
+      const pct=v=>v.toFixed(2).replace(/\.00$/,'')+'%';
+      if(/current\s+yield/.test(q)&&n.length>=2){
+        let [coupon,price]=n;
+        const annual=coupon<=25?1000*(coupon/100):coupon;
+        if(price<200)price=price*10;
+        return {title:'Current yield',lines:[
+          'Formula: annual coupon $ ÷ current market price',
+          'Annual coupon = '+money(annual),
+          'Market price = '+money(price),
+          'Current yield = '+money(annual)+' ÷ '+money(price)+' = '+pct(annual/price*100)
+        ],note:'A discount price raises current yield above the coupon; a premium lowers it.'};
+      }
+      if(/(breakeven|break even)/.test(q)&&n.length>=2){
+        const [strike,prem]=n,isPut=/\bput\b/.test(q);
+        return {title:(isPut?'Long put':'Long call')+' breakeven',lines:[
+          'Formula: strike '+(isPut?'−':'+')+' premium',
+          'Strike = '+money(strike)+', premium = '+money(prem),
+          'Breakeven = '+money(isPut?strike-prem:strike+prem)
+        ],note:'Max loss for either long option is the premium paid.'};
+      }
+      if(/\b(nav|net asset value)\b/.test(q)&&n.length>=3){
+        const [assets,liabs,shares]=n;
+        return {title:'Net asset value',lines:[
+          'Formula: (assets − liabilities) ÷ shares outstanding',
+          '('+money(assets)+' − '+money(liabs)+') ÷ '+shares.toLocaleString()+' shares',
+          'NAV = '+money((assets-liabs)/shares)+' per share'
+        ],note:'Open-end fund orders execute at the NEXT calculated NAV (forward pricing).'};
+      }
+      if(/sales\s+charge/.test(q)&&n.length>=2){
+        const [pop,nav]=n.slice().sort((a,b)=>b-a);
+        return {title:'Sales charge percentage',lines:[
+          'Formula: (POP − NAV) ÷ POP',
+          'POP = '+money(pop)+', NAV = '+money(nav),
+          'Sales charge = '+pct((pop-nav)/pop*100)
+        ],note:'FINRA caps a mutual fund sales charge at 8.5% of POP.'};
+      }
+      if(/accrued/.test(q)&&n.length>=2){
+        const par=n.find(x=>x>=100)||1000,rate=n.find(x=>x<25),days=n.find(x=>x>0&&x<=360&&x!==rate)||0;
+        if(rate&&days)return {title:'Accrued interest (corporate / municipal)',lines:[
+          'Formula: par × coupon% × (days ÷ 360), 30/360 day count',
+          money(par)+' × '+rate+'% × ('+days+' ÷ 360)',
+          'Accrued interest = '+money(par*(rate/100)*(days/360))
+        ],note:'Government bonds use actual/actual instead of 30/360.'};
+      }
+      return null;
+    }
+
+    /* ------------------------- Answer composition ------------------------- */
+    function asSource(e){
+      return {title:e.title,kind:e.kind,target:e.target,id:e.id||'',
+        term:e.kind==='glossary'?e.term:'',snippet:e.snippet||e.body||'',
+        lessonTitle:e.lesson?e.lesson.title:''};
+    }
+    const AS_KIND_LABEL={glossary:'Glossary',concept:'Lesson concept',lesson:'Lesson',
+      section:'Lesson section',fact:'Key fact',formula:'Formula',mnemonic:'Memory hook',guide:'Study guide'};
+
+    /* Gather everything the course knows about one subject. */
+    function asProfile(subject){
+      const hits=asSearch(subject,20);
+      if(!hits.length)return null;
+      const top=hits[0].e;
+      const pick=k=>{const h=hits.find(x=>x.e.kind===k);return h?h.e:null;};
+      const gloss=pick('glossary'),concept=pick('concept'),formula=pick('formula'),
+            mnem=pick('mnemonic'),section=pick('section'),fact=pick('fact');
+      let lesson=null;
+      for(const h of hits){if(h.e.lesson){lesson=h.e.lesson;break;}}
+      return {top,hits,gloss,concept,formula,mnem,section,fact,lesson,
+        label:(gloss&&gloss.title)||(concept&&concept.title)||top.title};
+    }
+
+    function asAnswerDefine(raw,prof){
+      const blocks=[],sources=[];
+      const g=prof.gloss||prof.concept;
+      let lead;
+      if(g){lead='**'+g.title+'** — '+g.body;sources.push(asSource(g));}
+      else {lead='**'+prof.top.title+'** — '+(prof.top.snippet||prof.top.body);sources.push(asSource(prof.top));}
+      blocks.push({type:'text',text:lead});
+      const L=prof.lesson;
+      if(L){
+        const extra=[];
+        if(L.why)extra.push('**Why it matters:** '+L.why);
+        if(L.trap)extra.push('**Common trap:** '+L.trap);
+        if(extra.length){blocks.push({type:'text',text:extra.join('\n\n')});
+          sources.push(asSource({kind:'lesson',title:L.title,target:'lesson',id:L.id,snippet:L.summary}));}
+      }
+      if(prof.formula){
+        blocks.push({type:'text',text:'**Formula:** '+prof.formula.eq+(prof.formula.note?'  \n'+prof.formula.note:'')});
+        sources.push(asSource(prof.formula));
+      }
+      if(prof.section&&(!g||prof.section.body.length>60)){
+        blocks.push({type:'text',text:'**More detail:** '+prof.section.body.slice(0,320)+(prof.section.body.length>320?'…':'')});
+        sources.push(asSource(prof.section));
+      }
+      return {blocks,sources,chips:['Give me an example','What’s the trap?','How do I remember this?','Quiz me on this']};
+    }
+
+    function asAnswerCompare(raw,subjects){
+      const a=asProfile(subjects[0]),b=asProfile(subjects[1]);
+      if(!a||!b)return null;
+      const blocks=[],sources=[];
+      const defOf=p=>{const g=p.gloss||p.concept||p.top;return g.body||g.snippet||'';};
+      blocks.push({type:'text',text:'Here’s how **'+a.label+'** and **'+b.label+'** line up:'});
+      blocks.push({type:'table',headers:['',a.label,b.label],rows:[
+        ['What it is',defOf(a),defOf(b)],
+        ['Domain',a.top.domain?DOMAINS[a.top.domain].short:'—',b.top.domain?DOMAINS[b.top.domain].short:'—'],
+        ['Where it’s taught',a.lesson?a.lesson.title:'—',b.lesson?b.lesson.title:'—']
+      ]});
+      [a,b].forEach(p=>{const g=p.gloss||p.concept||p.top;sources.push(asSource(g));});
+      const traps=[];
+      if(a.lesson&&a.lesson.trap)traps.push('**'+a.label+':** '+a.lesson.trap);
+      if(b.lesson&&b.lesson.trap&&(!a.lesson||b.lesson.id!==a.lesson.id))traps.push('**'+b.label+':** '+b.lesson.trap);
+      if(traps.length)blocks.push({type:'text',text:'**Traps to avoid**\n\n'+traps.join('\n\n')});
+      if(a.lesson)sources.push(asSource({kind:'lesson',title:a.lesson.title,target:'lesson',id:a.lesson.id,snippet:a.lesson.summary}));
+      if(b.lesson&&(!a.lesson||b.lesson.id!==a.lesson.id))sources.push(asSource({kind:'lesson',title:b.lesson.title,target:'lesson',id:b.lesson.id,snippet:b.lesson.summary}));
+      return {blocks,sources,chips:['Quiz me on this','Give me an example','What’s the trap?']};
+    }
+
+    function asAnswerQuiz(raw){
+      const topicHits=asSearch(raw.replace(/\b(quiz|test|me|on|about|drill|ask|question|give|a)\b/gi,' '),12);
+      let pool=[];
+      if(topicHits.length){
+        const toks=asQueryTokens(raw.replace(/\b(quiz|test|me|on|about|drill|ask|question|give|a)\b/gi,' '));
+        if(toks.length){
+          pool=practiceQuestions.filter(q=>{
+            const blob=asDocTokens(q.stem+' '+(q.topic||'')+' '+(q.takeaway||''));
+            return toks.some(t=>blob.has(t));
+          });
+        }
+      }
+      if(!pool.length)pool=practiceQuestions;
+      const q=pool[Math.floor(Math.random()*pool.length)];
+      return {blocks:[{type:'text',text:pool.length<practiceQuestions.length
+          ? 'Here’s a question on that topic — pick your answer:'
+          : 'Here’s a question from your practice bank — pick your answer:'},
+        {type:'quiz',q:q}],
+        sources:[],chips:[]};
+    }
+
+    function asAnswerExample(raw,prof){
+      const blocks=[],sources=[];
+      const L=prof.lesson;
+      let found=false;
+      if(L&&L.example){blocks.push({type:'text',text:'**Example — '+prof.label+'**\n\n'+L.example});
+        sources.push(asSource({kind:'lesson',title:L.title,target:'lesson',id:L.id,snippet:L.summary}));found=true;}
+      const sec=prof.hits.map(h=>h.e).find(e=>e.section&&e.section.e);
+      if(sec){blocks.push({type:'text',text:'**Another one:** '+sec.section.e});sources.push(asSource(sec));found=true;}
+      if(!found)return null;
+      return {blocks,sources,chips:['Quiz me on this','What’s the trap?','Tell me more']};
+    }
+
+    function asAnswerTrap(raw,prof){
+      const blocks=[],sources=[];
+      const L=prof.lesson;
+      if(L&&L.trap){
+        blocks.push({type:'text',text:'**Watch out on '+prof.label+'**\n\n'+L.trap});
+        sources.push(asSource({kind:'lesson',title:L.title,target:'lesson',id:L.id,snippet:L.summary}));
+        if(L.finra)blocks.push({type:'text',text:'**What FINRA is really testing:** '+L.finra});
+        return {blocks,sources,chips:['Give me an example','Quiz me on this','How do I remember this?']};
+      }
+      return null;
+    }
+
+    function asAnswerMemory(raw,prof){
+      const blocks=[],sources=[];
+      if(prof.mnem){blocks.push({type:'text',text:'**'+prof.mnem.title+'** — '+prof.mnem.body});sources.push(asSource(prof.mnem));}
+      if(prof.lesson&&prof.lesson.memory){
+        blocks.push({type:'text',text:'**Memory aid from the lesson:** '+prof.lesson.memory});
+        sources.push(asSource({kind:'lesson',title:prof.lesson.title,target:'lesson',id:prof.lesson.id,snippet:prof.lesson.summary}));
+      }
+      if(!blocks.length)return null;
+      return {blocks,sources,chips:['Quiz me on this','Give me an example']};
+    }
+
+    function asAnswerSimplify(raw,prof){
+      const g=prof.gloss||prof.concept||prof.top;
+      const blocks=[{type:'text',text:'**In plain terms:** '+(g.body||g.snippet)}];
+      const sources=[asSource(g)];
+      if(prof.lesson&&prof.lesson.memory){
+        blocks.push({type:'text',text:'**Quick hook:** '+prof.lesson.memory});
+        sources.push(asSource({kind:'lesson',title:prof.lesson.title,target:'lesson',id:prof.lesson.id,snippet:prof.lesson.summary}));
+      }
+      if(prof.lesson&&prof.lesson.example)blocks.push({type:'text',text:'**Concretely:** '+prof.lesson.example});
+      return {blocks,sources,chips:['Tell me more','Quiz me on this']};
+    }
+
+    function asAnswerFormula(raw,prof){
+      const hits=asSearch(raw,25).map(h=>h.e).filter(e=>e.kind==='formula').slice(0,3);
+      if(!hits.length)return null;
+      return {blocks:[{type:'text',text:'Formulas that match:'},
+        {type:'math',lines:hits.map(f=>'**'+f.title+'** = '+f.eq+(f.note?'  \n'+f.note:''))}],
+        sources:hits.map(asSource),
+        chips:['Quiz me on this','Open the calculators']};
+    }
+
+    function asAnswerStudy(){
+      const weak=typeof weakDomain==='function'?weakDomain():'d2';
+      const d=DOMAINS[weak]||DOMAINS.d2;
+      const done=state.completedLessons.length,total=allLessons.length;
+      const nxt=typeof nextLesson==='function'?nextLesson():allLessons[0];
+      const lines=[
+        'You’ve finished **'+done+' of '+total+' lessons** ('+(typeof completion==='function'?completion():0)+'%).',
+        'Your weakest area right now is **'+d.short+'**, which is **'+d.weight+'%** of the exam.',
+        'Next stop on your path: **'+nxt.title+'**.'
+      ];
+      if(state.missedIds&&state.missedIds.length)lines.push('You have **'+state.missedIds.length+'** question(s) waiting in your review queue.');
+      return {blocks:[{type:'text',text:lines.join('\n\n')}],sources:[],
+        chips:['Quiz me on '+d.short,'Open my dashboard','Tell me more']};
+    }
+
+    function asAnswerHelp(){
+      return {blocks:[{type:'text',text:'I’m a **fully offline** study assistant. I don’t use the internet or an AI service — I search the '+glossaryData.length+' glossary terms, '+allLessons.length+' lessons, formulas and study guide already inside this page, and I show you the exact source behind every answer so you can verify it.\n\n**Things I can do:**'},
+        {type:'list',items:[
+          'Define a term — *"what is a debenture?"*',
+          'Compare two things — *"GO bond vs revenue bond"*',
+          'Do the math — *"current yield on a 6% bond at 120"*',
+          'Quiz you — *"quiz me on options"*',
+          'Surface traps — *"what’s the trap with SIPC?"*',
+          'Simplify — *"explain forward pricing in plain english"*',
+          'Track progress — *"what should I study next?"*'
+        ]}],
+        sources:[],chips:['What should I study next?','Quiz me','GO bond vs revenue bond']};
+    }
+
+    /* --------------------------- Main entry point --------------------------- */
+    function asAnswer(raw,memory){
+      const q=(raw||'').trim();
+      if(!q)return {blocks:[{type:'text',text:'Ask me about any SIE term, rule or calculation.'}],sources:[],chips:[]};
+      let intent=asDetectIntent(q);
+      let subject=q;
+
+      if(intent==='greet')return {blocks:[{type:'text',text:'Hey! Ask me about any SIE concept — a definition, a comparison, a calculation, or say **quiz me** to practice.'}],sources:[],chips:['What can you do?','Quiz me','What should I study next?']};
+      if(intent==='help')return asAnswerHelp();
+      if(intent==='study')return asAnswerStudy();
+      if(intent==='quiz')return asAnswerQuiz(q);
+
+      /* Follow-ups reuse the last subject. */
+      if(intent==='more'){
+        if(!memory||!memory.subject)return {blocks:[{type:'text',text:'Tell me what to expand on — for example *"tell me more about margin accounts"*.'}],sources:[],chips:[]};
+        subject=memory.subject;
+        const prof=asProfile(subject);
+        if(!prof)return null;
+        const seen=memory.seen||[];
+        const nextSec=prof.hits.map(h=>h.e).find(e=>(e.kind==='section'||e.kind==='fact')&&!seen.includes(e.title));
+        if(nextSec)return {blocks:[{type:'text',text:'**'+nextSec.title+'**\n\n'+nextSec.body}],
+          sources:[asSource(nextSec)],chips:['Tell me more','Quiz me on this'],_seen:nextSec.title,_subject:subject};
+        return {blocks:[{type:'text',text:'That’s everything the course covers on **'+prof.label+'**. Want to be quizzed on it, or open the full lesson?'}],
+          sources:[],chips:['Quiz me on this','Open the lesson'],_subject:subject};
+      }
+
+      if(intent==='calc'||/\d/.test(q)){
+        const calc=asTryCalc(q);
+        if(calc)return {blocks:[{type:'text',text:'**'+calc.title+'**'},{type:'math',lines:calc.lines},
+          {type:'text',text:calc.note}],
+          sources:[],chips:['Open the calculators','Quiz me on this'],_subject:calc.title};
+        if(intent==='calc'){
+          const f=asAnswerFormula(q,null);
+          if(f)return f;
+        }
+      }
+
+      if(intent==='compare'){
+        const subs=asSplitCompare(q);
+        if(subs){
+          const cmp=asAnswerCompare(q,subs);
+          if(cmp){cmp._subject=subs[0];return cmp;}
+        }
+      }
+
+      /* Strip intent words so retrieval sees the real subject. */
+      const cleaned=q.replace(/\b(whats?|what is|whats the|tell me about|explain|define|give me|an?|the|example of|trap with|mnemonic for|formula for|simpler|in plain english|eli5|more about)\b/gi,' ').replace(/\s+/g,' ').trim();
+      const prof=asProfile(cleaned||q);
+      if(!prof)return {blocks:[{type:'text',text:'I couldn’t find anything on **'+q+'** in your course content. Try a key term (like *debenture*, *Reg T* or *breakpoint*), or open the full glossary.'}],
+        sources:[],chips:['What can you do?','Quiz me','Open the glossary']};
+
+      let out=null;
+      if(intent==='example')out=asAnswerExample(q,prof);
+      else if(intent==='trap')out=asAnswerTrap(q,prof);
+      else if(intent==='memory')out=asAnswerMemory(q,prof);
+      else if(intent==='simplify')out=asAnswerSimplify(q,prof);
+      else if(intent==='formula')out=asAnswerFormula(q,prof);
+      if(!out)out=asAnswerDefine(q,prof);
+      out._subject=prof.label;
+      /* Related material always offered so nothing feels like a dead end. */
+      out.related=asDedupe(prof.hits.filter(h=>h.e!==(prof.gloss||prof.top)),3).map(h=>asSource(h.e));
+      return out;
+    }
+
+    /* ------------------------- assistant DOM layer ------------------------- */
+    let asOpen=false, asLog=[], asMemory={subject:'',seen:[]}, asQuizState={};
+
+    function asInline(text){
+      return esc(text)
+        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g,'<em>$1</em>')
+        .replace(/\n\n/g,'</p><p>')
+        .replace(/  \n/g,'<br>')
+        .replace(/\n/g,'<br>');
+    }
+    function asRenderBlock(b,mi){
+      if(b.type==='text')return '<p>'+asInline(b.text)+'</p>';
+      if(b.type==='list')return '<ul class="as-list">'+b.items.map(i=>'<li>'+asInline(i)+'</li>').join('')+'</ul>';
+      if(b.type==='math')return '<div class="as-math">'+b.lines.map(l=>'<div>'+asInline(l)+'</div>').join('')+'</div>';
+      if(b.type==='table')return '<div class="as-table-wrap"><table class="as-table"><thead><tr>'+
+        b.headers.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr></thead><tbody>'+
+        b.rows.map(r=>'<tr>'+r.map((c,i)=>i===0?'<th scope="row">'+esc(c)+'</th>':'<td>'+esc(c)+'</td>').join('')+'</tr>').join('')+
+        '</tbody></table></div>';
+      if(b.type==='quiz'){
+        const q=b.q,st=asQuizState[mi+'|'+q.id];
+        const opts=q.choices.map((c,i)=>{
+          let cls='as-quiz-opt';
+          if(st!==undefined){
+            if(i===q.correct)cls+=' correct';
+            else if(i===st)cls+=' wrong';
+          }
+          return '<button class="'+cls+'" type="button" data-action="as-quiz" data-mi="'+mi+'" data-qid="'+esc(q.id)+'" data-index="'+i+'"'+(st!==undefined?' disabled':'')+'>'+
+            '<span class="as-quiz-letter">'+'ABCD'[i]+'</span><span>'+esc(c)+'</span></button>';
+        }).join('');
+        let fb='';
+        if(st!==undefined){
+          const right=st===q.correct;
+          fb='<div class="as-quiz-fb '+(right?'right':'')+'"><strong>'+(right?'Correct.':'Not quite.')+'</strong> '+
+            esc(q.reasons&&q.reasons[st]?q.reasons[st]:'')+
+            (right?'':'<br><strong>Answer:</strong> '+esc(q.choices[q.correct])+' — '+esc(q.reasons&&q.reasons[q.correct]?q.reasons[q.correct]:''))+
+            (q.takeaway?'<br><em>'+esc(q.takeaway)+'</em>':'')+'</div>';
+        }
+        return '<div class="as-quiz"><div class="as-quiz-stem">'+esc(q.stem)+'</div><div class="as-quiz-opts">'+opts+'</div>'+fb+'</div>';
+      }
+      return '';
+    }
+    function asSourceBtn(s){
+      return '<button class="as-src" type="button" data-action="as-jump" data-target="'+esc(s.target)+'" data-id="'+esc(s.id||'')+'" data-term="'+esc(s.term||'')+'">'+
+        '<strong>'+esc(s.title)+'</strong><span>'+esc(AS_KIND_LABEL[s.kind]||'Course content')+
+        (s.lessonTitle&&s.kind!=='lesson'?' · '+esc(s.lessonTitle):'')+'</span></button>';
+    }
+    function asRenderLog(){
+      const el=$('#asLog');if(!el)return;
+      el.innerHTML=asLog.map((m,mi)=>{
+        if(m.role==='user')return '<div class="as-msg as-user"><p>'+esc(m.text)+'</p></div>';
+        const body=(m.blocks||[]).map(b=>asRenderBlock(b,mi)).join('');
+        const src=(m.sources&&m.sources.length)
+          ? '<details class="as-sources" open><summary>Grounded in '+m.sources.length+' source'+(m.sources.length>1?'s':'')+' from your course</summary>'+
+            m.sources.map(asSourceBtn).join('')+'</details>':'';
+        const rel=(m.related&&m.related.length)
+          ? '<details class="as-sources as-related"><summary>Related material</summary>'+m.related.map(asSourceBtn).join('')+'</details>':'';
+        const chips=(m.chips&&m.chips.length)
+          ? '<div class="as-chips">'+m.chips.map(c=>'<button class="chip" type="button" data-action="as-chip" data-q="'+esc(c)+'">'+esc(c)+'</button>').join('')+'</div>':'';
+        return '<div class="as-msg as-bot"><div class="as-bubble">'+body+src+rel+'</div>'+chips+'</div>';
       }).join('');
-      log.scrollTop=log.scrollHeight;
+      el.scrollTop=el.scrollHeight;
     }
-    function askChat(question){
-      if(!question||!question.trim())return;
-      chatMessages.push({role:'user',text:question.trim()});
-      const ans=answerChatQuestion(question);
-      chatMessages.push({role:'bot',text:ans.text,results:ans.results});
-      renderChatLog();
-    }
-    function openChat(){
-      chatOpen=true;
-      const panel=$('#chatPanel');if(panel)panel.hidden=false;
-      const launcher=$('#chatLauncher');if(launcher)launcher.setAttribute('aria-expanded','true');
-      if(!chatMessages.length){
-        chatMessages.push({role:'bot',text:"Hi! I'm an offline study assistant — I search your lessons, glossary and formulas (no internet, no AI service) to answer questions. Try one of the suggestions below, or ask your own.",results:[]});
-        renderChatLog();
+    function asAsk(text){
+      const q=(text||'').trim();if(!q)return;
+      asLog.push({role:'user',text:q});
+      let ans;
+      try{ans=asAnswer(q,asMemory);}catch(err){
+        ans={blocks:[{type:'text',text:'Something went wrong answering that. Try rephrasing, or open the full glossary.'}],sources:[],chips:[]};
       }
-      setTimeout(()=>{const i=$('#chatInput');if(i)i.focus();},30);
+      if(!ans)ans={blocks:[{type:'text',text:'I couldn’t find that in your course content. Try a key term, or open the full glossary.'}],sources:[],chips:['Open the glossary']};
+      if(ans._subject){
+        if(ans._subject!==asMemory.subject)asMemory={subject:ans._subject,seen:[]};
+        if(ans._seen)asMemory.seen.push(ans._seen);
+      }
+      asLog.push({role:'bot',blocks:ans.blocks,sources:ans.sources,related:ans.related,chips:ans.chips});
+      asRenderLog();
     }
-    function closeChat(){
-      chatOpen=false;
-      const panel=$('#chatPanel');if(panel)panel.hidden=true;
-      const launcher=$('#chatLauncher');if(launcher)launcher.setAttribute('aria-expanded','false');
+    function asOpenPanel(){
+      asOpen=true;
+      const p=$('#asPanel');if(p)p.hidden=false;
+      const b=$('#asLauncher');if(b)b.setAttribute('aria-expanded','true');
+      if(!asLog.length){
+        asLog.push({role:'bot',blocks:[{type:'text',text:'Hi — I’m your **offline study assistant**. Everything I say comes from the lessons, glossary and formulas already in this page, and I cite the source each time so you can check it.\n\nAsk me anything, or start here:'}],
+          sources:[],chips:['What can you do?','GO bond vs revenue bond','Quiz me','What should I study next?']});
+        asRenderLog();
+      }
+      setTimeout(()=>{const i=$('#asInput');if(i)i.focus();},40);
     }
+    function asClosePanel(){
+      asOpen=false;
+      const p=$('#asPanel');if(p)p.hidden=true;
+      const b=$('#asLauncher');if(b)b.setAttribute('aria-expanded','false');
+    }
+
     function lookupResultsHTML(){
       const term=lookupSearch.trim().toLowerCase();
       if(!term)return `<p class="lookup-hint">Start typing to search all ${glossaryData.length} terms and definitions.</p>`;
@@ -1926,10 +2504,10 @@
     });
     document.addEventListener('change',e=>{ if(e.target.classList&&e.target.classList.contains('calc-input'))computeCalculators(); });
     document.addEventListener('submit',e=>{
-      if(e.target&&e.target.id==='chatForm'){
+      if(e.target&&e.target.id==='asForm'){
         e.preventDefault();
-        const input=$('#chatInput');
-        if(input&&input.value.trim()){askChat(input.value);input.value='';}
+        const i=$('#asInput');
+        if(i&&i.value.trim()){asAsk(i.value);i.value='';}
       }
     });
     /* ===================== END ADDED FEATURES ===================== */
@@ -2005,12 +2583,18 @@
       else if(a==='glossary-domain'){glossaryFilter=btn.dataset.domain;renderGlossary();}
       else if(a==='open-lookup')openLookup();
       else if(a==='goto-glossary'){glossarySearch=lookupSearch;closeDialog();go('glossary');}
-      else if(a==='toggle-chat'){chatOpen?closeChat():openChat();}
-      else if(a==='chat-chip'){askChat(btn.dataset.q);}
-      else if(a==='chat-jump'){
+      else if(a==='as-toggle'){asOpen?asClosePanel():asOpenPanel();}
+      else if(a==='as-chip'){asAsk(btn.dataset.q);}
+      else if(a==='as-quiz'){
+        asQuizState[btn.dataset.mi+'|'+btn.dataset.qid]=Number(btn.dataset.index);
+        const pq=practiceQuestions.find(x=>x.id===btn.dataset.qid);
+        if(pq&&Number(btn.dataset.index)!==pq.correct&&state.missedIds&&!state.missedIds.includes(pq.id)){state.missedIds.push(pq.id);save();}
+        asRenderLog();
+      }
+      else if(a==='as-jump'){
         const t=btn.dataset.target;
         if(t==='glossary'){glossarySearch=btn.dataset.term||'';go('glossary');}
-        else if(t==='lesson'){go('lesson',btn.dataset.id);}
+        else if(t==='lesson'&&btn.dataset.id){go('lesson',btn.dataset.id);}
         else if(t){go(t);}
       }
       else if(a==='confirm-mock'){pendingMock=btn.dataset.mock;const m=mockDefs.find(x=>x.id===pendingMock)||{};showDialog(`<h2>Start ${esc(m.name||'the mock')}?</h2><p>The 105-minute timer begins immediately. Your saved progress is safe, but the active attempt is not preserved if the browser closes.</p><div class="dialog-actions"><button class="soft-btn" data-action="close-dialog">Not yet</button><button class="primary-btn" data-action="start-exam-now">Start timer</button></div>`);}
@@ -2022,6 +2606,8 @@
     });
     document.addEventListener('keydown',e=>{
       if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openLookup();return;}
+      if((e.ctrlKey||e.metaKey)&&e.key==='/'){e.preventDefault();asOpen?asClosePanel():asOpenPanel();return;}
+      if(e.key==='Escape'&&asOpen){asClosePanel();return;}
       if(view==='flashcards'&&(e.code==='Space'||e.key==='Enter')&&!['INPUT','SELECT','BUTTON'].includes(document.activeElement.tagName)){e.preventDefault();cardFlipped=!cardFlipped;renderFlashcards();}
       if(view==='exam'&&activeExam&&!activeExam.report&&/^[1-4]$/.test(e.key)){const q=activeExam.questions[activeExam.index];activeExam.answers[q.id]=Number(e.key)-1;renderExam();}
     });
