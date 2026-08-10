@@ -367,7 +367,8 @@
     .dialog-body { padding:27px; }
     .dialog-body h2 { margin-top:0; }
     .dialog-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:22px; }
-    .mobile-menu { display:none; }
+    .nav .mobile-more-btn, .mobile-nav-sheet, .mobile-nav-backdrop { display:none; }
+    body.mobile-nav-open { overflow:hidden; }
     .sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
     @media (max-width: 1080px) {
       .grid-4 { grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -381,17 +382,27 @@
     }
     @media (max-width: 780px) {
       :root { --sidebar:0px; }
-      .shell { display:block; padding-bottom:69px; }
-      .sidebar { inset:auto 0 0; width:auto; height:69px; padding:8px 10px; flex-direction:row; overflow-x:auto; border-top:1px solid rgba(255,255,255,.12); }
+      .shell { display:block; padding-bottom:calc(76px + env(safe-area-inset-bottom)); }
+      .sidebar { inset:auto 0 0; width:auto; height:calc(76px + env(safe-area-inset-bottom)); padding:7px 8px max(7px,env(safe-area-inset-bottom)); flex-direction:row; overflow:visible; border-top:1px solid rgba(255,255,255,.12); }
       .brand, .sidebar-foot { display:none; }
-      .nav { display:flex; min-width:max-content; width:100%; justify-content:space-around; gap:3px; }
-      .nav button { width:auto; min-width:62px; padding:7px 9px; flex-direction:column; gap:1px; text-align:center; font-size:9px; }
+      .nav { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); min-width:0; width:100%; gap:3px; }
+      .nav > button { display:none; width:100%; min-width:0; min-height:56px; padding:6px 4px; flex-direction:column; justify-content:center; gap:1px; text-align:center; font-size:9px; }
+      .nav > button[data-view="home"], .nav > button[data-view="course"], .nav > button[data-view="quiz"], .nav > button[data-view="review"], .nav > .mobile-more-btn { display:flex; }
+      .mobile-more-btn { border:0; border-radius:11px; background:transparent; color:#a8c5c0; align-items:center; }
+      .mobile-more-btn[aria-expanded="true"] { background:#214b4a; color:white; box-shadow:inset 0 3px #5fd1bc; }
       .nav-icon { font-size:16px; }
       .nav button.active { box-shadow:inset 0 3px #5fd1bc; }
+      .mobile-nav-backdrop:not([hidden]) { display:block; position:fixed; inset:0 0 calc(76px + env(safe-area-inset-bottom)); z-index:24; border:0; background:rgba(5,17,16,.58); backdrop-filter:blur(3px); }
+      .mobile-nav-sheet:not([hidden]) { display:grid; position:fixed; left:10px; right:10px; bottom:calc(86px + env(safe-area-inset-bottom)); z-index:25; max-height:calc(100dvh - 102px - env(safe-area-inset-bottom)); overflow-y:auto; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; padding:12px; border:1px solid var(--line); border-radius:18px; background:var(--surface); box-shadow:var(--shadow); }
+      .mobile-nav-sheet button { min-width:0; min-height:62px; padding:9px 6px; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--ink); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; font-size:10px; font-weight:750; text-align:center; }
+      .mobile-nav-sheet button:hover, .mobile-nav-sheet button.active { border-color:var(--green); background:var(--green-2); color:var(--green); }
+      .mobile-nav-sheet .nav-icon { width:auto; font-size:18px; }
       .content { grid-column:auto; }
-      .topbar { min-height:62px; padding:10px 16px; }
+      .topbar { min-height:62px; padding:10px 14px; gap:10px; }
+      .topbar > div:first-child { min-width:0; }
       .top-actions .soft-btn { display:none; }
-      .main { padding:22px 15px 35px; }
+      .primary-btn, .soft-btn, .danger-btn, .icon-btn { min-height:44px; }
+      .main { padding:22px 15px 40px; }
       .hero { min-height:auto; padding:29px 23px; border-radius:20px; }
       .hero h1 { font-size:38px; }
       .grid-3, .grid-2, .plan-cards { grid-template-columns:1fr; }
@@ -412,16 +423,29 @@
       .lesson-flow-status { display:none; }
       .lesson-flow button { width:100%; }
       .lesson-check-cta { align-items:flex-start; flex-direction:column; }
+      .lesson-check-cta .primary-btn { width:100%; }
       .domain-result { grid-template-columns:1fr 50px; }
       .domain-result .bar { grid-column:1/-1; grid-row:2; }
       .review-focus ul { columns:1; }
       .task { grid-template-columns:auto 42px minmax(0,1fr); }
       .task .pill { display:none; }
+      .quiz-actions { flex-wrap:wrap; }
+      .quiz-actions > button, .quiz-actions > div { flex:1 1 150px; }
+      .quiz-actions > div { display:flex; gap:8px; flex-wrap:wrap; }
+      .quiz-actions > div > button { flex:1 1 120px; }
+      .dialog-actions { flex-wrap:wrap; }
+      .dialog-actions > button { flex:1 1 130px; }
+      .as-launcher { bottom:calc(88px + env(safe-area-inset-bottom)); }
+      .tts-player { bottom:calc(88px + env(safe-area-inset-bottom)); }
     }
     @media (max-width: 480px) {
       .grid-4 { grid-template-columns:1fr; }
       .study-toc { grid-template-columns:1fr; }
-      .top-title { max-width:190px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .topbar { gap:7px; padding-left:12px; padding-right:12px; }
+      .topbar .eyebrow { display:none; }
+      .top-title { max-width:calc(100vw - 128px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:12px; }
+      .top-actions { gap:6px; }
+      .hero h1 { font-size:34px; }
       .hero-actions > * { flex:1; }
       .mini-metrics { grid-template-columns:1fr; }
       .mini-metrics div { display:flex; justify-content:space-between; }
@@ -438,6 +462,9 @@
       .map-stop-status { grid-column:2; margin-top:-7px; }
       .lesson-flow { margin-left:-8px; margin-right:-8px; padding:8px; }
       .lesson-flow .soft-btn,.lesson-flow .primary-btn { padding:10px 9px; font-size:11px; }
+      .srs-grades { grid-template-columns:repeat(2,1fr); }
+      .mobile-nav-sheet:not([hidden]) { grid-template-columns:repeat(3,minmax(0,1fr)); left:8px; right:8px; padding:10px; }
+      .page-head > button { width:100%; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; }
@@ -492,8 +519,8 @@
     .as-form input { flex:1; min-width:0; padding:11px 13px; border:1px solid var(--line); border-radius:12px; background:var(--paper); color:var(--ink); font-size:14px; }
     .as-foot { padding:0 15px 12px; font-size:10.5px; color:var(--muted); text-align:center; }
     @media (max-width:520px) {
-      .as-panel { right:10px; left:10px; width:auto; bottom:80px; height:calc(100vh - 150px); }
-      .as-launcher { right:14px; bottom:14px; }
+      .as-panel { right:10px; left:10px; width:auto; bottom:calc(84px + env(safe-area-inset-bottom)); height:calc(100vh - 164px - env(safe-area-inset-bottom)); }
+      .as-launcher { right:14px; bottom:calc(88px + env(safe-area-inset-bottom)); }
     }
     .tts-sentence { background:var(--gold-2); border-radius:4px; box-shadow:0 0 0 2px var(--gold-2); transition:background .15s ease; }
     .tts-word { background:var(--gold); color:#fff; border-radius:3px; padding:0 1px; }
@@ -512,7 +539,7 @@
     .tts-controls .tts-main { background:var(--green); border-color:var(--green); color:#fff; }
     .tts-controls select { height:34px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); font-size:12px; padding:0 5px; max-width:112px; }
     .tts-controls .tts-spacer { margin-left:auto; }
-    @media (max-width:900px) { .tts-player { left:12px; right:12px; width:auto; bottom:82px; } }
+    @media (max-width:900px) { .tts-player { left:12px; right:12px; width:auto; bottom:calc(88px + env(safe-area-inset-bottom)); } }
     .qx { margin-top:14px; border:1px solid var(--line); border-radius:13px; background:var(--surface); overflow:hidden; }
     .qx > summary { cursor:pointer; padding:11px 14px; font-size:12.5px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--green); background:var(--surface-2); list-style:none; }
     .qx > summary::-webkit-details-marker { display:none; }
@@ -667,6 +694,7 @@
         <button data-view="glossary"><span class="nav-icon">◈</span><span>Glossary</span></button>
         <button data-view="planner"><span class="nav-icon">□</span><span>Planner</span></button>
         <button data-view="analytics"><span class="nav-icon">↗</span><span>Analytics</span></button>
+        <button class="mobile-more-btn" data-action="toggle-mobile-nav" aria-expanded="false" aria-controls="mobileNavSheet"><span class="nav-icon">•••</span><span>More</span></button>
       </nav>
       <div class="sidebar-foot">
         <div class="side-label">Course progress</div>
@@ -674,6 +702,18 @@
         <div class="side-stat"><span id="sideCompleted">0 lessons</span><strong id="sidePercent">0%</strong></div>
       </div>
     </aside>
+    <button class="mobile-nav-backdrop" id="mobileNavBackdrop" data-action="close-mobile-nav" aria-label="Close more navigation" hidden></button>
+    <nav class="mobile-nav-sheet" id="mobileNavSheet" role="dialog" aria-modal="true" aria-label="More course tools" hidden>
+      <button data-view="dashboard"><span class="nav-icon">◫</span><span>Dashboard</span></button>
+      <button data-view="guide"><span class="nav-icon">≡</span><span>Study guide</span></button>
+      <button data-view="flashcards"><span class="nav-icon">◇</span><span>Cards</span></button>
+      <button data-view="exam"><span class="nav-icon">◷</span><span>Mock exam</span></button>
+      <button data-view="formulas"><span class="nav-icon">∑</span><span>Formulas</span></button>
+      <button data-view="calculators"><span class="nav-icon">▦</span><span>Calculators</span></button>
+      <button data-view="glossary"><span class="nav-icon">◈</span><span>Glossary</span></button>
+      <button data-view="planner"><span class="nav-icon">□</span><span>Planner</span></button>
+      <button data-view="analytics"><span class="nav-icon">↗</span><span>Analytics</span></button>
+    </nav>
     <div class="content">
       <header class="topbar">
         <div><div class="eyebrow" id="topEyebrow">SIE study system</div><div class="top-title" id="topTitle">Build exam confidence, one decision at a time.</div></div>
@@ -1770,9 +1810,17 @@
       return {domain:w,title:next.title,lesson:next,reason:domainResults(w).total?`${d.short} is your lowest measured accuracy area.`:`${d.short} carries ${d.weight}% of scored questions and needs baseline evidence.`};
     }
     function sourceNote(){return `<p class="source-note"><strong>Rule audit: August 10, 2026.</strong> Optional primary references: <a href="https://www.finra.org/sites/default/files/2025-10/SIE_Content_Outline.pdf" target="_blank" rel="noreferrer">FINRA SIE Content Outline</a>, <a href="https://www.finra.org/industry/sie-practice-test" target="_blank" rel="noreferrer">official practice-test guidance</a>, <a href="https://www.finra.org/rules-guidance/rulebooks/finra-rules/3220" target="_blank" rel="noreferrer">current $300 Gifts Rule</a>, and <a href="https://www.finra.org/rules-guidance/rulebooks/finra-rules/1240" target="_blank" rel="noreferrer">current CE rule</a>. Rules change; confirm current FINRA materials near your test date. SIE Compass is independent and not endorsed by FINRA. Readiness is directional, never a guarantee.</p>`;}
+    function mobileNavIsOpen(){const sheet=$('#mobileNavSheet');return Boolean(sheet&&!sheet.hidden);}
+    function setMobileNav(open,restoreFocus=false){
+      const sheet=$('#mobileNavSheet'),backdrop=$('#mobileNavBackdrop'),more=$('.mobile-more-btn');if(!sheet||!backdrop||!more)return;
+      const wasOpen=!sheet.hidden;sheet.hidden=!open;backdrop.hidden=!open;more.setAttribute('aria-expanded',String(open));document.body.classList.toggle('mobile-nav-open',open);
+      if(open)requestAnimationFrame(()=>sheet.querySelector('button')?.focus());else if(wasOpen&&restoreFocus)more.focus();
+    }
+    function closeMobileNav(restoreFocus=false){setMobileNav(false,restoreFocus);}
     function updateChrome(){
       const p=completion();$('#sideProgress').style.width=p+'%';$('#sideCompleted').textContent=`${state.completedLessons.length} of ${allLessons.length} lessons`;$('#sidePercent').textContent=p+'%';
-      $$('#nav button').forEach(b=>{const active=b.dataset.view===view;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+      $$('#nav button,#mobileNavSheet button').forEach(b=>{const active=b.dataset.view===view;b.classList.toggle('active',active);if(active)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+      const moreViews=['dashboard','guide','flashcards','exam','formulas','calculators','glossary','planner','analytics'],more=$('.mobile-more-btn');if(more)more.classList.toggle('active',moreViews.includes(view));
       const dark=state.theme==='dark',themeButton=$('#themeToggle');document.documentElement.dataset.theme=state.theme;themeButton.textContent=dark?'☀':'◐';themeButton.setAttribute('aria-label',dark?'Switch to light theme':'Switch to dark theme');
     }
     function clearTimer(){if(timerHandle){clearInterval(timerHandle);timerHandle=null;}}
@@ -1785,7 +1833,7 @@
       },1000);
     }
     function go(next,arg){
-      creditTime(); clearTimer(); if(typeof ttsStop==='function')ttsStop(); view=next;if(next==='lesson'&&arg){selectedLesson=arg;state.lastLesson=arg;save();}
+      closeMobileNav(false);creditTime(); clearTimer(); if(typeof ttsStop==='function')ttsStop(); view=next;if(next==='lesson'&&arg){selectedLesson=arg;state.lastLesson=arg;save();}
       if(next!=='quiz')activeQuiz=null;if(next!=='exam')activeExam=null;
       history.replaceState(null,'','#'+next+(arg?'/'+arg:''));render();window.scrollTo(0,0);$('#main').focus({preventScroll:true});
     }
@@ -1920,7 +1968,7 @@
         if(state.quizDraft&&!draft){state.quizDraft=null;save();}
         const resume=draft?`<article class="card resume-card"><span class="tag gold">Saved set</span><h2 style="margin-top:10px">Continue question ${draft.index+1} of ${draft.questions.length}</h2><p>${Object.keys(draft.answers).length} answered${draft.timed?` · ${formatClock(draft.remaining)} remaining`:''}. Your place is stored on this device.</p><div class="resume-meta">${draft.lessonId?'Lesson mastery check':draft.moduleId?'Module checkpoint':draft.kind==='diagnostic'?'Diagnostic assessment':'Practice set'}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><button class="primary-btn" data-action="resume-quiz">Resume saved set →</button><button class="soft-btn" data-action="discard-quiz">Discard saved set</button></div></article>`:'';
         $('#main').innerHTML=`<div class="page-head"><div><div class="eyebrow">Quiz mode · ${practiceQuestions.length} original questions</div><h1>Targeted practice with full rationales.</h1><p>Build anything from a 10-question concept check to a 50-question endurance drill. Every answer choice is explained, and misses automatically enter your review queue.</p></div><button class="soft-btn" data-action="start-diagnostic">Take 12-question diagnostic</button></div>${resume}
-          <article class="card setup-card"><h2>Build a custom practice set</h2><p>Select a domain, difficulty and length. Mixed sets interleave concepts; focused sets isolate a weak area.</p><div class="control-grid"><div class="field"><label for="quizDomain">Domain</label><select id="quizDomain"><option value="mixed">Mixed comprehensive pool</option>${Object.entries(DOMAINS).map(([id,d])=>`<option value="${id}">${esc(d.short)} (${d.weight}%)</option>`).join('')}</select></div><div class="field"><label for="quizDifficulty">Difficulty</label><select id="quizDifficulty"><option value="all">All difficulties</option><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select></div><div class="field"><label for="quizCount">Questions</label><select id="quizCount"><option value="10">10 · concept check</option><option value="20" selected>20 · focused drill</option><option value="30">30 · exam sprint</option><option value="50">50 · endurance set</option></select></div></div><div class="toggle-row"><div><strong>Timed mode</strong><p style="font-size:12px">One minute per question. Explanations appear after each answer and the timer keeps running, so use this for pacing only after you know the content.</p></div><label class="switch"><input id="quizTimed" type="checkbox"><span class="slider"></span></label></div><button class="primary-btn" style="margin-top:17px" data-action="start-custom-quiz">Start selected set →</button></article>
+          <article class="card setup-card"><h2>Build a custom practice set</h2><p>Select a domain, difficulty and length. Mixed sets interleave concepts; focused sets isolate a weak area.</p><div class="control-grid"><div class="field"><label for="quizDomain">Domain</label><select id="quizDomain"><option value="mixed">Mixed comprehensive pool</option>${Object.entries(DOMAINS).map(([id,d])=>`<option value="${id}">${esc(d.short)} (${d.weight}%)</option>`).join('')}</select></div><div class="field"><label for="quizDifficulty">Difficulty</label><select id="quizDifficulty"><option value="all">All difficulties</option><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select></div><div class="field"><label for="quizCount">Questions</label><select id="quizCount"><option value="10">10 · concept check</option><option value="20" selected>20 · focused drill</option><option value="30">30 · exam sprint</option><option value="50">50 · endurance set</option></select></div></div><div class="toggle-row"><div><strong id="quizTimedLabel">Timed mode</strong><p style="font-size:12px">One minute per question. Explanations appear after each answer and the timer keeps running, so use this for pacing only after you know the content.</p></div><label class="switch"><input id="quizTimed" type="checkbox" aria-labelledby="quizTimedLabel"><span class="slider"></span></label></div><button class="primary-btn" style="margin-top:17px" data-action="start-custom-quiz">Start selected set →</button></article>
           <section class="quiz-presets" aria-label="Practice presets"><button class="quiz-preset" data-action="preset-quiz" data-count="10"><span class="tag green">Untimed</span><strong>Concept check</strong><span>10 mixed questions for a fast retrieval session.</span></button><button class="quiz-preset" data-action="preset-quiz" data-count="20"><span class="tag">Untimed</span><strong>Application drill</strong><span>20 mixed questions with time to study every rationale.</span></button><button class="quiz-preset" data-action="preset-quiz" data-count="30" data-timed="true"><span class="tag gold">Timed</span><strong>Exam sprint</strong><span>30 questions in 30 minutes to build decision speed.</span></button><button class="quiz-preset" data-action="preset-quiz" data-count="50" data-timed="true"><span class="tag coral">Timed</span><strong>Endurance set</strong><span>50 questions in 50 minutes before a full mock.</span></button></section>
           <section class="section"><div class="section-title"><div><h2>Official-weight domain benchmarks</h2><p>Each benchmark uses the same scored-question count as that domain on the 75-question SIE blueprint.</p></div></div><div class="grid grid-4">${Object.entries(DOMAINS).map(([id,d])=>{const s=domainResults(id);return `<article class="card"><span class="tag" style="color:${d.color}">${d.weight}% domain</span><h3 style="margin-top:12px">${esc(d.short)}</h3><p>${s.total?`${s.accuracy}% across ${s.total} answers`:'No practice evidence yet'}</p><div class="benchmark-meta">Benchmark length: ${d.count} questions</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:14px"><button class="primary-btn" data-action="domain-benchmark" data-domain="${id}" data-count="${d.count}">Run benchmark</button><button class="soft-btn" data-action="start-domain-quiz" data-domain="${id}">Quick 10</button></div></article>`}).join('')}</div></section>${sourceNote()}`;return;
       }
@@ -3401,9 +3449,11 @@
 
     document.addEventListener('click',e=>{
       const btn=e.target.closest('button,[data-action]');if(!btn)return;
-      if(btn.dataset.view){go(btn.dataset.view);return;}
+      if(btn.dataset.view){closeMobileNav(false);go(btn.dataset.view);return;}
       const a=btn.dataset.action;
-      if(a==='open-lesson')go('lesson',btn.dataset.id);
+      if(a==='toggle-mobile-nav')setMobileNav(!mobileNavIsOpen());
+      else if(a==='close-mobile-nav')closeMobileNav(true);
+      else if(a==='open-lesson'){closeMobileNav(false);go('lesson',btn.dataset.id);}
       else if(a==='previous-lesson'&&btn.dataset.id)go('lesson',btn.dataset.id);
       else if(a==='complete-continue'){
         const id=btn.dataset.id;if(!state.completedLessons.includes(id))state.completedLessons.push(id);creditTime();save();
@@ -3513,6 +3563,14 @@
       if(e.target.matches('[data-task-id]')){const id=e.target.dataset.taskId;if(e.target.checked&&!state.completedTasks.includes(id))state.completedTasks.push(id);if(!e.target.checked)state.completedTasks=state.completedTasks.filter(x=>x!==id);save();renderPlanner();}
     });
     document.addEventListener('keydown',e=>{
+      if(mobileNavIsOpen()){
+        if(e.key==='Escape'){e.preventDefault();closeMobileNav(true);return;}
+        if(e.key==='Tab'){
+          const items=$$('#mobileNavSheet button'),first=items[0],last=items[items.length-1];
+          if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus();return;}
+          if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();return;}
+        }
+      }
       if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openLookup();return;}
       if((e.ctrlKey||e.metaKey)&&e.key==='/'){e.preventDefault();asOpen?asClosePanel():asOpenPanel();return;}
       if(e.key==='Escape'&&ttsPlaying){ttsStop();return;}
@@ -3526,6 +3584,7 @@
       if(view==='exam'&&activeExam&&!activeExam.report&&/^[1-4]$/.test(e.key)){const q=activeExam.questions[activeExam.index];activeExam.answers[q.id]=Number(e.key)-1;renderExam();}
     });
     $('#themeToggle').addEventListener('click',()=>{state.theme=state.theme==='dark'?'light':'dark';save();});
+    window.addEventListener('resize',()=>{if(window.innerWidth>780&&mobileNavIsOpen())closeMobileNav(false);});
     window.addEventListener('beforeunload',()=>{creditTime();if(activeQuiz)state.quizDraft=serializeQuiz(activeQuiz);localStorage.setItem(STORAGE_KEY,JSON.stringify(state));});
     setInterval(()=>{creditTime();save();},60000);
     (function init(){
