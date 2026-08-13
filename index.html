@@ -213,6 +213,16 @@
     .lesson-block h2 { margin:0 0 12px; font-size:21px; }
     .lesson-block ul { padding-left:19px; margin:8px 0; }
     .lesson-block li + li { margin-top:7px; }
+    .lesson-glossary { padding:20px; border:1px solid color-mix(in srgb,var(--green) 34%,var(--line)); border-radius:16px; background:linear-gradient(135deg,var(--green-2),var(--surface)); }
+    .lesson-glossary-head { display:flex; justify-content:space-between; align-items:start; gap:16px; }
+    .lesson-glossary h2 { margin:4px 0 5px; }
+    .lesson-glossary-intro { margin:0; color:var(--muted); max-width:720px; }
+    .abbreviation-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin-top:15px; }
+    .abbreviation-entry { padding:12px 13px; border:1px solid color-mix(in srgb,var(--green) 18%,var(--line)); border-radius:11px; background:color-mix(in srgb,var(--surface) 88%,transparent); }
+    .abbreviation-entry dt { display:flex; align-items:center; gap:8px; margin:0 0 5px; font-weight:850; }
+    .abbreviation-entry dt .abbr { color:var(--green); font-size:14px; letter-spacing:.02em; }
+    .abbreviation-entry dd { margin:0; color:var(--muted); font-size:13px; }
+    .lesson-glossary-foot { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:15px; color:var(--muted); font-size:12px; }
     .coverage-banner { display:flex; justify-content:space-between; align-items:center; gap:14px; padding:14px 16px; margin-bottom:16px; border:1px solid color-mix(in srgb,var(--green) 30%,var(--line)); border-radius:13px; background:var(--green-2); }
     .coverage-banner strong { display:block; }
     .coverage-banner span { color:var(--muted); font-size:12px; }
@@ -671,7 +681,8 @@
     .quiz-preset .tag { pointer-events:none; }
     .benchmark-meta { margin:8px 0 0; color:var(--muted); font-size:12px; }
     @media (max-width:780px){
-      .formula-grid,.mnemonic-grid,.cram-grid,.calc-fields,.glossary-list,.case-grid,.quiz-presets { grid-template-columns:1fr; }
+      .formula-grid,.mnemonic-grid,.cram-grid,.calc-fields,.glossary-list,.case-grid,.quiz-presets,.abbreviation-list { grid-template-columns:1fr; }
+      .lesson-glossary-head,.lesson-glossary-foot { align-items:stretch; flex-direction:column; }
     }
   </style>
 </head>
@@ -1810,6 +1821,62 @@
       return {domain:w,title:next.title,lesson:next,reason:domainResults(w).total?`${d.short} is your lowest measured accuracy area.`:`${d.short} carries ${d.weight}% of scored questions and needs baseline evidence.`};
     }
     function sourceNote(){return `<p class="source-note"><strong>Rule audit: August 10, 2026.</strong> Optional primary references: <a href="https://www.finra.org/sites/default/files/2025-10/SIE_Content_Outline.pdf" target="_blank" rel="noreferrer">FINRA SIE Content Outline</a>, <a href="https://www.finra.org/industry/sie-practice-test" target="_blank" rel="noreferrer">official practice-test guidance</a>, <a href="https://www.finra.org/rules-guidance/rulebooks/finra-rules/3220" target="_blank" rel="noreferrer">current $300 Gifts Rule</a>, and <a href="https://www.finra.org/rules-guidance/rulebooks/finra-rules/1240" target="_blank" rel="noreferrer">current CE rule</a>. Rules change; confirm current FINRA materials near your test date. SIE Compass is independent and not endorsed by FINRA. Readiness is directional, never a guarantee.</p>`;}
+    const ABBREVIATION_EXPANSIONS = {
+      SEC:'Securities and Exchange Commission',FINRA:'Financial Industry Regulatory Authority',SRO:'self-regulatory organization',MSRB:'Municipal Securities Rulemaking Board',FRB:'Federal Reserve Board',FDIC:'Federal Deposit Insurance Corporation',SIPC:'Securities Investor Protection Corporation',DTCC:'Depository Trust & Clearing Corporation',OCC:'Options Clearing Corporation',
+      IPO:'initial public offering',OTC:'over the counter',ADR:'American depositary receipt',REIT:'real estate investment trust',BDC:'business development company',TIPS:'Treasury Inflation-Protected Securities',STRIPS:'Separate Trading of Registered Interest and Principal of Securities',GNMA:'Government National Mortgage Association',
+      YTM:'yield to maturity',YTC:'yield to call',MBS:'mortgage-backed security',ETF:'exchange-traded fund',UIT:'unit investment trust',ETN:'exchange-traded note',DPP:'direct participation program',NAV:'net asset value',POP:'public offering price',CDSC:'contingent deferred sales charge',LOI:'letter of intent',ROA:'rights of accumulation',
+      GTC:'good-til-canceled',FOK:'fill-or-kill',IOC:'immediate-or-cancel',AON:'all-or-none',DK:'don’t know',T:'Regulation T',T1:'trade date plus one business day',CIP:'Customer Identification Program',KYC:'know your customer',BI:'Regulation Best Interest',ODD:'Options Disclosure Document',MNPI:'material nonpublic information',AML:'anti-money laundering',SAR:'Suspicious Activity Report',CTR:'Currency Transaction Report',OFAC:'Office of Foreign Assets Control',
+      JTWROS:'joint tenants with right of survivorship',UGMA:'Uniform Gifts to Minors Act',UTMA:'Uniform Transfers to Minors Act',TOD:'transfer on death',CRD:'Central Registration Depository',SIE:'Securities Industry Essentials',U4:'Form U4 registration filing',U5:'Form U5 termination filing'
+    };
+    delete ABBREVIATION_EXPANSIONS.T;
+    delete ABBREVIATION_EXPANSIONS.T1;
+    delete ABBREVIATION_EXPANSIONS.BI;
+    ABBREVIATION_EXPANSIONS['Reg T']='Regulation T';
+    ABBREVIATION_EXPANSIONS['T+1']='trade date plus one business day';
+    ABBREVIATION_EXPANSIONS['Reg BI']='Regulation Best Interest';
+    ABBREVIATION_EXPANSIONS['Reg S-P']='Regulation S-P';
+    function escapeRegex(value){return value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+    function abbreviationKey(term){
+      const base=term.replace(/\s*\([^)]*\)/g,'').trim();
+      const key=Object.keys(ABBREVIATION_EXPANSIONS).find(k=>base===k||base.startsWith(k+' ')||base.startsWith(k+' ('));
+      return key||'';
+    }
+    function abbreviationLike(term){
+      return Boolean(abbreviationKey(term)||/\b[A-Z]{2,}\b/.test(term)||/\bReg\s+[A-Z0-9]+\b/.test(term)||/\bForm\s+[A-Z0-9]+\b/.test(term)||/\bT-[A-Za-z]+\b/.test(term)||/\b[A-Z0-9]+(?:[+/-][A-Z0-9]+)+\b/.test(term));
+    }
+    function termMentioned(text,term){
+      const clean=term.trim();if(!clean)return false;
+      return new RegExp('(?:^|[^a-z0-9])'+escapeRegex(clean.toLowerCase())+'(?=$|[^a-z0-9])','i').test(text);
+    }
+    function termPosition(text,term){
+      const index=text.toLowerCase().indexOf(term.toLowerCase());return index<0?Number.MAX_SAFE_INTEGER:index;
+    }
+    function lessonGlossaryEntries(lesson,depth,lab){
+      const text=JSON.stringify([lesson,depth,lab]),concepts=new Map((lesson.concepts||[]).map(item=>{const [term,...detail]=item.split('|');return [term,detail.join('|')];})),entries=[],seen=new Set();
+      const add=(term,definition='')=>{
+        const key=term.toLowerCase();if(seen.has(key))return;
+        const expansionKey=abbreviationKey(term)||term;
+        entries.push({term,expansion:ABBREVIATION_EXPANSIONS[expansionKey]||'',definition:definition||`Short for ${ABBREVIATION_EXPANSIONS[expansionKey]||term}.`,position:termPosition(text,term)});seen.add(key);
+      };
+      glossaryData.forEach(([,term,definition])=>{
+        if(!abbreviationLike(term))return;
+        const base=term.replace(/\s*\([^)]*\)/g,'').trim(),match=term.match(/^([^()]+)\(([^)]+)\)$/),aliases=match?[term,base,match[1],match[2]]:[term,base];
+        if(aliases.some(alias=>termMentioned(text,alias)))add(term,definition);
+      });
+      concepts.forEach((definition,term)=>{
+        if(abbreviationLike(term)&&termMentioned(text,term))add(term,definition);
+      });
+      Object.keys(ABBREVIATION_EXPANSIONS).forEach(key=>{
+        if(!termMentioned(text,key))return;
+        const glossaryMatch=glossaryData.find(([,term])=>abbreviationKey(term)===key),conceptMatch=[...concepts.entries()].find(([term])=>abbreviationKey(term)===key||term===key);
+        add(glossaryMatch?.[1]||conceptMatch?.[0]||key,glossaryMatch?.[2]||conceptMatch?.[1]||'');
+      });
+      return entries.sort((a,b)=>a.position-b.position||a.term.localeCompare(b.term));
+    }
+    function lessonGlossaryHTML(lesson,depth,lab){
+      const entries=lessonGlossaryEntries(lesson,depth,lab);
+      return `<section class="lesson-glossary lesson-block" aria-labelledby="lesson-glossary-title"><div class="lesson-glossary-head"><div><div class="eyebrow">Chapter glossary</div><h2 id="lesson-glossary-title">Abbreviations decoded</h2><p class="lesson-glossary-intro">Pause here before moving on: every short label used in this chapter is expanded into plain English, with its study definition beside it.</p></div><span class="tag green">${entries.length} term${entries.length===1?'':'s'}</span></div>${entries.length?`<dl class="abbreviation-list">${entries.map(entry=>`<div class="abbreviation-entry"><dt><span class="abbr">${esc(entry.term)}</span>${entry.expansion?`<span class="abbreviation-expansion">${esc(entry.expansion)}</span>`:''}</dt><dd>${esc(entry.definition)}</dd></div>`).join('')}</dl>`:`<p class="lesson-glossary-intro" style="margin-top:14px">This chapter does not introduce any glossary abbreviations.</p>`}<div class="lesson-glossary-foot"><span>Definitions link back to the course glossary and core concepts.</span><button class="soft-btn" data-view="glossary">Open full glossary →</button></div></section>`;
+    }
     function mobileNavIsOpen(){const sheet=$('#mobileNavSheet');return Boolean(sheet&&!sheet.hidden);}
     function setMobileNav(open,restoreFocus=false){
       const sheet=$('#mobileNavSheet'),backdrop=$('#mobileNavBackdrop'),more=$('.mobile-more-btn');if(!sheet||!backdrop||!more)return;
@@ -1928,6 +1995,7 @@
         <section class="card lesson-block"><div class="eyebrow">Why this matters on test day</div><h2>Turn the fact into a decision</h2><p>${esc(lesson.why)}</p></section>
         <section class="card lesson-block"><h2>Learning objectives</h2><ul>${lesson.objectives.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
         <section class="card lesson-block"><div class="eyebrow">Foundation explanation</div><h2>Build the mental model first</h2><p>${esc(lesson.deep)}</p></section>
+        ${lessonGlossaryHTML(lesson,depth,lab)}
         <section class="lesson-block"><div class="section-title"><div><div class="eyebrow">Complete lesson</div><h2>Everything you are responsible for here</h2></div></div><div class="depth-stack">${depth.sections.map(s=>`<article class="depth-section"><h3>${esc(s.h)}</h3><p>${esc(s.p)}</p>${s.b?.length?`<ul>${s.b.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${s.e?`<div class="micro-example"><strong>Example:</strong> ${esc(s.e)}</div>`:''}</article>`).join('')}</div></section>
         ${depth.table?`<section class="lesson-block"><h2>Comparison you should be able to reproduce</h2><div class="table-wrap"><table class="study-table"><thead><tr>${depth.table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${depth.table.rows.map(row=>`<tr>${row.map((cell,i)=>`<${i?'td':'th scope="row"'}>${esc(cell)}</${i?'td':'th'}>`).join('')}</tr>`).join('')}</tbody></table></div></section>`:''}
         <section class="card lesson-block mastery-lab"><header class="mastery-head"><div class="eyebrow">Mastery lab · ${lab.minutes} additional minutes</div><h2>Reason through the rule, do not just recognize it</h2><p>${esc(lab.model)}</p></header><div class="mastery-body"><div><h3>Decision framework</h3><ol class="reasoning-steps">${lab.steps.map(step=>`<li>${esc(step)}</li>`).join('')}</ol></div><div><h3>Case analysis</h3><div class="case-grid">${lab.cases.map(c=>`<article class="case-card"><h4>${esc(c.title)}</h4><p>${esc(c.scenario)}</p><p class="case-analysis"><strong>Reasoning:</strong> ${esc(c.analysis)}</p></article>`).join('')}</div></div><div><h3>Closed-book retrieval</h3><p style="color:var(--muted);margin-top:-5px">Answer aloud before opening each response.</p><div class="recall-stack">${lab.recall.map(([prompt,answer])=>`<details><summary>${esc(prompt)}</summary><p>${esc(answer)}</p></details>`).join('')}</div></div></div></section>
