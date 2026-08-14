@@ -603,21 +603,34 @@
     .tts-word { background:var(--gold); color:#fff; border-radius:3px; padding:0 1px; }
     [data-theme="dark"] .tts-word { color:#0d1717; }
     .tts-btn { display:inline-flex; align-items:center; gap:7px; }
-    .tts-player { position:fixed; left:22px; bottom:22px; width:360px; max-width:calc(100vw - 44px); background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:13px 15px 12px; z-index:93; }
+    .tts-player { position:fixed; left:22px; bottom:22px; width:430px; max-width:calc(100vw - 44px); background:linear-gradient(145deg,var(--surface),color-mix(in srgb,var(--green-2) 26%,var(--surface))); border:1px solid color-mix(in srgb,var(--green) 25%,var(--line)); border-radius:18px; box-shadow:var(--shadow); padding:15px 16px 14px; z-index:93; }
     .tts-player[hidden] { display:none; }
-    .tts-player-top { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:9px; }
-    .tts-player-top strong { font-size:13px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-    .tts-player-top span { font-size:11px; color:var(--muted); white-space:nowrap; }
-    .tts-track { height:4px; border-radius:99px; background:var(--surface-2); overflow:hidden; margin-bottom:11px; }
+    .tts-player-top { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; }
+    .tts-title-block { min-width:0; }
+    .tts-kicker { display:block; color:var(--green); font-size:9px; font-weight:850; letter-spacing:.12em; text-transform:uppercase; }
+    .tts-player-top strong { display:block; margin-top:2px; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .tts-live { display:flex; align-items:center; gap:6px; color:var(--muted); font-size:10px; white-space:nowrap; }
+    .tts-live-dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 0 4px var(--green-2); }
+    .tts-track { height:5px; border-radius:99px; background:var(--surface-2); overflow:hidden; margin-bottom:12px; }
     .tts-track span { display:block; height:100%; background:var(--green); transition:width .25s ease; }
     .tts-controls { display:flex; align-items:center; gap:7px; }
     .tts-controls button { border:1px solid var(--line); background:var(--paper); color:var(--ink); border-radius:9px; height:34px; min-width:34px; padding:0 9px; cursor:pointer; font:inherit; font-size:13px; display:grid; place-items:center; }
     .tts-controls button:hover { border-color:var(--green); }
     .tts-controls .tts-main { background:var(--green); border-color:var(--green); color:#fff; }
-    .tts-controls select { height:34px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); font-size:12px; padding:0 5px; max-width:112px; }
+    .tts-controls select { height:34px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); font-size:12px; padding:0 6px; max-width:156px; }
     .tts-controls .tts-spacer { margin-left:auto; }
-    .tts-voice-hint { color:var(--muted); font-size:10px; flex-basis:100%; }
+    .tts-settings { display:flex; align-items:center; gap:7px; margin-left:auto; }
+    .tts-setting { display:flex; align-items:center; gap:5px; color:var(--muted); font-size:10px; font-weight:750; }
+    .tts-setting select { max-width:138px; }
+    .tts-setting.tts-speed select { max-width:74px; }
+    .tts-voice-card { display:flex; align-items:center; gap:10px; margin-top:12px; padding:9px 10px; border:1px solid color-mix(in srgb,var(--green) 20%,var(--line)); border-radius:12px; background:color-mix(in srgb,var(--surface) 75%,transparent); }
+    .tts-voice-avatar { width:28px; height:28px; display:grid; place-items:center; flex:0 0 auto; border-radius:9px; color:var(--green); background:var(--green-2); font-weight:900; }
+    .tts-voice-copy { min-width:0; }
+    .tts-voice-copy strong { display:block; font-size:12px; }
+    .tts-voice-copy span { display:block; overflow:hidden; color:var(--muted); font-size:10px; text-overflow:ellipsis; white-space:nowrap; }
+    .tts-voice-hint { margin:8px 1px 0; color:var(--muted); font-size:10px; }
     @media (max-width:900px) { .tts-player { left:12px; right:12px; width:auto; bottom:calc(88px + env(safe-area-inset-bottom)); } }
+    @media (max-width:560px) { .tts-controls { flex-wrap:wrap; } .tts-settings { width:100%; margin-left:0; } .tts-setting:first-child { flex:1; } .tts-setting:first-child select { width:100%; max-width:none; } }
     .qx { margin-top:14px; border:1px solid var(--line); border-radius:13px; background:var(--surface); overflow:hidden; }
     .qx > summary { cursor:pointer; padding:11px 14px; font-size:12.5px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--green); background:var(--surface-2); list-style:none; }
     .qx > summary::-webkit-details-marker { display:none; }
@@ -831,28 +844,27 @@
     <div class="as-foot">No internet, no AI service &mdash; searches only this page&rsquo;s content.</div>
   </section>
   <div id="ttsPlayer" class="tts-player" hidden role="region" aria-label="Read-along player">
-    <div class="tts-player-top"><strong id="ttsLabel">Reading</strong><span id="ttsCount"></span></div>
+    <div class="tts-player-top"><div class="tts-title-block"><span class="tts-kicker">Read-along</span><strong id="ttsLabel">Reading</strong></div><span class="tts-live"><i class="tts-live-dot" aria-hidden="true"></i><span id="ttsCount"></span></span></div>
     <div class="tts-track"><span id="ttsBar" style="width:0%"></span></div>
     <div class="tts-controls">
       <button data-action="tts-prev" aria-label="Previous sentence" title="Previous sentence">&#9198;</button>
       <button id="ttsPlayPause" class="tts-main" data-action="tts-toggle" aria-label="Pause reading">&#10074;&#10074;</button>
       <button data-action="tts-next" aria-label="Next sentence" title="Next sentence">&#9197;</button>
       <button data-action="tts-stop" aria-label="Stop reading" title="Stop">&#9632;</button>
-      <select id="ttsRate" class="tts-spacer" aria-label="Reading speed" title="Reading speed">
-        <option value="0.7">0.7&times;</option><option value="0.85">0.85&times;</option>
-        <option value="1" selected>1&times;</option><option value="1.15">1.15&times;</option>
-        <option value="1.3">1.3&times;</option><option value="1.5">1.5&times;</option><option value="1.75">1.75&times;</option>
-      </select>
-      <select id="ttsVoice" aria-label="Voice" title="Voice">
-        <optgroup label="Built-in offline profiles">
-          <option value="offline:clarity">Clarity · Natural</option>
-          <option value="offline:warm">Warm · Conversational</option>
-          <option value="offline:coach">Coach · Encouraging</option>
-          <option value="offline:focus">Focus · Exam pace</option>
-        </optgroup>
-      </select>
-      <span id="ttsVoiceHint" class="tts-voice-hint" aria-live="polite">Built into this app · runs locally with no API or account.</span>
+      <div class="tts-settings">
+        <label class="tts-setting"><span>Voice</span><select id="ttsVoice" aria-label="Voice style" title="Voice style">
+          <option value="profile:maya">Maya · Warm</option>
+          <option value="profile:noah">Noah · Calm</option>
+          <option value="profile:sage">Sage · Focused</option>
+        </select></label>
+        <label class="tts-setting tts-speed"><span>Speed</span><select id="ttsRate" aria-label="Reading speed" title="Reading speed">
+          <option value="0.78">0.78×</option><option value="0.9">0.9×</option><option value="0.96" selected>0.96×</option><option value="1">1×</option>
+          <option value="1.05">1.05×</option><option value="1.18">1.18×</option><option value="1.35">1.35×</option><option value="1.55">1.55×</option>
+        </select></label>
+      </div>
     </div>
+    <div class="tts-voice-card"><span id="ttsVoiceAvatar" class="tts-voice-avatar" aria-hidden="true">M</span><div class="tts-voice-copy"><strong id="ttsVoiceName">Maya · Warm</strong><span id="ttsVoiceDescription">Warm, natural and reassuring</span></div></div>
+    <p id="ttsVoiceHint" class="tts-voice-hint" aria-live="polite">Uses the smoothest matching voice available on this device. No account or API.</p>
   </div>
   <script>
     'use strict';
@@ -2217,7 +2229,7 @@
     };
 
     const STORAGE_KEY='sie-compass-state-v1';
-    const defaultState={theme:'light',completedLessons:[],quizHistory:[],missedIds:[],cardRatings:{},plan:'standard',completedTasks:[],lastLesson:'l1',timeSeconds:0,lastExam:null,diagnosticScore:null,srs:{},examHistory:[],ttsRate:1,ttsVoice:'',quizDraft:null,lessonMastery:{}};
+    const defaultState={theme:'light',completedLessons:[],quizHistory:[],missedIds:[],cardRatings:{},plan:'standard',completedTasks:[],lastLesson:'l1',timeSeconds:0,lastExam:null,diagnosticScore:null,srs:{},examHistory:[],ttsRate:.96,ttsVoice:'profile:maya',quizDraft:null,lessonMastery:{}};
     function loadState(){
       try{return {...defaultState,...JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}')};}
       catch(e){return {...defaultState};}
@@ -2434,9 +2446,9 @@
     function renderGuide(){
       $('#topEyebrow').textContent='First-pass study guide';$('#topTitle').textContent='Read, retrieve, then verify.';
       const allGuideQuestions=guideSections.flatMap(s=>s.questions);
-      $('#main').innerHTML=`<div class="page-head"><div><div class="eyebrow">Concise study hub</div><h1>The SIE, from first principles to exam decisions.</h1><p>This guide adds a skim-friendly path through the full app. Use the Course for deeper lessons and Quiz mode for scored practice.</p></div><div class="hero-actions" style="display:flex;gap:9px;flex-wrap:wrap"><button class="soft-btn tts-btn" data-action="tts-guide-all">🔊 Read the guide</button><button class="primary-btn" data-action="start-diagnostic">Start diagnostic →</button></div></div>
+      $('#main').innerHTML=`<div class="page-head"><div><div class="eyebrow">Concise study hub</div><h1>The SIE, from first principles to exam decisions.</h1><p>This guide adds a skim-friendly path through the full app. Use the Course for deeper lessons and Quiz mode for scored practice.</p></div><div class="hero-actions" style="display:flex;gap:9px;flex-wrap:wrap"><button class="soft-btn tts-btn" data-action="tts-guide-all">🔊 Listen to the guide</button><button class="primary-btn" data-action="start-diagnostic">Start diagnostic →</button></div></div>
         <section class="card study-intro"><span class="tag">How to use this resource</span><h2 style="margin-top:12px">One section. Closed-book recall. Delayed answers.</h2><p>Read each section once, study the comparison, then answer its three questions without looking back. Complete the mixed review after all seven sections and check every response against the answer key at the bottom.</p><nav class="study-toc" aria-label="Study guide contents">${guideSections.map(s=>`<a href="#${s.id}"><span>${s.number} · ${esc(s.title)}</span><span>↓</span></a>`).join('')}<a href="#guide-mixed"><span>08 · Mixed review</span><span>↓</span></a><a href="#guide-answers"><span>09 · Answer key</span><span>↓</span></a></nav></section>
-        ${guideSections.map(s=>`<hr class="study-rule"><section class="card study-section" id="${s.id}"><header><div class="eyebrow">Section ${s.number}</div><h2>${esc(s.title)}</h2><p>${esc(s.summary)}</p><div class="lesson-actions"><button class="soft-btn tts-btn" data-action="tts-guide-section" data-id="${s.id}">🔊 Read this section</button></div></header><div class="study-points">${s.points.map(p=>`<div class="study-point"><strong>${esc(p[0])}</strong><p>${esc(p[1])}</p></div>`).join('')}</div><div class="table-wrap"><table class="study-table"><thead><tr>${s.table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${s.table.rows.map(row=>`<tr>${row.map((cell,i)=>`<${i?'td':'th scope="row"'}>${esc(cell)}</${i?'td':'th'}>`).join('')}</tr>`).join('')}</tbody></table></div><div class="callout"><h3>Concrete example</h3><p>${esc(s.example)}</p></div><div class="practice-block"><h3>Check your understanding</h3><p>Answer before visiting the key.</p><div class="practice-list">${s.questions.map(guideQuestionMarkup).join('')}</div></div></section>`).join('')}
+        ${guideSections.map(s=>`<hr class="study-rule"><section class="card study-section" id="${s.id}"><header><div class="eyebrow">Section ${s.number}</div><h2>${esc(s.title)}</h2><p>${esc(s.summary)}</p><div class="lesson-actions"><button class="soft-btn tts-btn" data-action="tts-guide-section" data-id="${s.id}">🔊 Listen to this section</button></div></header><div class="study-points">${s.points.map(p=>`<div class="study-point"><strong>${esc(p[0])}</strong><p>${esc(p[1])}</p></div>`).join('')}</div><div class="table-wrap"><table class="study-table"><thead><tr>${s.table.headers.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${s.table.rows.map(row=>`<tr>${row.map((cell,i)=>`<${i?'td':'th scope="row"'}>${esc(cell)}</${i?'td':'th'}>`).join('')}</tr>`).join('')}</tbody></table></div><div class="callout"><h3>Concrete example</h3><p>${esc(s.example)}</p></div><div class="practice-block"><h3>Check your understanding</h3><p>Answer before visiting the key.</p><div class="practice-list">${s.questions.map(guideQuestionMarkup).join('')}</div></div></section>`).join('')}
         <hr class="study-rule"><section class="card study-section" id="guide-mixed"><header><div class="eyebrow">Section 08 · Interleaving</div><h2>Mixed review</h2><p>These questions switch topics deliberately. On the actual exam, first identify the domain, then the rule or relationship being tested.</p></header><div class="practice-list">${mixedReview.map(guideQuestionMarkup).join('')}</div></section>
         <hr class="study-rule"><section class="card answer-key" id="guide-answers"><header><div class="eyebrow">Section 09</div><h2 style="margin:5px 0 6px">Answer key with reasoning</h2><p>Do not score only the letter. Say why the correct answer works and why your original reasoning differed.</p></header><h3 style="margin-top:22px">Section checks</h3>${allGuideQuestions.map(q=>`<div class="answer-entry"><strong>${esc(q.id)}</strong><p>${esc(q.answer)}</p></div>`).join('')}<h3 style="margin-top:25px">Mixed review</h3>${mixedReview.map(q=>`<div class="answer-entry"><strong>${esc(q.id)}</strong><p>${esc(q.answer)}</p></div>`).join('')}</section>
         <p class="source-note">Optional references: <a href="https://www.finra.org/registration-exams-ce/qualification-exams/securities-industry-essentials-exam-sie" target="_blank" rel="noreferrer">official FINRA SIE overview</a> and <a href="https://www.sec.gov/about/what-we-do" target="_blank" rel="noreferrer">official SEC overview</a>. All explanations and practice questions in this guide are original.</p>`;
@@ -2457,7 +2469,7 @@
       $('#topEyebrow').textContent=`Course lesson ${lessonIndex+1} of ${allLessons.length}`;
       $('#topTitle').textContent=lesson.title;
       $('#main').innerHTML=`<div class="lesson-layout"><div>
-        <section class="lesson-hero"><div class="eyebrow">Course lesson ${lessonIndex+1} of ${allLessons.length} · ${esc(m.title)}</div><h1>${esc(lesson.title)}</h1><p>${esc(lesson.summary)}</p><div class="lesson-actions" style="margin-top:14px"><button class="soft-btn tts-btn" data-action="tts-lesson">🔊 Read this lesson aloud</button></div><div class="lesson-meta"><span>◷ ${lessonMinutes(lesson)} minutes</span><span>${done?'✓ Complete':'Current path stop'}</span><span>${esc(depth.outline)}</span><span>Domain weight ${DOMAINS[lesson.domain].weight}%</span></div></section>
+        <section class="lesson-hero"><div class="eyebrow">Course lesson ${lessonIndex+1} of ${allLessons.length} · ${esc(m.title)}</div><h1>${esc(lesson.title)}</h1><p>${esc(lesson.summary)}</p><div class="lesson-actions" style="margin-top:14px"><button class="soft-btn tts-btn" data-action="tts-lesson">🔊 Listen to this lesson</button></div><div class="lesson-meta"><span>◷ ${lessonMinutes(lesson)} minutes</span><span>${done?'✓ Complete':'Current path stop'}</span><span>${esc(depth.outline)}</span><span>Domain weight ${DOMAINS[lesson.domain].weight}%</span></div></section>
         <div class="coverage-banner"><div><strong>Complete outline coverage for this lesson</strong><span>${esc(depth.outline)} · ${depth.sections.length} teaching sections · case-based mastery lab · ${quizIds.length}-question lesson quiz</span></div><span class="tag green">Long form</span></div>
         <section class="card lesson-block"><div class="eyebrow">Why this matters on test day</div><h2>Turn the fact into a decision</h2><p>${esc(lesson.why)}</p></section>
         <section class="card lesson-block"><h2>Learning objectives</h2><ul>${lesson.objectives.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
@@ -2550,7 +2562,7 @@
       $('#main').innerHTML=`${controls}
         <div class="flash-stage"><div class="flashcard ${cardFlipped?'flipped':''}" data-action="flip-card" role="button" tabindex="0" aria-label="Flashcard. Activate to flip."><div class="flash-face front"><span class="tag" style="color:${DOMAINS[card.domain].color}">${esc(DOMAINS[card.domain].short)}</span><h2>${esc(card.front)}</h2><p>Think first · tap to reveal</p></div><div class="flash-face back"><span class="tag">Definition</span><h2>${esc(card.front)}</h2><p>${esc(card.back)}</p></div></div></div>
         <div style="max-width:760px;margin:16px auto 0">${cardFlipped?`<div class="srs-grades"><button class="again" data-action="srs-rate" data-grade="again">Again<small>${nextIntervalPreview(card.id,'again')}</small></button><button class="hard" data-action="srs-rate" data-grade="hard">Hard<small>${nextIntervalPreview(card.id,'hard')}</small></button><button class="good" data-action="srs-rate" data-grade="good">Good<small>${nextIntervalPreview(card.id,'good')}</small></button><button class="easy" data-action="srs-rate" data-grade="easy">Easy<small>${nextIntervalPreview(card.id,'easy')}</small></button></div>`:`<button class="primary-btn" style="width:100%" data-action="flip-card">Reveal definition</button>`}</div>
-        <p style="text-align:center;color:var(--muted);margin-top:13px">${cardMode==='due'?`${deck.length} due in this deck`:`Card ${(cardIndex%deck.length)+1} of ${deck.length}`} · <button class="pill" data-action="tts-card" data-id="${card.id}">🔊 Read aloud</button> · <button class="pill" data-action="shuffle-cards">Shuffle</button></p>`;
+        <p style="text-align:center;color:var(--muted);margin-top:13px">${cardMode==='due'?`${deck.length} due in this deck`:`Card ${(cardIndex%deck.length)+1} of ${deck.length}`} · <button class="pill" data-action="tts-card" data-id="${card.id}">🔊 Listen</button> · <button class="pill" data-action="shuffle-cards">Shuffle</button></p>`;
     }
     function renderReview(){
       $('#topEyebrow').textContent='Adaptive review';$('#topTitle').textContent='Misses return until you can explain them.';
@@ -3360,18 +3372,21 @@
 
 
     /* =========================== Read-along text to speech ===========================
-       The reader is intentionally local-only. These four profiles are coded into the
-       app and select the best matching voice already installed in the browser/OS. No
-       provider, API key, network request, server route, or account is needed. Sentence
-       highlighting is shared by every profile.                                      */
+       The reader stays local-only. These three profiles are speaking styles, not
+       pretend audio files: each one selects the smoothest matching English voice
+       available in the browser or OS. No provider, API key, network request, server
+       route, or account is needed. Sentence highlighting is shared by every profile. */
 
     const TTS_OK = typeof window!=='undefined' && 'speechSynthesis' in window;
-    const TTS_LOCAL_PROFILES=[
-      {value:'offline:clarity',label:'Clarity · Natural',pitch:1.02,preferred:['samantha','ava','google us english','microsoft aria','allison','en-us']},
-      {value:'offline:warm',label:'Warm · Conversational',pitch:1.04,preferred:['karen','susan','moira','victoria','samantha','en-gb']},
-      {value:'offline:coach',label:'Coach · Encouraging',pitch:1.08,preferred:['daniel','alex','tom','microsoft guy','microsoft david','en-us']},
-      {value:'offline:focus',label:'Focus · Exam pace',pitch:.98,preferred:['alex','daniel','fred','microsoft ryan','google uk english male','en-us']}
+    const TTS_PROFILES=[
+      {value:'profile:maya',label:'Maya · Warm',description:'Warm, natural and reassuring',avatar:'M',pitch:1.02,rate:.98,preferred:['samantha','ava','aria','jenny','google us english','allison','en-us']},
+      {value:'profile:noah',label:'Noah · Calm',description:'Calm, clear and conversational',avatar:'N',pitch:.98,rate:.97,preferred:['alex','daniel','guy','david','tom','google uk english male','en-us']},
+      {value:'profile:sage',label:'Sage · Focused',description:'Polished, steady and easy to follow',avatar:'S',pitch:1,rate:1,preferred:['aria','jenny','ryan','samantha','google us english','en-us']}
     ];
+    const TTS_PROFILE_ALIASES={'offline:clarity':'profile:maya','offline:warm':'profile:maya','offline:coach':'profile:noah','offline:focus':'profile:sage'};
+    const TTS_RATE_OPTIONS=[.78,.9,.96,1,1.05,1.18,1.35,1.55];
+    const TTS_NATURAL_HINTS={natural:58,neural:58,online:18,premium:16,enhanced:14};
+    const TTS_ROBOTIC_HINTS={espeak:-65,festival:-65,desktop:-28,compact:-22};
     const TTS_BLOCKS='h1,h2,h3,h4,p,li,blockquote,figcaption,td,th,.micro-example,.concept,.must-know>div,.study-point,.answer-entry';
     const TTS_SKIP='button,select,input,textarea,.check-options,.lesson-flow,.sticky-card,.practice-list,.study-toc,.as-panel,.as-launcher,.tts-player,.source-note,.dialog-body,script,style,.tts-skip';
     /* Firefox reports word boundaries unreliably; fall back to sentence-only there. */
@@ -3463,50 +3478,62 @@
         if(!text.trim())return;
         ttsSentences(text).forEach(s=>{
           const clean=s.text.replace(/\s+/g,' ').trim();
-          if(clean)queue.push({block,start:s.start,end:s.end,text:clean});
+          if(clean)queue.push({block,start:s.start,end:s.end,text:clean,speechText:ttsSpeechText(clean)});
         });
       });
       return queue;
     }
 
-    /* ---------- local voice profiles ---------- */
-    function ttsLocalProfile(){return TTS_LOCAL_PROFILES.find(v=>v.value===state.ttsVoice)||null;}
+    /* ---------- curated voice profiles ---------- */
+    function ttsMigrateProfile(){
+      if(TTS_PROFILE_ALIASES[state.ttsVoice])state.ttsVoice=TTS_PROFILE_ALIASES[state.ttsVoice];
+      if(!TTS_PROFILES.some(v=>v.value===state.ttsVoice))state.ttsVoice=TTS_PROFILES[0].value;
+      if(!TTS_RATE_OPTIONS.includes(Number(state.ttsRate)))state.ttsRate=.96;
+    }
+    function ttsProfile(){return TTS_PROFILES.find(v=>v.value===state.ttsVoice)||TTS_PROFILES[0];}
     function ttsCanPlay(){return TTS_OK;}
     function ttsVoiceScore(voice,profile){
       const name=String(voice.name||'').toLowerCase(),lang=String(voice.lang||'').toLowerCase();
-      let score=voice.localService?100:0;
-      if(lang==='en-us')score+=18;else if(lang.startsWith('en-'))score+=10;else if(lang==='en')score+=8;
-      (profile?.preferred||[]).forEach((term,index)=>{if(name.includes(term))score+=Math.max(3,24-index*2);});
+      let score=voice.localService?5:0;
+      if(lang==='en-us')score+=20;else if(lang.startsWith('en-'))score+=13;else if(lang==='en')score+=9;else score-=55;
+      Object.entries(TTS_NATURAL_HINTS).forEach(([term,points])=>{if(name.includes(term))score+=points;});
+      Object.entries(TTS_ROBOTIC_HINTS).forEach(([term,points])=>{if(name.includes(term))score+=points;});
+      (profile?.preferred||[]).forEach((term,index)=>{if(name.includes(term))score+=Math.max(6,30-index*2);});
       return score;
     }
     function ttsVoiceObj(){
-      const profile=ttsLocalProfile();
-      if(profile&&ttsVoices.length)return [...ttsVoices].sort((a,b)=>ttsVoiceScore(b,profile)-ttsVoiceScore(a,profile))[0]||null;
-      return ttsVoices.find(v=>v.voiceURI===state.ttsVoice)||ttsVoices[0]||null;
+      const profile=ttsProfile();
+      return ttsVoices.length?[...ttsVoices].sort((a,b)=>ttsVoiceScore(b,profile)-ttsVoiceScore(a,profile))[0]||null:null;
     }
-    function ttsVoiceLabel(){return ttsLocalProfile()?.label||ttsVoiceObj()?.name||'Browser voice';}
+    function ttsCleanVoiceName(name){return String(name||'device voice').replace(/\s*\(.*?\)\s*/g,' ').replace(/\s+/g,' ').trim();}
+    function ttsVoiceLabel(){return ttsProfile().label;}
     function ttsLoadVoices(){
       const all=TTS_OK?(speechSynthesis.getVoices()||[]):[];
       ttsVoices=all.filter(v=>/^en(-|_|$)/i.test(v.lang||''));
       if(!ttsVoices.length)ttsVoices=all;
-      const browserVoice=ttsVoices.find(v=>v.localService)||ttsVoices[0]||null;
-      const validProfile=!!ttsLocalProfile();
-      const validBrowser=ttsVoices.some(v=>v.voiceURI===state.ttsVoice);
-      if(!validProfile&&!validBrowser)state.ttsVoice=TTS_LOCAL_PROFILES[0].value;
+      ttsMigrateProfile();
       const sel=$('#ttsVoice');
       if(sel){
-        const profileHtml=`<optgroup label="Built-in offline profiles">${TTS_LOCAL_PROFILES.map(v=>`<option value="${esc(v.value)}">${esc(v.label)}</option>`).join('')}</optgroup>`;
-        const browserHtml=ttsVoices.length?`<optgroup label="Installed browser voices">${ttsVoices.map(v=>`<option value="${esc(v.voiceURI)}">${esc(v.name.replace(/\s*\(.*?\)\s*/g,' ').trim())}</option>`).join('')}</optgroup>`:'';
-        sel.innerHTML=profileHtml+browserHtml;sel.value=state.ttsVoice;
+        sel.innerHTML=TTS_PROFILES.map(v=>`<option value="${esc(v.value)}">${esc(v.label)}</option>`).join('');sel.value=state.ttsVoice;
       }
       save();
+      const profile=ttsProfile(), actual=ttsVoiceObj();
+      const name=$('#ttsVoiceName'),desc=$('#ttsVoiceDescription'),avatar=$('#ttsVoiceAvatar');
+      if(name)name.textContent=profile.label;
+      if(desc)desc.textContent=profile.description;
+      if(avatar)avatar.textContent=profile.avatar;
       const hint=$('#ttsVoiceHint');
-      const actual=ttsVoiceObj();
       if(hint){
-        if(ttsLocalProfile()&&actual)hint.textContent=`${ttsVoiceLabel()} · ${actual.localService?'local':'browser'} voice · no API`;
-        else if(ttsLocalProfile())hint.textContent=`${ttsVoiceLabel()} · ready when browser voices load · no API`;
-        else hint.textContent=`${ttsVoiceLabel()} · installed browser voice · works offline`;
+        if(actual)hint.textContent=`${profile.label} style · using ${ttsCleanVoiceName(actual.name)} · no account or API`;
+        else hint.textContent=`${profile.label} style · waiting for the device voice list…`;
       }
+    }
+
+    /* Small pronunciation repairs make study abbreviations sound deliberate on
+       otherwise excellent system voices. The visible text and highlights stay true
+       to the lesson; only the spoken copy is softened. */
+    function ttsSpeechText(text){
+      return String(text||'').replace(/\bSIE\b/gi,'S-I-E').replace(/\bFINRA\b/gi,'FIN-rah').replace(/\bReg\.?\s*T\b/gi,'Regulation T').replace(/\bSEC\b/gi,'S-E-C').replace(/\bSRO\b/gi,'S-R-O').replace(/[—–]/g,', ').replace(/\s*\/\s*/g,' or ').replace(/\s+/g,' ').trim();
     }
 
     /* ---------- playback ---------- */
@@ -3526,12 +3553,15 @@
       ttsIndex=i;
       const seg=ttsQueue[i];
       ttsShowSegment(seg);
-      const u=new SpeechSynthesisUtterance(seg.text);
+      const spokenText=seg.speechText||seg.text;
+      const u=new SpeechSynthesisUtterance(spokenText);
       const v=ttsVoiceObj();
       if(v)u.voice=v;
-      u.rate=Number(state.ttsRate)||1;
-      u.pitch=ttsLocalProfile()?.pitch||1;u.volume=1;
-      if(TTS_WORDS&&seg.block){
+      const profile=ttsProfile();
+      u.lang=v?.lang||'en-US';
+      u.rate=clamp((Number(state.ttsRate)||.96)*(profile.rate||1),.72,1.55);
+      u.pitch=profile.pitch||1;u.volume=1;
+      if(TTS_WORDS&&seg.block&&spokenText===seg.text){
         u.onboundary=ev=>{
           if(ev.name&&ev.name!=='word')return;
           if(typeof ev.charIndex!=='number')return;
@@ -3639,6 +3669,10 @@
       pb.textContent=ttsPaused?'▶':'❚❚';
       pb.setAttribute('aria-label',ttsPaused?'Resume reading':'Pause reading');
       const rs=$('#ttsRate');if(rs&&rs.value!==String(state.ttsRate))rs.value=String(state.ttsRate);
+      const profile=ttsProfile(),name=$('#ttsVoiceName'),desc=$('#ttsVoiceDescription'),avatar=$('#ttsVoiceAvatar');
+      if(name)name.textContent=profile.label;
+      if(desc)desc.textContent=profile.description;
+      if(avatar)avatar.textContent=profile.avatar;
     }
     function ttsReadLesson(){
       const root=document.querySelector('.lesson-layout > div');
