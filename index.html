@@ -3,30 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="SIE Compass is a complete offline FINRA SIE prep system: 29 long-form lessons, 279 original practice questions, 29 mastery labs, module and domain quizzes, spaced-repetition flashcards, a searchable glossary, formulas, calculators, analytics, and three 75-question scored-form mock exams.">
+  <meta name="description" content="SIE Compass is a complete offline FINRA SIE prep system: 29 long-form lessons, 294 original practice questions, 29 mastery labs, chapter-scoped quizzes, module and domain quizzes, spaced-repetition flashcards, a searchable glossary, formulas, calculators, analytics, and three 75-question scored-form mock exams.">
   <title>SIE Compass — Focused FINRA SIE Prep</title>
   <style>
     :root {
       color-scheme: light;
       --ink: #14231f;
       --muted: #63706b;
-      --paper: #f4f2eb;
-      --surface: #fffef9;
-      --surface-2: #ebe8df;
-      --line: #dad8cf;
-      --navy: #102a2c;
-      --navy-2: #183b3c;
-      --green: #0f766e;
-      --green-2: #d7eee8;
-      --gold: #b77822;
-      --gold-2: #f7e8ca;
+      --paper: #f2f5f1;
+      --surface: #fffdfa;
+      --surface-2: #e9eeea;
+      --line: #d6ddd7;
+      --navy: #0b2527;
+      --navy-2: #12383a;
+      --green: #08796f;
+      --green-2: #d8f0ea;
+      --gold: #a96b17;
+      --gold-2: #f7e8c7;
       --coral: #bd5546;
       --coral-2: #f8dfd9;
       --blue: #4169a5;
       --blue-2: #e0e9f7;
-      --shadow: 0 14px 40px rgba(20, 35, 31, .08);
-      --shadow-sm: 0 5px 18px rgba(20, 35, 31, .07);
-      --radius: 18px;
+      --shadow: 0 24px 60px rgba(13, 42, 38, .11);
+      --shadow-sm: 0 8px 24px rgba(13, 42, 38, .07);
+      --radius: 20px;
       --radius-sm: 12px;
       --sidebar: 254px;
     }
@@ -387,6 +387,36 @@
     .nav .mobile-more-btn, .mobile-nav-sheet, .mobile-nav-backdrop { display:none; }
     body.mobile-nav-open { overflow:hidden; }
     .sr-only { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+    /* 2026 course refresh: calmer hierarchy, stronger wayfinding and chapter scope clarity. */
+    body { background-image:radial-gradient(circle at 78% -10%,color-mix(in srgb,var(--green) 9%,transparent),transparent 30%); }
+    .sidebar { background:linear-gradient(180deg,#0a292b 0%,#071d1f 100%); border-right:1px solid rgba(255,255,255,.06); }
+    .brand-mark { background:linear-gradient(145deg,#61d0bd,#14766f); color:#062523; box-shadow:0 10px 24px rgba(0,0,0,.2); }
+    .brand span { color:#8dbab2; }
+    .nav button { min-height:44px; font-weight:680; }
+    .nav button.active { background:linear-gradient(90deg,rgba(93,211,190,.2),rgba(93,211,190,.08)); box-shadow:inset 3px 0 #69d8c3; }
+    .topbar { border-bottom-color:color-mix(in srgb,var(--line) 76%,transparent); box-shadow:0 1px 0 rgba(255,255,255,.4); }
+    .main { padding-top:clamp(28px,4vw,56px); }
+    .card { box-shadow:var(--shadow-sm); }
+    .card:hover { border-color:color-mix(in srgb,var(--green) 19%,var(--line)); }
+    .hero { background:radial-gradient(circle at 88% 8%,rgba(94,213,190,.3),transparent 30%),linear-gradient(135deg,#082426 0%,#113d3d 68%,#164c47 100%); }
+    .hero::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.22; background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px); background-size:36px 36px; mask-image:linear-gradient(90deg,transparent,#000); }
+    .hero h1,.page-head h1 { text-wrap:balance; }
+    .primary-btn { box-shadow:0 10px 24px color-mix(in srgb,var(--green) 24%,transparent); }
+    .lesson-hero { position:relative; overflow:hidden; background:radial-gradient(circle at 90% 0,rgba(85,193,173,.25),transparent 32%),linear-gradient(135deg,var(--navy),var(--navy-2)); }
+    .lesson-hero::after { content:""; position:absolute; width:230px; height:230px; right:-100px; bottom:-150px; border:1px solid rgba(255,255,255,.12); border-radius:50%; box-shadow:0 0 0 34px rgba(255,255,255,.025),0 0 0 68px rgba(255,255,255,.018); }
+    .depth-section { border-left:3px solid color-mix(in srgb,var(--green) 38%,var(--line)); }
+    .question-card { padding:clamp(22px,4vw,36px); }
+    .question-card h2 { font-size:clamp(22px,3vw,31px); line-height:1.25; max-width:980px; }
+    .option-btn { min-height:58px; }
+    .option-btn:hover:not(:disabled) { transform:translateY(-1px); box-shadow:0 7px 18px rgba(13,42,38,.08); }
+    .quiz-scope { display:flex; align-items:center; gap:12px; margin:0 0 14px; padding:12px 15px; border:1px solid color-mix(in srgb,var(--green) 32%,var(--line)); border-radius:14px; background:linear-gradient(110deg,var(--green-2),var(--surface)); color:var(--ink); }
+    .quiz-scope-icon { width:34px; height:34px; flex:0 0 auto; display:grid; place-items:center; border-radius:10px; background:var(--green); color:#fff; font-weight:900; }
+    .quiz-scope strong { display:block; font-size:13px; }
+    .quiz-scope span { display:block; color:var(--muted); font-size:11px; }
+    .scope-seal { display:inline-flex; align-items:center; gap:6px; margin-top:10px; color:var(--green); font-size:11px; font-weight:850; letter-spacing:.04em; }
+    .scope-seal::before { content:"✓"; display:grid; place-items:center; width:18px; height:18px; border-radius:50%; background:var(--green-2); }
+    .lesson-check-cta { background:linear-gradient(125deg,color-mix(in srgb,var(--green-2) 78%,var(--surface)),var(--surface)); border-color:color-mix(in srgb,var(--green) 26%,var(--line)); }
+    @media (forced-colors: active) { .bar span,.progress-disc,.score-ring { forced-color-adjust:none; } }
     @media (max-width: 1080px) {
       .grid-4 { grid-template-columns:repeat(2,minmax(0,1fr)); }
       .grid-3 { grid-template-columns:repeat(2,minmax(0,1fr)); }
@@ -1762,29 +1792,88 @@
         ['1933—secondary trading; 1934—new offerings; Investment Company Act—bank deposits','1933—new offering disclosure; 1934—markets and broker-dealers; Investment Company Act—pooled-product structure','1933—SIPC liquidation; 1934—529 plans; Advisers Act—exchange listing','1933—monetary policy; 1934—fiscal policy; SIPA—mutual-fund pricing'],1,
         ['The first two statutes are reversed, and the Investment Company Act does not insure bank deposits.','Correct. This is the high-yield federal-law map.','SIPA addresses failed broker-dealer liquidation; the other pairings are also wrong.','Monetary and fiscal policy are not the organizing purpose of these securities statutes.'],'1933 before the sale; 1934 on the market floor; the 1940 Acts govern funds and advisers.')
     ];
-    const practiceQuestions = [...questions,...lessonQuestions,...masteryQuestions,...extraBank];
+    const chapterQuestions = [
+      Q('z03a','d1','Markets','medium','Which market label applies when exchange-listed shares trade over the counter through a dealer?',
+        ['Primary market','Second market','Third market','Fourth market'],2,
+        ['Primary-market trades distribute new securities for the issuer.','The second market generally describes OTC trading in unlisted securities.','Correct. The third market is dealer-facilitated OTC trading in exchange-listed securities.','The fourth market is direct institution-to-institution trading without a broker-dealer intermediary.'],'Third market = listed shares traded OTC through dealers.'),
+      Q('z03b','d1','Markets','medium','A customer sells previously issued shares on an exchange. Who receives the sale proceeds?',
+        ['The issuer','The selling investor','The SEC','The transfer agent'],1,
+        ['The issuer receives proceeds only when it sells a new issue in the primary market.','Correct. This is a secondary-market trade, so the seller receives the proceeds.','The SEC regulates markets but does not receive trade proceeds.','The transfer agent maintains ownership records; it is not the seller.'],'Primary proceeds go to the issuer; secondary proceeds go to the selling investor.'),
+      Q('z05a','d1','Monetary policy','hard','The Federal Reserve buys Treasury securities from dealers. Which chain is most likely?',
+        ['Bank reserves fall, credit tightens and rates tend to rise','Bank reserves rise, credit eases and rates tend to fall','Federal tax rates rise immediately','The federal budget deficit automatically disappears'],1,
+        ['A sale, not a purchase, removes reserves and tends to tighten credit.','Correct. Fed purchases add reserves and generally support easier credit conditions.','Tax rates are fiscal policy set through the legislative process.','Open-market operations do not automatically eliminate a budget deficit.'],'Fed buys = reserves up, easier credit, downward pressure on rates.'),
+      Q('z05b','d1','Interest rates','medium','Which rate is the overnight rate banks charge one another for reserve balances?',
+        ['Discount rate','Federal funds rate','Prime rate','Coupon rate'],1,
+        ['The discount rate is charged by a Federal Reserve Bank to eligible borrowing institutions.','Correct. The federal funds rate is the overnight interbank reserve rate.','The prime rate is a commercial bank lending benchmark.','A coupon rate sets contractual bond interest.'],'Federal funds = bank-to-bank overnight reserves; discount = Fed-to-bank borrowing.'),
+      Q('z17a','d2','Municipal fund securities','medium','Which statement about a 529 savings plan is most accurate?',
+        ['The beneficiary always controls investment selections','The owner generally controls the account and may change the beneficiary under plan rules','The account is an FDIC-insured deposit in every case','Only tuition at one named school can qualify'],1,
+        ['The beneficiary receives the benefit but usually does not control the account.','Correct. The owner retains control subject to the program rules.','A 529 is a municipal fund security, not automatically an insured bank deposit.','Savings plans can generally cover a range of qualified education expenses and eligible schools.'],'529 savings plan: owner controls; beneficiary benefits.'),
+      Q('z17b','d2','ABLE accounts','medium','An ABLE account is principally designed for',
+        ['qualified disability expenses of an eligible individual','municipal working-capital management','only graduate-school tuition','corporate employee stock purchases'],0,
+        ['Correct. ABLE accounts provide tax-advantaged funding for qualified disability expenses.','Public cash management is the role of an LGIP.','ABLE eligibility and permitted expenses are not limited to graduate tuition.','ABLE accounts are not employee stock-purchase plans.'],'ABLE = tax-advantaged disability-expense account for an eligible individual.'),
+      Q('z17c','d2','LGIPs','medium','A local government investment pool primarily serves',
+        ['state and local governmental entities managing short-term funds','individual retirement savers','corporate issuers conducting IPOs','hedge-fund managers seeking leverage'],0,
+        ['Correct. An LGIP pools cash for participating state and local governmental entities.','LGIPs are not retail retirement accounts.','They do not underwrite corporate offerings.','They are not private hedge-fund vehicles.'],'LGIP = pooled cash management for governmental participants.'),
+      Q('z17d','d2','529 plans','hard','Which comparison between a 529 savings plan and prepaid tuition plan is correct?',
+        ['Both guarantee the same investment return','Savings plans use market-based options; prepaid plans generally purchase tuition units or credits under program terms','Only prepaid plans are state sponsored','The beneficiary must manage both accounts'],1,
+        ['Neither structure creates a universal guaranteed return.','Correct. Their funding mechanics and risks differ in exactly this way.','Both types are generally state-sponsored programs.','The owner, not the beneficiary, generally controls the account.'],'529 savings = investment menu; prepaid = tuition units or credits under plan terms.'),
+      Q('z08a','d2','Restricted stock','hard','Rule 144 is most directly associated with conditions for reselling',
+        ['restricted and control securities','new municipal bonds','open-end mutual fund shares','listed options at expiration'],0,
+        ['Correct. Rule 144 provides a conditional path for public resale of restricted and control securities.','Municipal offerings use a different disclosure framework.','Open-end fund shares are redeemable with the fund and are not the Rule 144 focus.','Listed options are cleared through the OCC.'],'Rule 144 = conditional resale of restricted and control stock.'),
+      Q('z24a','d3','Communications','hard','A message distributed to more than 25 retail investors within 30 calendar days is generally classified as',
+        ['correspondence','a retail communication','an institutional communication','an official statement'],1,
+        ['Correspondence goes to 25 or fewer retail investors during the period.','Correct. More than 25 makes the message a retail communication.','Institutional communication is directed to institutional investors.','An official statement is municipal offering disclosure.'],'Retail communication = more than 25 retail investors in 30 calendar days.'),
+      Q('z24b','d3','Communications','medium','Communication categories matter most directly because they affect',
+        ['approval and supervisory review requirements','whether losses may be guaranteed','whether records can be discarded','whether material facts may be omitted'],0,
+        ['Correct. Retail communication, correspondence and institutional communication carry different approval or review treatment.','No category permits guarantees against loss.','Communications remain subject to recordkeeping requirements.','Material misstatements and omissions are prohibited in every category.'],'Classify the audience and count first; the category drives approval and supervision.'),
+      Q('z29a','d4','Federal securities acts','medium','The Securities Exchange Act of 1934 is most closely associated with',
+        ['new-issue prospectus registration only','secondary markets, exchanges, broker-dealers and creation of the SEC','insurance company solvency','state taxation of municipal bonds'],1,
+        ['The Securities Act of 1933 centers on new-issue registration and disclosure.','Correct. The 1934 Act governs the trading marketplace and created the SEC.','Insurance solvency is not the statute\'s primary focus.','State tax treatment is not its organizing purpose.'],'1933 = new issues; 1934 = trading markets, broker-dealers and the SEC.'),
+      Q('z29b','d4','Federal securities acts','medium','Which 1940 law principally regulates investment advisers?',
+        ['Investment Advisers Act of 1940','Investment Company Act of 1940','Securities Investor Protection Act of 1970','Securities Act of 1933'],0,
+        ['Correct. The Advisers Act is the federal framework for investment advisers.','The Investment Company Act governs registered pooled investment companies.','SIPA created the broker-dealer customer-protection and SIPC framework.','The 1933 Act governs new-issue registration and disclosure.'],'Advisers Act regulates advisers; Investment Company Act regulates funds.'),
+      Q('z29c','d4','Federal securities acts','medium','The Securities Investor Protection Act of 1970 created',
+        ['FINRA','the SEC','SIPC','the Federal Reserve'],2,
+        ['FINRA is the broker-dealer SRO and has a different history.','The 1934 Act created the SEC.','Correct. SIPA created SIPC and the failed-broker-dealer customer-protection framework.','The Federal Reserve predates the securities statutes.'],'SIPA created SIPC; it protects custody assets in a member failure, not market value.'),
+      Q('z29d','d4','Federal securities acts','hard','State securities statutes are commonly called',
+        ['Blue-sky laws','Glass-Steagall rules','Regulation T','SIPC bylaws'],0,
+        ['Correct. Blue-sky laws regulate securities activity at the state level.','Glass-Steagall refers to historical federal banking legislation.','Regulation T governs credit extended by broker-dealers.','SIPC bylaws are not state securities statutes.'],'Blue-sky laws = state securities laws, administered by state regulators.'),
+    ];
+    const practiceQuestions = [...questions,...lessonQuestions,...masteryQuestions,...chapterQuestions,...extraBank];
     const lessonQuestionMap = {
-      l1:['q01','q02','q03'], l2:['x01','x02','x03'], l3:['q04','q05','x04'], l4:['q06','q07','q12'],
-      l5:['q08','q09','x05'], l6:['q10','q11','x06'], l7:['q13','q14','q15'], l8:['q16','q17','x07'],
-      l9:['q19','q20','q26'], l10:['q21','q24','q25'], l11:['q22','q23','q27'], l12:['q28','q29','q30'],
-      l13:['q31','q32','q33','q34'], l14:['q35','q36','q37','q40'], l15:['q38','q39','x08'], l16:['q41','x09','x10'],
-      l17:['q42','x11','x12'], l18:['q43','x13','x14'], l19:['q44','q45','x15'], l20:['q46','q47','q48','q49','q50','q51'],
-      l21:['q52','q53','q54','q55'], l22:['q56','q57','q58','q59','q60'], l23:['q61','q62','q63','q64'],
-      l24:['q65','x16','x17'], l25:['q66','q67','x18'], l26:['q68','x19','x20'], l27:['q69','q72','x21'],
-      l28:['q70','q71','q73','q74'], l29:['q75','x22','x23']
+      l1:['q01','q02','q03','y01','n101','n102','n104','n105'],
+      l2:['x01','x02','x03','y02','n106','n107','n108','n109'],
+      l3:['q04','q05','x04','y03','n110','n111','z03a','z03b'],
+      l4:['q06','q07','q12','y04','n116','n117','n119','n121'],
+      l5:['q08','q09','x05','y05','n103','n114','z05a','z05b'],
+      l6:['q10','q11','x06','y06','n112','n113','n115','n122'],
+      l7:['q13','q14','q15','y07','n201','n202','n203','n204'],
+      l8:['q16','q17','x07','y08','n205','n206','n207','z08a'],
+      l9:['q19','q20','q26','y09','n213','n224','n225','n227'],
+      l10:['q21','q24','q25','y10','n214','n215','n216','n220'],
+      l11:['q22','q23','q27','y11','n217','n218','n219','n222'],
+      l12:['q28','q29','q30','y12','n231','n232','n233','n236'],
+      l13:['q31','q32','q33','q34','y13','n238','n239','n241'],
+      l14:['q35','q36','q37','q40','y14','n248','n249','n250'],
+      l15:['q38','q39','x08','y15','n243','n244','n246','n247'],
+      l16:['q41','x09','x10','y16','n257','n258','n260','n261'],
+      l17:['q42','x11','x12','y17','z17a','z17b','z17c','z17d'],
+      l18:['q43','x13','x14','y18','n208','n252','n253','n255'],
+      l19:['q44','q45','x15','y19','n262','n263','n264','n265'],
+      l20:['q46','q47','q48','q49','q50','q51','y20','n302'],
+      l21:['q52','q53','q54','q55','y21','n313','n314','n315'],
+      l22:['q56','q57','q58','q59','q60','y22','n322','n325'],
+      l23:['q61','q62','q63','q64','y23','n333','n336','n347'],
+      l24:['q65','x16','x17','y24','n334','n335','z24a','z24b'],
+      l25:['q66','q67','x18','y25','n339','n340','n341','n342'],
+      l26:['q68','x19','x20','y26','n343','n344','n345','n346'],
+      l27:['q69','q72','x21','y27','n404','n405','n406','n407'],
+      l28:['q70','q71','q73','q74','y28','n402','n403','n409'],
+      l29:['q75','x22','x23','y29','z29a','z29b','z29c','z29d']
     };
     const lessonQuizIds=(lesson,count=8)=>{
-      const base=[...(lessonQuestionMap[lesson.id]||[])];
-      const masteryId='y'+String(Number(lesson.id.slice(1))).padStart(2,'0');
-      if(practiceQuestions.some(q=>q.id===masteryId))base.push(masteryId);
-      const ignore=new Set(['and','the','for','with','from','into','their','risk','market','securities','security','customer','questions','which']);
-      const text=[lesson.title,lesson.summary,...lesson.concepts].join(' ').toLowerCase();
-      const tokens=[...new Set((text.match(/[a-z0-9]{4,}/g)||[]).filter(t=>!ignore.has(t)))];
-      const ranked=practiceQuestions.filter(q=>q.domain===lesson.domain&&!base.includes(q.id)).map(q=>{
-        const hay=[q.topic,q.stem,q.takeaway].join(' ').toLowerCase();
-        return {id:q.id,score:tokens.reduce((s,t)=>s+(hay.includes(t)?1:0),0)};
-      }).sort((a,b)=>b.score-a.score||a.id.localeCompare(b.id));
-      return [...new Set([...base,...ranked.map(x=>x.id)])].slice(0,count);
+      const scoped=[...(lessonQuestionMap[lesson.id]||[])];
+      return scoped.filter(id=>practiceQuestions.some(q=>q.id===id)).slice(0,count);
     };
     const moduleQuizIds=(module,count=16)=>{
       const ids=[...new Set(module.lessons.flatMap(l=>lessonQuizIds(l,8)))];
@@ -2048,7 +2137,7 @@
         <section class="callout gold lesson-block"><h3>Memory aid</h3><p>${esc(lesson.memory)}</p></section>
         <section class="check-card lesson-block" id="quickCheck"><div class="eyebrow">Mini knowledge check</div><h2>${esc(q.stem)}</h2><div class="check-options">${q.choices.map((c,i)=>`<button class="option-btn" data-action="quick-answer" data-index="${i}" data-qid="${q.id}"><span class="option-letter">${letters[i]}</span><span>${esc(c)}</span></button>`).join('')}</div><div id="quickFeedback" aria-live="polite"></div></section>
         <section class="card lesson-block"><div class="eyebrow">What FINRA is really testing</div><h2>Recognition under pressure</h2><p>${esc(lesson.finra)}</p><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><h3>Summary sheet</h3><ul>${lesson.summaryPoints.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></section>
-        <section class="card lesson-block lesson-check-cta"><div><div class="eyebrow">Before you continue${mastery?` · best ${mastery.best}%`:''}</div><h2>${mastery?'Strengthen your mastery':'Check that the lesson stuck'}</h2><p>${mastery?`Latest score: ${mastery.last}% across ${mastery.attempts} attempt${mastery.attempts===1?'':'s'}. Retake to improve, or continue through the lesson sequence.`:'This expanded assessment begins with directly mapped questions, adds a new case question, and then uses related items from the same domain. Every choice receives a full rationale.'}</p></div><button class="primary-btn" data-action="lesson-quiz" data-lesson="${lesson.id}">${mastery?'Retake':'Take'} ${quizIds.length}-question mastery check →</button></section>
+        <section class="card lesson-block lesson-check-cta"><div><div class="eyebrow">Before you continue${mastery?` · best ${mastery.best}%`:''}</div><h2>${mastery?'Strengthen your mastery':'Check that the lesson stuck'}</h2><p>${mastery?`Latest score: ${mastery.last}% across ${mastery.attempts} attempt${mastery.attempts===1?'':'s'}. Retake to improve, or continue through the lesson sequence.`:'Eight carefully mapped questions test only the material in this chapter. Every answer choice receives a full rationale.'}</p><span class="scope-seal">Chapter ${lessonIndex+1} only · no neighboring-chapter questions</span></div><button class="primary-btn" data-action="lesson-quiz" data-lesson="${lesson.id}">${mastery?'Retake':'Take'} ${quizIds.length}-question mastery check →</button></section>
         <nav class="lesson-flow" aria-label="Lesson sequence"><button class="soft-btn flow-prev" data-action="previous-lesson" data-id="${previous?.id||''}" ${previous?'':'disabled'} aria-label="${previous?`Previous lesson: ${esc(previous.title)}`:'This is the first lesson'}">← Previous</button><div class="lesson-flow-status"><strong>Lesson ${lessonIndex+1} of ${allLessons.length}</strong>${esc(DOMAINS[lesson.domain].short)}</div><button class="primary-btn flow-next" data-action="complete-continue" data-id="${lesson.id}" data-next="${next?.id||''}" aria-label="${next?`${done?'Continue':'Complete lesson and continue'} to ${esc(next.title)}`:'Complete the final lesson'}">${next?(done?'Continue →':'Complete & continue →'):'Finish course ✓'}</button></nav>
       </div><aside class="card sticky-card"><span class="tag green">Module ${modules.findIndex(item=>item.id===m.id)+1} of ${modules.length}</span><div class="lesson-nav-list">${m.lessons.map(l=>`<button class="${l.id===lesson.id?'current':''}" data-action="open-lesson" data-id="${l.id}">${state.completedLessons.includes(l.id)?'✓ ':''}${esc(l.title)}</button>`).join('')}</div><div class="bar"><span style="width:${percent(m.lessons.filter(l=>state.completedLessons.includes(l.id)).length,m.lessons.length)}%"></span></div><p style="font-size:12px;margin-top:8px">${m.lessons.filter(l=>state.completedLessons.includes(l.id)).length} of ${m.lessons.length} complete</p><button class="soft-btn" style="width:100%;margin-top:15px" data-action="open-lookup">◈ Quick glossary lookup</button><button class="soft-btn" style="width:100%;margin-top:10px" data-view="course">View full course map</button></aside></div>${sourceNote()}`;
     }
@@ -2082,9 +2171,10 @@
           <section class="quiz-presets" aria-label="Practice presets"><button class="quiz-preset" data-action="preset-quiz" data-count="10"><span class="tag green">Untimed</span><strong>Concept check</strong><span>10 mixed questions for a fast retrieval session.</span></button><button class="quiz-preset" data-action="preset-quiz" data-count="20"><span class="tag">Untimed</span><strong>Application drill</strong><span>20 mixed questions with time to study every rationale.</span></button><button class="quiz-preset" data-action="preset-quiz" data-count="30" data-timed="true"><span class="tag gold">Timed</span><strong>Exam sprint</strong><span>30 questions in 30 minutes to build decision speed.</span></button><button class="quiz-preset" data-action="preset-quiz" data-count="50" data-timed="true"><span class="tag coral">Timed</span><strong>Endurance set</strong><span>50 questions in 50 minutes before a full mock.</span></button></section>
           <section class="section"><div class="section-title"><div><h2>Official-weight domain benchmarks</h2><p>Each benchmark uses the same scored-question count as that domain on the 75-question SIE blueprint.</p></div></div><div class="grid grid-4">${Object.entries(DOMAINS).map(([id,d])=>{const s=domainResults(id);return `<article class="card"><span class="tag" style="color:${d.color}">${d.weight}% domain</span><h3 style="margin-top:12px">${esc(d.short)}</h3><p>${s.total?`${s.accuracy}% across ${s.total} answers`:'No practice evidence yet'}</p><div class="benchmark-meta">Benchmark length: ${d.count} questions</div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:14px"><button class="primary-btn" data-action="domain-benchmark" data-domain="${id}" data-count="${d.count}">Run benchmark</button><button class="soft-btn" data-action="start-domain-quiz" data-domain="${id}">Quick 10</button></div></article>`}).join('')}</div></section>${sourceNote()}`;return;
       }
-      const s=activeQuiz,q=s.questions[s.index],answered=Object.keys(s.answers).length;
+      const s=activeQuiz,q=s.questions[s.index],answered=Object.keys(s.answers).length,originLesson=s.lessonId?allLessons.find(l=>l.id===s.lessonId):null;
       const kindLabel={diagnostic:'Diagnostic',lesson:'Mastery check',module:'Module checkpoint',benchmark:'Domain benchmark',review:'Smart review',quiz:'Practice'}[s.kind]||'Practice';
-      $('#main').innerHTML=`<div class="quiz-shell"><div class="quiz-top"><div class="quiz-progress"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)"><span>${kindLabel} · question ${s.index+1} of ${s.questions.length}</span><span>${answered} answered</span></div><div class="bar" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="${s.questions.length}" aria-valuenow="${s.index+1}"><span style="width:${percent(s.index+1,s.questions.length)}%"></span></div></div>${s.timed?`<div class="timer" id="timer" role="timer" aria-label="Time remaining">${formatClock(s.remaining)}</div>`:''}</div>${quizQuestionMarkup(s)}<div class="quiz-actions"><button class="soft-btn" data-action="exit-quiz">Save &amp; exit</button><button class="primary-btn" data-action="next-quiz" ${s.answers[q.id]===undefined?'disabled':''}>${s.index===s.questions.length-1?'Finish set':'Next question'} →</button></div><p class="quiz-shortcuts">Keyboard: 1–4 selects an answer · Enter continues</p></div>`;
+      const scopeNotice=originLesson?`<div class="quiz-scope" role="status"><span class="quiz-scope-icon">✓</span><div><strong>Chapter ${allLessons.findIndex(l=>l.id===originLesson.id)+1} only: ${esc(originLesson.title)}</strong><span>Every question in this mastery check is explicitly mapped to this chapter.</span></div></div>`:'';
+      $('#main').innerHTML=`<div class="quiz-shell"><div class="quiz-top"><div class="quiz-progress"><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted)"><span>${kindLabel} · question ${s.index+1} of ${s.questions.length}</span><span>${answered} answered</span></div><div class="bar" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="${s.questions.length}" aria-valuenow="${s.index+1}"><span style="width:${percent(s.index+1,s.questions.length)}%"></span></div></div>${s.timed?`<div class="timer" id="timer" role="timer" aria-label="Time remaining">${formatClock(s.remaining)}</div>`:''}</div>${scopeNotice}${quizQuestionMarkup(s)}<div class="quiz-actions"><button class="soft-btn" data-action="exit-quiz">Save &amp; exit</button><button class="primary-btn" data-action="next-quiz" ${s.answers[q.id]===undefined?'disabled':''}>${s.index===s.questions.length-1?'Finish set':'Next question'} →</button></div><p class="quiz-shortcuts">Keyboard: 1–4 selects an answer · Enter continues</p></div>`;
     }
     function recordResults(session,kind){
       const results=session.questions.map(q=>({id:q.id,domain:q.domain,topic:q.topic,correct:session.answers[q.id]===q.correct}));
