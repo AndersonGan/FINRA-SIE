@@ -549,6 +549,7 @@
     .tts-controls .tts-main { background:var(--green); border-color:var(--green); color:#fff; }
     .tts-controls select { height:34px; border:1px solid var(--line); border-radius:9px; background:var(--paper); color:var(--ink); font-size:12px; padding:0 5px; max-width:112px; }
     .tts-controls .tts-spacer { margin-left:auto; }
+    .tts-voice-hint { color:var(--muted); font-size:10px; flex-basis:100%; }
     @media (max-width:900px) { .tts-player { left:12px; right:12px; width:auto; bottom:calc(88px + env(safe-area-inset-bottom)); } }
     .qx { margin-top:14px; border:1px solid var(--line); border-radius:13px; background:var(--surface); overflow:hidden; }
     .qx > summary { cursor:pointer; padding:11px 14px; font-size:12.5px; font-weight:800; letter-spacing:.03em; text-transform:uppercase; color:var(--green); background:var(--surface-2); list-style:none; }
@@ -770,7 +771,15 @@
         <option value="1" selected>1&times;</option><option value="1.15">1.15&times;</option>
         <option value="1.3">1.3&times;</option><option value="1.5">1.5&times;</option><option value="1.75">1.75&times;</option>
       </select>
-      <select id="ttsVoice" aria-label="Voice" title="Voice"></select>
+      <select id="ttsVoice" aria-label="Voice" title="Voice">
+        <optgroup label="Premium cloud voices">
+          <option value="premium:openai:marin">Marin · Premium (OpenAI)</option>
+          <option value="premium:openai:cedar">Cedar · Premium (OpenAI)</option>
+          <option value="premium:elevenlabs:talia">Talia · Premium (ElevenLabs)</option>
+          <option value="premium:elevenlabs:caleb">Caleb · Premium (ElevenLabs)</option>
+        </optgroup>
+      </select>
+      <span id="ttsVoiceHint" class="tts-voice-hint" aria-live="polite">Premium voices require the optional local TTS server.</span>
     </div>
   </div>
   <script>
@@ -2890,19 +2899,28 @@
     }
 
 
-    /* ====================== Read-along (offline text to speech) ======================
-       Uses the browser's built-in speechSynthesis with the voices already installed on
-       the device. No network calls, no audio files. Highlighting splits text nodes in
-       place and unwraps afterwards, so inline formatting is never destroyed.          */
+    /* =========================== Read-along text to speech ===========================
+       Browser voices remain available offline. The four premium choices use the local
+       /api/tts proxy when this file is served by server.mjs, keeping provider API keys
+       out of the browser. Sentence highlighting is shared by both playback paths.    */
 
     const TTS_OK = typeof window!=='undefined' && 'speechSynthesis' in window;
+    const TTS_AUDIO_OK = typeof window!=='undefined' && typeof Audio==='function';
+    const TTS_PREMIUM_ENDPOINT='/api/tts';
+    const TTS_PREMIUM_VOICES=[
+      {value:'premium:openai:marin',label:'Marin · Premium (OpenAI)',provider:'OpenAI',id:'marin'},
+      {value:'premium:openai:cedar',label:'Cedar · Premium (OpenAI)',provider:'OpenAI',id:'cedar'},
+      {value:'premium:elevenlabs:talia',label:'Talia · Premium (ElevenLabs)',provider:'ElevenLabs',id:'talia'},
+      {value:'premium:elevenlabs:caleb',label:'Caleb · Premium (ElevenLabs)',provider:'ElevenLabs',id:'caleb'}
+    ];
     const TTS_BLOCKS='h1,h2,h3,h4,p,li,blockquote,figcaption,td,th,.micro-example,.concept,.must-know>div,.study-point,.answer-entry';
     const TTS_SKIP='button,select,input,textarea,.check-options,.lesson-flow,.sticky-card,.practice-list,.study-toc,.as-panel,.as-launcher,.tts-player,.source-note,.dialog-body,script,style,.tts-skip';
     /* Firefox reports word boundaries unreliably; fall back to sentence-only there. */
     const TTS_WORDS = TTS_OK && !/firefox/i.test(navigator.userAgent||'');
 
     let ttsQueue=[], ttsIndex=0, ttsPlaying=false, ttsPaused=false,
-        ttsSentSpans=[], ttsWordSpans=[], ttsVoices=[], ttsLabel='', ttsStopping=false;
+        ttsSentSpans=[], ttsWordSpans=[], ttsVoices=[], ttsLabel='', ttsStopping=false,
+        ttsAudio=null, ttsAudioUrl='', ttsRun=0;
 
     /* ---------- text-node mapping so we can highlight without rebuilding HTML ---------- */
     function ttsMap(block){
@@ -2993,29 +3011,41 @@
     }
 
     /* ---------- voices ---------- */
+    function ttsPremiumVoice(){return TTS_PREMIUM_VOICES.find(v=>v.value===state.ttsVoice)||null;}
+    function ttsIsPremium(){return !!ttsPremiumVoice();}
+    function ttsCanPlay(){return TTS_OK||TTS_AUDIO_OK;}
+    function ttsVoiceLabel(){return ttsPremiumVoice()?.label||ttsVoiceObj()?.name||'Browser voice';}
+    function ttsClearAudio(){
+      if(ttsAudio){
+        try{ttsAudio.pause();}catch(err){}
+        ttsAudio.onended=null;ttsAudio.onerror=null;ttsAudio.src='';ttsAudio=null;
+      }
+      if(ttsAudioUrl){try{URL.revokeObjectURL(ttsAudioUrl);}catch(err){}ttsAudioUrl='';}
+    }
     function ttsLoadVoices(){
-      if(!TTS_OK)return;
-      const all=speechSynthesis.getVoices()||[];
+      const all=TTS_OK?(speechSynthesis.getVoices()||[]):[];
       ttsVoices=all.filter(v=>/^en(-|_|$)/i.test(v.lang||''));
       if(!ttsVoices.length)ttsVoices=all;
-      if(!state.ttsVoice&&ttsVoices.length){
-        const local=ttsVoices.find(v=>v.localService)||ttsVoices[0];
-        state.ttsVoice=local.voiceURI;
-      }
+      const browserVoice=ttsVoices.find(v=>v.localService)||ttsVoices[0]||null;
+      const validPremium=!!ttsPremiumVoice();
+      const validBrowser=ttsVoices.some(v=>v.voiceURI===state.ttsVoice);
+      if(!validPremium&&!validBrowser)state.ttsVoice=browserVoice?browserVoice.voiceURI:TTS_PREMIUM_VOICES[0].value;
       const sel=$('#ttsVoice');
-      if(sel&&ttsVoices.length){
-        sel.innerHTML=ttsVoices.map(v=>`<option value="${esc(v.voiceURI)}" ${state.ttsVoice===v.voiceURI?'selected':''}>${esc(v.name.replace(/\s*\(.*?\)\s*/g,' ').trim())}</option>`).join('');
+      if(sel){
+        const premiumHtml=`<optgroup label="Premium cloud voices">${TTS_PREMIUM_VOICES.map(v=>`<option value="${esc(v.value)}">${esc(v.label)}</option>`).join('')}</optgroup>`;
+        const browserHtml=ttsVoices.length?`<optgroup label="Installed browser voices">${ttsVoices.map(v=>`<option value="${esc(v.voiceURI)}">${esc(v.name.replace(/\s*\(.*?\)\s*/g,' ').trim())}</option>`).join('')}</optgroup>`:'';
+        sel.innerHTML=premiumHtml+browserHtml;sel.value=state.ttsVoice;
       }
+      save();
+      const hint=$('#ttsVoiceHint');
+      if(hint)hint.textContent=ttsIsPremium()?`${ttsVoiceLabel()} · cloud TTS`: 'Installed browser voice · works offline';
     }
     function ttsVoiceObj(){
       return ttsVoices.find(v=>v.voiceURI===state.ttsVoice)||ttsVoices[0]||null;
     }
 
     /* ---------- playback ---------- */
-    function ttsSpeakIndex(i){
-      if(!TTS_OK||i<0||i>=ttsQueue.length)return ttsFinish();
-      ttsIndex=i;
-      const seg=ttsQueue[i];
+    function ttsShowSegment(seg){
       ttsClearAll();
       if(seg.onStart){try{seg.onStart();}catch(err){}}
       if(seg.block&&document.body.contains(seg.block)){
@@ -3024,6 +3054,55 @@
           try{ttsSentSpans[0].scrollIntoView({behavior:'smooth',block:'center'});}catch(err){}
         }
       }
+    }
+    function ttsUseBrowserFallback(message,run){
+      if(run!==ttsRun||ttsStopping)return;
+      ttsClearAudio();
+      const fallback=ttsVoices.find(v=>v.localService)||ttsVoices[0];
+      if(!fallback){ttsFinish();return toast(`${message} Start server.mjs and configure an API key to use premium voices.`);}
+      state.ttsVoice=fallback.voiceURI;save();ttsLoadVoices();
+      toast(`${message} Using ${fallback.name.replace(/\s*\(.*?\)\s*/g,' ').trim()} instead.`);
+      ttsPaused=false;ttsRun++;ttsSpeakIndex(ttsIndex,ttsRun);
+    }
+    async function ttsSpeakPremiumIndex(i,run){
+      if(run!==ttsRun||i<0||i>=ttsQueue.length)return;
+      ttsIndex=i;const seg=ttsQueue[i],voice=ttsPremiumVoice();
+      if(!voice)return ttsFinish();
+      ttsClearAudio();ttsShowSegment(seg);ttsRenderPlayer();
+      if(location.protocol==='file:')return ttsUseBrowserFallback('Premium voices need the app server.',run);
+      try{
+        const res=await fetch(TTS_PREMIUM_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({voice:voice.value,text:seg.text,rate:Number(state.ttsRate)||1})});
+        if(run!==ttsRun||ttsStopping)return;
+        if(!res.ok){
+          let detail='The premium voice request failed.';
+          try{const data=await res.json();if(data.error)detail=data.error;}catch(err){}
+          throw new Error(detail);
+        }
+        const blob=await res.blob();
+        if(run!==ttsRun||ttsStopping)return;
+        if(!blob.size)throw new Error('The premium voice returned empty audio.');
+        ttsAudioUrl=URL.createObjectURL(blob);ttsAudio=new Audio(ttsAudioUrl);
+        ttsAudio.onended=()=>{
+          if(run!==ttsRun||ttsStopping)return;
+          if(ttsIndex+1<ttsQueue.length)ttsSpeakIndex(ttsIndex+1,run);else ttsFinish();
+        };
+        ttsAudio.onerror=()=>ttsUseBrowserFallback('Premium audio could not be played.',run);
+        await ttsAudio.play();
+        ttsRenderPlayer();
+      }catch(err){
+        if(run!==ttsRun||ttsStopping)return;
+        ttsClearAudio();
+        ttsUseBrowserFallback(err&&err.message?err.message:'Premium voice is unavailable.',run);
+      }
+    }
+    function ttsSpeakIndex(i,run=ttsRun){
+      if(run!==ttsRun)return;
+      if(!ttsCanPlay()||i<0||i>=ttsQueue.length)return ttsFinish();
+      if(ttsIsPremium())return ttsSpeakPremiumIndex(i,run);
+      if(!TTS_OK)return ttsFinish();
+      ttsIndex=i;
+      const seg=ttsQueue[i];
+      ttsShowSegment(seg);
       const u=new SpeechSynthesisUtterance(seg.text);
       const v=ttsVoiceObj();
       if(v)u.voice=v;
@@ -3050,72 +3129,79 @@
         };
       }
       u.onend=()=>{
-        if(ttsStopping)return;
-        if(ttsIndex+1<ttsQueue.length)ttsSpeakIndex(ttsIndex+1);
-        else ttsFinish();
+        if(run!==ttsRun||ttsStopping)return;
+        if(ttsIndex+1<ttsQueue.length)ttsSpeakIndex(ttsIndex+1,run);else ttsFinish();
       };
       u.onerror=ev=>{
-        if(ttsStopping||(ev&&(ev.error==='interrupted'||ev.error==='canceled')))return;
-        if(ttsIndex+1<ttsQueue.length)ttsSpeakIndex(ttsIndex+1);else ttsFinish();
+        if(run!==ttsRun||ttsStopping||(ev&&(ev.error==='interrupted'||ev.error==='canceled')))return;
+        if(ttsIndex+1<ttsQueue.length)ttsSpeakIndex(ttsIndex+1,run);else ttsFinish();
       };
       speechSynthesis.speak(u);
       ttsRenderPlayer();
     }
     function ttsStart(root,label,queue){
-      if(!TTS_OK)return toast('This browser has no speech support');
+      if(!ttsCanPlay())return toast('This browser has no speech or audio support');
       ttsStop(true);
       ttsQueue=queue||ttsBuildQueue(root);
       if(!ttsQueue.length)return toast('Nothing to read here');
       ttsLabel=label||'Reading';
-      ttsPlaying=true;ttsPaused=false;ttsStopping=false;
-      ttsSpeakIndex(0);
+      ttsPlaying=true;ttsPaused=false;ttsStopping=false;ttsRun++;
+      ttsSpeakIndex(0,ttsRun);
     }
     function ttsFinish(){
-      ttsClearAll();
+      ttsRun++;ttsClearAudio();ttsClearAll();
       ttsPlaying=false;ttsPaused=false;
       ttsRenderPlayer();
     }
     function ttsStop(silent){
-      ttsStopping=true;
+      ttsRun++;ttsStopping=true;
       if(TTS_OK)try{speechSynthesis.cancel();}catch(err){}
-      ttsClearAll();
+      ttsClearAudio();ttsClearAll();
       ttsQueue=[];ttsIndex=0;ttsPlaying=false;ttsPaused=false;
       ttsStopping=false;
       if(!silent)ttsRenderPlayer();
     }
     function ttsToggle(){
-      if(!TTS_OK||!ttsPlaying)return;
-      if(ttsPaused){speechSynthesis.resume();ttsPaused=false;}
-      else{speechSynthesis.pause();ttsPaused=true;}
+      if(!ttsCanPlay()||!ttsPlaying)return;
+      if(ttsIsPremium()){
+        if(!ttsAudio)return;
+        if(ttsPaused){ttsAudio.play().catch(()=>{});ttsPaused=false;}
+        else{ttsAudio.pause();ttsPaused=true;}
+      }else if(TTS_OK){
+        if(ttsPaused){speechSynthesis.resume();ttsPaused=false;}
+        else{speechSynthesis.pause();ttsPaused=true;}
+      }
       ttsRenderPlayer();
     }
     function ttsSkip(delta){
       if(!ttsPlaying||!ttsQueue.length)return;
-      const next=clamp(ttsIndex+delta,0,ttsQueue.length-1);
+      const next=clamp(ttsIndex+delta,0,ttsQueue.length-1),run=++ttsRun;
       ttsStopping=true;
-      try{speechSynthesis.cancel();}catch(err){}
-      ttsStopping=false;ttsPaused=false;
-      ttsSpeakIndex(next);
+      if(TTS_OK)try{speechSynthesis.cancel();}catch(err){}
+      ttsClearAudio();ttsStopping=false;ttsPaused=false;
+      ttsSpeakIndex(next,run);
     }
     function ttsSetRate(r){
       state.ttsRate=Number(r)||1;save();
       if(ttsPlaying){
-        ttsStopping=true;try{speechSynthesis.cancel();}catch(err){}
-        ttsStopping=false;ttsPaused=false;
-        ttsSpeakIndex(ttsIndex);
+        const run=++ttsRun;ttsStopping=true;
+        if(TTS_OK)try{speechSynthesis.cancel();}catch(err){}
+        ttsClearAudio();ttsStopping=false;ttsPaused=false;
+        ttsSpeakIndex(ttsIndex,run);
       }else ttsRenderPlayer();
     }
     function ttsSetVoice(uri){
-      state.ttsVoice=uri;save();
+      state.ttsVoice=uri;save();ttsLoadVoices();
       if(ttsPlaying){
-        ttsStopping=true;try{speechSynthesis.cancel();}catch(err){}
-        ttsStopping=false;ttsPaused=false;
-        ttsSpeakIndex(ttsIndex);
+        const run=++ttsRun;ttsStopping=true;
+        if(TTS_OK)try{speechSynthesis.cancel();}catch(err){}
+        ttsClearAudio();ttsStopping=false;ttsPaused=false;
+        ttsSpeakIndex(ttsIndex,run);
       }
     }
     /* Flashcards: speak the front, flip, then speak the definition. */
     function ttsSpeakCard(card){
-      if(!TTS_OK)return toast('This browser has no speech support');
+      if(!ttsCanPlay())return toast('This browser has no speech or audio support');
       ttsStart(null,'Flashcard',[
         {block:null,start:0,end:0,text:card.front,onStart:()=>{if(cardFlipped){cardFlipped=false;renderFlashcards();}}},
         {block:null,start:0,end:0,text:card.back,onStart:()=>{if(!cardFlipped){cardFlipped=true;renderFlashcards();}}}
@@ -3658,10 +3744,12 @@
     (function init(){
       const parts=location.hash.replace('#','').split('/');if(parts[0]&&['home','dashboard','course','guide','lesson','quiz','flashcards','review','exam','formulas','calculators','glossary','planner','analytics'].includes(parts[0]))view=parts[0];if(view==='lesson'&&parts[1])selectedLesson=parts[1];
       const expected={d1:12,d2:33,d3:23,d4:7};Object.keys(expected).forEach(id=>{const actual=questions.filter(q=>q.domain===id).length;if(actual!==expected[id])console.error(`Question weighting error for ${id}: ${actual}`)});
-      if(TTS_OK){
+      if(ttsCanPlay()){
         ttsLoadVoices();
-        if(typeof speechSynthesis.addEventListener==='function')speechSynthesis.addEventListener('voiceschanged',ttsLoadVoices);
-        else speechSynthesis.onvoiceschanged=ttsLoadVoices;
+        if(TTS_OK){
+          if(typeof speechSynthesis.addEventListener==='function')speechSynthesis.addEventListener('voiceschanged',ttsLoadVoices);
+          else speechSynthesis.onvoiceschanged=ttsLoadVoices;
+        }
         const rs=$('#ttsRate');if(rs)rs.value=String(state.ttsRate||1);
       }else{
         document.addEventListener('DOMContentLoaded',()=>{});
